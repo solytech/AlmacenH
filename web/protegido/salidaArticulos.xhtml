@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/templates/plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:form id="frmSeleccion">
+                    <p:fieldset legend="Selecciona el tipo de salida" style="margin-bottom:20px">
+                        <h:panelGrid columns="3">
+                            <p:column/>
+                            <p:selectOneButton value="#{salidaBean.opcion}"  >
+                                <f:selectItem itemLabel="Salida Factura Completa" itemValue="1" />
+                                <f:selectItem itemLabel="Salida por Articulos " itemValue="2" />
+                                <p:ajax listener="#{salidaBean.mostrarOpcion()}" update=":frmPorFactura :frmPorArticulo :frmArticulosSalida" />
+                            </p:selectOneButton>
+                            <p:column/>
+                        </h:panelGrid>
+                        
+                    </p:fieldset>
+                </h:form>
+                
+                <h:form id="frmPorFactura">
+                    <p:growl id="growl" showDetail="true" sticky="true" life="30000" />
+                    <p:fieldset id="fielPorFactura" legend="Salida por factura" style="margin-bottom:20px" rendered="#{salidaBean.mostrarPorFactura}" >
+                        <h:panelGrid columns="9" >
+                            <p:outputLabel value="Seleccione Proveedor:" for="cboProveedor" />
+                            <p:column/>
+                            <p:selectOneMenu id="cboProveedor" value="#{salidaBean.idProv}"  filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel=" -- Proveedor -- " />
+                                <f:selectItems value="#{salidaBean.listaProv}"  />
+                                <f:ajax execute="cboProveedor" render="cboFacturas" />
+                            </p:selectOneMenu>
+                            <p:column/>
+                            <p:column/>
+                            <p:outputLabel value="Seleccione la Factura:" for="cboProveedor" />
+                            <p:column/>
+                            <p:selectOneMenu id="cboFacturas" value="#{salidaBean.idFac}" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel=" -- Factura -- " />
+                                <f:selectItems value="#{salidaBean.listaFacturas}"  />
+                                <f:ajax execute="cboFacturas" render=":frmArticulosSalida:listadoArticulos verProveedor" />
+                            </p:selectOneMenu>
+                            
+                        </h:panelGrid>
+                        <p/>
+                        <h:panelGrid columns="1" >
+                            <p:outputLabel value="Proveedor: #{salidaBean.factura.proveedor.proveedor}" id="verProveedor" />
+                        </h:panelGrid>
+                        
+                        <h:panelGrid columns="10" >
+                            <p:outputLabel value="Seleccione Empleado:" for="cboEmpleado" />
+                            <p:column/>
+                            <p:selectOneMenu id="cboEmpleado" value="#{salidaBean.idEmpleado}"  filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel=" -- Empleado -- " />
+                                <f:selectItems value="#{salidaBean.listaEmpleado}"   />
+                            </p:selectOneMenu>
+                            <p:commandButton icon="icon-plus-squared" value="Nuevo Empleado" onclick="PF('wdialogoEmpleado').show();" />
+                            <p:column/>
+                            <p:outputLabel for="dtaSalida" value="Fecha Salida"/>
+                            <p:calendar id="dtaSalida" value="#{salidaBean.salida.fechaSalida}" />
+                            <p:column/>
+                            <p:outputLabel for="txtObservaciones" value="Observaciones" />
+                            <p:inputTextarea id="txtObservaciones" value="#{salidaBean.salida.observaciones}" />
+                        </h:panelGrid>
+                    <p/>
+                    <p/>
+                        <p:commandButton value="Registrar Salida" icon="ui-icon-check" actionListener="#{salidaBean.guardaSalidaFactura()}" update="growl" />
+                        
+                    </p:fieldset>
+                </h:form>
+                
+                <h:form id="frmPorArticulo">
+                    <p:fieldset id="fielPorArticulo" legend="Salida por articulo" style="margin-bottom:20px" rendered="#{salidaBean.mostrarPorArticulos}" >
+                        <p:outputLabel value="Selecciones Articulo: " for="themePojo" />
+                        <p:autoComplete id="themePojo"  value="#{completarArticulo.idArtEnt}" completeMethod="#{completarArticulo.completarArtEnt}" 
+                                        var="theme" itemLabel="#{theme.articulo.articulo}" itemValue="#{theme}" converter="articuloConverter" forceSelection="true" size="60" minQueryLength="2"  >
+
+                            <p:column>
+                                <h:outputText value="#{theme.cbInterno}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{theme.articulo.articulo}"/>
+                            </p:column>
+
+                        </p:autoComplete>
+                        
+                        <h:panelGroup id="cantidad" >
+                            <p:outputLabel value="cantidad " for="txtCantidad" rendered="#{facturaBean.txtCantidad}" />
+                            <p:inputText id="txtCantidad" size="4" value="#{facturaBean.cantidad}" rendered="#{facturaBean.txtCantidad}" />
+                        </h:panelGroup>
+                        <h:panelGroup id="caja"  >
+                            <p:outputLabel value="Paquetes x Caja " for="txtCaja" rendered="#{facturaBean.txtCaja}" />
+                            <p:inputText id="txtCaja" size="4" value="#{facturaBean.uxcaja}" rendered="#{facturaBean.txtCaja}"  />
+                        </h:panelGroup>
+                        <h:panelGroup id="paquete" >
+                            <p:outputLabel value="Piezas x Paquete " for="txtPaquete" rendered="#{facturaBean.txtPaquete}" />
+                            <p:inputText id="txtPaquete" size="4" value="#{facturaBean.uxpaquete}" rendered="#{facturaBean.txtPaquete}"/>
+                        </h:panelGroup>
+                        
+                        
+                    </p:fieldset>
+                </h:form>
+                
+                <h:form id="frmArticulosSalida">
+                    <p:dataTable id="listadoArticulos" value="#{salidaBean.listaArticulos}"  var="art" rendered="#{salidaBean.mostrarListado}">
+                        <f:facet name="header">
+                                ARTICULOS QUE SALEN DEL ALMACEN
+                        </f:facet>
+                        <p:column headerText="Codigo" style="width:150px;text-align: center">
+                            <h:outputText value="#{art.cbInterno}" />
+                        </p:column>
+                        <p:column headerText="Cantidad" style="width:150px;text-align: center">
+                            <h:outputText value="#{art.cantidad} #{art.unidadDeMedida.unidadDeMedida}" />
+                        </p:column>
+                        <p:column headerText="Articulo" style="width:150px;text-align: center">
+                            <h:outputText value="#{art.articulo.articulo}" />
+                        </p:column>
+                        <p:column headerText="Depto. Solicitante" style="width:150px;text-align: center">
+                            <h:outputText value="#{art.departamento.departamento}" />
+                        </p:column>
+                        
+                    </p:dataTable>
+                </h:form>
+                
+                <p:dialog id="empleado" widgetVar="wdialogoEmpleado" header="Nuevo Empleado" modal="true" resizable="false" closeOnEscape="true" draggable="false">
+                    <h:form id="frmEmpleado">
+                        <p:growl id="growl3" showDetail="true" sticky="true" life="3000" />
+                        <h:panelGrid columns="6" >
+                            <p:outputLabel value="Nombre" for="txtNombre" />
+                            <p:inputText id="txtNombre"  value="#{empleadoBean.empleado.nombre}"  />
+                            <p:outputLabel value="Apellido Paterno " for="txtApp" />
+                            <p:inputText id="txtApp"  value="#{empleadoBean.empleado.app}"  />
+                            <p:outputLabel value="Apellido Materno" for="txtApm" />
+                            <p:inputText id="txtApm"  value="#{empleadoBean.empleado.apm}"  />
+                            
+                            <p:outputLabel value="Curp" for="txtCurp" />
+                            <p:inputText id="txtCurp"  value="#{empleadoBean.empleado.curp}"  />
+                            <p:outputLabel value="RFC" for="txtRfc" />
+                            <p:inputText id="txtRfc"  value="#{empleadoBean.empleado.rfc}"  />
+                            <p:outputLabel value="Fecha de Nacimiento" for="dteFechaNac" />
+                            <p:calendar id="dteFechaNac" value="#{empleadoBean.empleado.fechaNacimiento}" />
+                        </h:panelGrid>
+                        <p:outputLabel value="Dirección" for="txtDireccion" />
+                        <p:inputText id="txtDireccion"  value="#{empleadoBean.empleado.direccion}" size="60" />
+                        <h:panelGrid columns="6" >
+                            <p:outputLabel value="Correo" for="txtCorreo" />
+                            <p:inputText id="txtCorreo"  value="#{empleadoBean.empleado.email}"  />
+                            <p:outputLabel value="Celular" for="txtCelular" />
+                            <p:inputText id="txtCelular"  value="#{empleadoBean.empleado.celular}"  />
+                            <p:outputLabel value="Telefono" for="txtTelefono" />
+                            <p:inputText id="txtTelefono"  value="#{empleadoBean.empleado.telefono}"  />
+                            
+                            <p:outputLabel value="Puesto" for="txtPuesto" />
+                            <p:inputText id="txtPuesto"  value="#{empleadoBean.empleado.puesto}"  />
+                            <p:outputLabel value="Clave Presupuestal" for="txtClave" />
+                            <p:inputText id="txtClave"  value="#{empleadoBean.empleado.clave}"  />
+                            <p:outputLabel for="cboDepto" value="Departamento al que pertenece" />
+                            <p:selectOneMenu id="cboDepto" value="#{empleadoBean.idDepto}" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione Departamento" />
+                                <f:selectItems value="#{empleadoBean.listaDpto}"  />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        
+                        <p:commandButton value="Registrar" icon="ui-icon-check" actionListener="#{empleadoBean.guardaEmpleado()}" update="growl3 :frmEmpleado :frmPorFactura:cboEmpleado" oncomplete="PF('wdialogoEmpleado').hide();"  />
+                            <p:commandButton value="Cancelar" icon="ui-icon-cancel" process="@this" immediate="true" onclick="PF('wdialogoEmpleado').hide();" update=":frmEmpleado " />
+                            
+                    </h:form>
+                </p:dialog>
+                
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Almacen USET</title>
+        <h:outputStylesheet library="css" name="index.css" />
+    </h:head>
+    <h:body id="principal">  
+        <div id="cuadro">
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" /> 
+
+            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                <p:graphicImage value="/resources/imagenes/ajaxloader.gif" />
+            </p:dialog>
+            
+            
+            <h:form>
+                <p:messages autoUpdate="true" showDetail="true" />
+                <h:panelGrid columns="2" >
+                    <p:outputLabel for="txtUsuario" value="Usuario"/>
+                    <p:inputText id="txtUsuario" value="#{usuarioBean.usuario.usuario}"  required="true"/>
+
+                    <p:outputLabel for="txtClave" value="Clave"/>
+                    <p:password id="txtClave" value="#{usuarioBean.usuario.passwd}" required="true"/>
+
+                    <h:column/>
+                    <p:commandButton value="Iniciar Sesión" action="#{usuarioBean.iniciarSesion()}"  />
+
+                </h:panelGrid>
+
+
+            </h:form>
+            
+        </div>
+    </h:body>
+</html>
+

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27/06/2016 04:28:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.almacen.model.TipoPartida" table="tipoPartida" catalog="siswebho_almacen" optimistic-lock="version">
+        <id name="idTipoPartida" type="java.lang.Integer">
+            <column name="id_tipoPartida" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="acceso" class="com.almacen.model.Acceso" fetch="select">
+            <column name="id_acceso" not-null="true" />
+        </many-to-one>
+        <property name="tipoPartida" type="string">
+            <column name="tipoPartida" length="100" not-null="true" />
+        </property>
+        <property name="vigente" type="string">
+            <column name="vigente" length="45" not-null="true" />
+        </property>
+        <property name="cvePartida" type="string">
+            <column name="cvePartida" length="45" not-null="true" />
+        </property>
+        <property name="fechaReg" type="timestamp">
+            <column name="fechaReg" length="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

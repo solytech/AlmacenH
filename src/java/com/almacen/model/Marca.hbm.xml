@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27/06/2016 04:28:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.almacen.model.Marca" table="marca" catalog="siswebho_almacen" optimistic-lock="version">
+        <id name="idMarca" type="java.lang.Integer">
+            <column name="id_marca" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="acceso" class="com.almacen.model.Acceso" fetch="select">
+            <column name="id_acceso" not-null="true" />
+        </many-to-one>
+        <property name="marca" type="string">
+            <column name="marca" length="100" not-null="true" />
+        </property>
+        <property name="vigente" type="string">
+            <column name="vigente" length="1" />
+        </property>
+        <property name="fechareg" type="timestamp">
+            <column name="fechareg" length="0" not-null="true" />
+        </property>
+        <set name="articulos" table="articulo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_marca" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Articulo" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27/06/2016 04:28:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.almacen.model.Proveedor" table="proveedor" catalog="siswebho_almacen" optimistic-lock="version">
+        <id name="idProveedor" type="java.lang.Integer">
+            <column name="id_proveedor" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="acceso" class="com.almacen.model.Acceso" fetch="select">
+            <column name="id_acceso" not-null="true" />
+        </many-to-one>
+        <property name="proveedor" type="string">
+            <column name="proveedor" length="200" not-null="true" />
+        </property>
+        <property name="rfc" type="string">
+            <column name="rfc" length="13" not-null="true" unique="true" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="direccion" length="250" not-null="true" />
+        </property>
+        <property name="telefono" type="string">
+            <column name="telefono" length="20" not-null="true" />
+        </property>
+        <property name="correo" type="string">
+            <column name="correo" length="80" />
+        </property>
+        <property name="paginaWeb" type="string">
+            <column name="paginaWeb" length="100" />
+        </property>
+        <property name="contacto" type="string">
+            <column name="contacto" length="100" not-null="true" />
+        </property>
+        <property name="observaciones" type="string">
+            <column name="observaciones" length="200" />
+        </property>
+        <property name="vigente" type="string">
+            <column name="vigente" length="1" not-null="true" />
+        </property>
+        <property name="fechareg" type="timestamp">
+            <column name="fechareg" length="0" not-null="true" />
+        </property>
+        <set name="facturas" table="factura" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_proveedor" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Factura" />
+        </set>
+    </class>
+</hibernate-mapping>

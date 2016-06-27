@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CB" language="groovy" pageWidth="309" pageHeight="309" columnWidth="303" leftMargin="3" rightMargin="3" topMargin="3" bottomMargin="3" uuid="2f23a1a2-7797-495f-b464-b666e82740ee">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idArticulo" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select ae.cbInterno, a.articulo, d.departamento
+from articuloEntrada ae join articulo a using (id_articulo)
+	join factura f using (id_factura)
+	join departamento d on (d.id_departamento = ae.id_departamento)
+where ae.id_articuloEntrada = $P{idArticulo}]]>
+	</queryString>
+	<field name="cbInterno" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="articulo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="departamento" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="205" splitType="Stretch">
+			<textField>
+				<reportElement x="4" y="48" width="192" height="20" uuid="51dfbd2b-28a5-4194-8bec-8f959f1e985b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{articulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4" y="58" width="201" height="47" uuid="7a5bcc76-3b68-4154-a8d2-2d5b2b02be4e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{departamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="5" y="37" width="111" height="20" uuid="ae3e6b84-d7c6-44a7-a280-184ae2b75b14"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cbInterno}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="2" y="1" width="203" height="36" uuid="976e62f1-2504-41e3-aec0-f98233b9c422"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39 (Extended)" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{cbInterno}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

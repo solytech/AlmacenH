@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27/06/2016 04:28:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.almacen.model.ArticuloSalida" table="articuloSalida" catalog="siswebho_almacen" optimistic-lock="version">
+        <id name="idArticuloSalida" type="java.lang.Integer">
+            <column name="id_articuloSalida" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="acceso" class="com.almacen.model.Acceso" fetch="select">
+            <column name="id_acceso" not-null="true" />
+        </many-to-one>
+        <many-to-one name="articuloEntrada" class="com.almacen.model.ArticuloEntrada" fetch="select">
+            <column name="id_articuloEntrada" not-null="true" />
+        </many-to-one>
+        <many-to-one name="salida" class="com.almacen.model.Salida" fetch="select">
+            <column name="id_salida" not-null="true" />
+        </many-to-one>
+        <many-to-one name="unidadDeMedida" class="com.almacen.model.UnidadDeMedida" fetch="select">
+            <column name="id_unidadDeMedida" not-null="true" />
+        </many-to-one>
+        <property name="cantidadPieza" type="big_decimal">
+            <column name="cantidadPieza" precision="8" not-null="true" />
+        </property>
+        <property name="cantidadPaquete" type="big_decimal">
+            <column name="cantidadPaquete" precision="8" not-null="true" />
+        </property>
+        <property name="cantidadCaja" type="big_decimal">
+            <column name="cantidadCaja" precision="8" not-null="true" />
+        </property>
+        <property name="esResguardo" type="string">
+            <column name="esResguardo" length="1" />
+        </property>
+        <property name="numSerie" type="string">
+            <column name="numSerie" length="60" />
+        </property>
+        <property name="observaciones" type="string">
+            <column name="observaciones" />
+        </property>
+        <property name="fechaReg" type="timestamp">
+            <column name="fechaReg" length="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

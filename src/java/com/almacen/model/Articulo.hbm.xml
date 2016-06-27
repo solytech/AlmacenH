@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27/06/2016 04:28:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.almacen.model.Articulo" table="articulo" catalog="siswebho_almacen" optimistic-lock="version">
+        <id name="idArticulo" type="java.lang.Integer">
+            <column name="id_articulo" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="acceso" class="com.almacen.model.Acceso" fetch="select">
+            <column name="id_acceso" not-null="true" />
+        </many-to-one>
+        <many-to-one name="marca" class="com.almacen.model.Marca" fetch="select">
+            <column name="id_marca" not-null="true" />
+        </many-to-one>
+        <many-to-one name="subCatalogoBienes" class="com.almacen.model.SubCatalogoBienes" fetch="select">
+            <column name="id_subCatalogoBienes" not-null="true" />
+        </many-to-one>
+        <property name="articulo" type="string">
+            <column name="articulo" not-null="true" />
+        </property>
+        <property name="cb" type="string">
+            <column name="cb" length="45" />
+        </property>
+        <property name="modelo" type="string">
+            <column name="modelo" length="100" />
+        </property>
+        <property name="ubicacionFisica" type="string">
+            <column name="ubicacionFisica" length="100" />
+        </property>
+        <property name="minimo" type="big_decimal">
+            <column name="minimo" precision="6" />
+        </property>
+        <property name="maximo" type="big_decimal">
+            <column name="maximo" precision="6" />
+        </property>
+        <property name="esConsumible" type="string">
+            <column name="esConsumible" length="1" />
+        </property>
+        <property name="caracteristicas" type="string">
+            <column name="caracteristicas" length="16777215" />
+        </property>
+        <property name="observaciones" type="string">
+            <column name="observaciones" length="16777215" />
+        </property>
+        <property name="foto" type="string">
+            <column name="foto" length="200" />
+        </property>
+        <property name="fechaCaducidad" type="date">
+            <column name="fechaCaducidad" length="0" />
+        </property>
+        <property name="fechaReg" type="timestamp">
+            <column name="fechaReg" length="0" not-null="true" />
+        </property>
+        <set name="articuloEntradas" table="articuloEntrada" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_articulo" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.ArticuloEntrada" />
+        </set>
+    </class>
+</hibernate-mapping>

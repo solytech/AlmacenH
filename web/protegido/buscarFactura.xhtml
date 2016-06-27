@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/templates/plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <p:dataTable id="tablafacturas" value="#{facturaBean.listaFacturas}" var="fac" >
+                        <p:column headerText="Folio Factura" filterBy="#{fac.folioFactura}" filterMatchMode="contains" style="width:110px; text-align: center" sortBy="#{fac.folioFactura}" >
+                            <h:outputText value="#{fac.folioFactura}"/>
+                        </p:column>
+                        <p:column headerText="RFC Proveedor" filterBy="#{fac.proveedor.rfc}" filterMatchMode="contains" style="width:120px; text-align: center" sortBy="#{fac.proveedor.rfc}" >
+                            <h:outputText value="#{fac.proveedor.rfc}"/>
+                        </p:column>
+                        <p:column headerText="Nombre Proveedor" filterBy="#{fac.proveedor.proveedor}" filterMatchMode="contains" sortBy="#{fac.proveedor.proveedor}" >
+                            <h:outputText value="#{fac.proveedor.proveedor}"/>
+                        </p:column>
+                        <p:column headerText="Fecha Factura" filterBy="#{fac.fechaFactura}" filterMatchMode="contains" style="width:110px; text-align: center" sortBy="#{fac.fechaFactura}" >
+                            <h:outputText value="#{fac.fechaFactura}"/>
+                        </p:column>
+                        <p:column headerText="Fecha Recepcion" filterBy="#{fac.fechaRecepcion}" filterMatchMode="contains" style="width:130px; text-align: center" sortBy="#{fac.fechaRecepcion}" >
+                            <h:outputText value="#{fac.fechaRecepcion}"/>
+                        </p:column>
+                        <p:column headerText="Ver Factura" style="width:110px; text-align: center" >
+                            <p:commandLink  action="editaFactura"  actionListener="#{editaFactura.editaFactura(fac)}" >
+                                <p:graphicImage library="imagenes" name="iconoEdita.png" />
+                            </p:commandLink>
+                        </p:column> 
+                    </p:dataTable>
+                </h:form>
+                
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BarrasCodigo" language="groovy" pageWidth="226" pageHeight="226" columnWidth="218" leftMargin="4" rightMargin="4" topMargin="4" bottomMargin="4" uuid="11d8b0b2-f48f-4abd-85d2-9fee48c748aa">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     articuloEntrada.`cbInterno` AS articuloEntrada_cbInterno,
+     articulo.`id_marca` AS articulo_id_marca,
+     articulo.`modelo` AS articulo_modelo,
+     factura.`folioRequisicion` AS factura_folioRequisicion,
+     factura.`id_tipoEntrada` AS factura_id_tipoEntrada,
+     factura.`id_proveedor` AS factura_id_proveedor,
+     factura.`folioFactura` AS factura_folioFactura,
+     factura.`id_departamento` AS factura_id_departamento,
+     proveedor.`id_proveedor` AS proveedor_id_proveedor,
+     proveedor.`proveedor` AS proveedor_proveedor,
+     proveedor.`rfc` AS proveedor_rfc,
+     departamento.`id_departamento` AS departamento_id_departamento,
+     articuloEntrada.`id_articulo` AS articuloEntrada_id_articulo,
+     articulo.`id_articulo` AS articulo_id_articulo,
+     articulo.`articulo` AS articulo_articulo,
+     departamento.`departamento` AS departamento_departamento,
+     tipoEntrada.`tipoEntrada` AS tipoEntrada_tipoEntrada,
+     formaDePago.`id_formaDePago` AS formaDePago_id_formaDePago,
+     factura.`id_formaDePago` AS factura_id_formaDePago,
+     formaDePago.`formaDePago` AS formaDePago_formaDePago,
+     factura.`fechaFactura` AS factura_fechaFactura,
+     factura.`fechaRecepcion` AS factura_fechaRecepcion,
+     articuloEntrada.`id_departamento` AS articuloEntrada_id_departamento
+FROM
+     `articulo` articulo INNER JOIN `articuloEntrada` articuloEntrada ON articulo.`id_articulo` = articuloEntrada.`id_articulo`
+     INNER JOIN `factura` factura ON articuloEntrada.`id_factura` = factura.`id_factura`
+     INNER JOIN `departamento` departamento ON articuloEntrada.`id_departamento` = departamento.`id_departamento`
+     AND departamento.`id_departamento` = factura.`id_departamento`
+     INNER JOIN `proveedor` proveedor ON factura.`id_proveedor` = proveedor.`id_proveedor`
+     INNER JOIN `tipoEntrada` tipoEntrada ON factura.`id_tipoEntrada` = tipoEntrada.`id_tipoEntrada`
+     INNER JOIN `formaDePago` formaDePago ON factura.`id_formaDePago` = formaDePago.`id_formaDePago`]]>
+	</queryString>
+	<field name="articuloEntrada_cbInterno" class="java.lang.String"/>
+	<field name="articulo_id_marca" class="java.lang.Long"/>
+	<field name="articulo_modelo" class="java.lang.String"/>
+	<field name="factura_folioRequisicion" class="java.lang.String"/>
+	<field name="factura_id_tipoEntrada" class="java.lang.Long"/>
+	<field name="factura_id_proveedor" class="java.lang.Long"/>
+	<field name="factura_folioFactura" class="java.lang.String"/>
+	<field name="factura_id_departamento" class="java.lang.Long"/>
+	<field name="proveedor_id_proveedor" class="java.lang.Long"/>
+	<field name="proveedor_proveedor" class="java.lang.String"/>
+	<field name="proveedor_rfc" class="java.lang.String"/>
+	<field name="departamento_id_departamento" class="java.lang.Long"/>
+	<field name="articuloEntrada_id_articulo" class="java.lang.Long"/>
+	<field name="articulo_id_articulo" class="java.lang.Long"/>
+	<field name="articulo_articulo" class="java.lang.String"/>
+	<field name="departamento_departamento" class="java.lang.String"/>
+	<field name="tipoEntrada_tipoEntrada" class="java.lang.String"/>
+	<field name="formaDePago_id_formaDePago" class="java.lang.Long"/>
+	<field name="factura_id_formaDePago" class="java.lang.Long"/>
+	<field name="formaDePago_formaDePago" class="java.lang.String"/>
+	<field name="factura_fechaFactura" class="java.sql.Date"/>
+	<field name="factura_fechaRecepcion" class="java.sql.Date"/>
+	<field name="articuloEntrada_id_departamento" class="java.lang.Long"/>
+	<detail>
+		<band height="213" splitType="Stretch">
+			<textField>
+				<reportElement x="3" y="33" width="150" height="13" uuid="26bd53e5-1a24-4c97-b70e-7c2ad965b86c"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{articuloEntrada_cbInterno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="45" width="151" height="16" uuid="8a6fc5e2-1932-48a7-92ae-61452a6852ba"/>
+				<textElement>
+					<font fontName="Arial" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{articulo_articulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="80" width="151" height="35" uuid="1b074718-dead-45e3-9f1a-a8dab2d2dab8"/>
+				<textElement>
+					<font fontName="Arial" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{departamento_departamento}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="155" y="35" width="63" height="86" uuid="55ddbb36-a0d1-4c76-afda-29228b5351d7"/>
+				<jr:DataMatrix xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA["RFC: "+$F{proveedor_rfc}+"\n"+"Prov: "+$F{proveedor_proveedor}+"\n"+"Dpto: "+$F{departamento_departamento}+"\n"+"FF: "+$F{factura_folioFactura}+"\n"+"FR: "+$F{factura_folioRequisicion}+"\n"+"TE: "+$F{tipoEntrada_tipoEntrada}+"\n"+"FF: "+$F{factura_fechaFactura}+"\n"+"FE: "+$F{factura_fechaRecepcion}]]></jr:codeExpression>
+				</jr:DataMatrix>
+			</componentElement>
+			<componentElement>
+				<reportElement x="0" y="1" width="218" height="37" uuid="ad5cab02-56cf-4b6d-ba2a-114c5d445992"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{articuloEntrada_cbInterno}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="2" y="60" width="153" height="20" uuid="9dce7a9b-1c86-400f-843d-7fba5abb815e"/>
+				<textElement>
+					<font fontName="Arial" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Marca: "+$F{articulo_id_marca}+"\n"+"Modelo: "+$F{articulo_modelo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

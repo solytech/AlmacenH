@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27/06/2016 04:28:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.almacen.model.ArticuloEntrada" table="articuloEntrada" catalog="siswebho_almacen" optimistic-lock="version">
+        <id name="idArticuloEntrada" type="java.lang.Integer">
+            <column name="id_articuloEntrada" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="acceso" class="com.almacen.model.Acceso" fetch="select">
+            <column name="id_acceso" not-null="true" />
+        </many-to-one>
+        <many-to-one name="articulo" class="com.almacen.model.Articulo" fetch="select">
+            <column name="id_articulo" not-null="true" />
+        </many-to-one>
+        <many-to-one name="departamento" class="com.almacen.model.Departamento" fetch="select">
+            <column name="id_departamento" not-null="true" />
+        </many-to-one>
+        <many-to-one name="factura" class="com.almacen.model.Factura" fetch="select">
+            <column name="id_factura" not-null="true" />
+        </many-to-one>
+        <many-to-one name="unidadDeMedida" class="com.almacen.model.UnidadDeMedida" fetch="select">
+            <column name="id_unidadDeMedida" not-null="true" />
+        </many-to-one>
+        <property name="cantidad" type="big_decimal">
+            <column name="cantidad" precision="8" />
+        </property>
+        <property name="unidadesPorCaja" type="big_decimal">
+            <column name="unidadesPorCaja" precision="8" />
+        </property>
+        <property name="unidadesPorPaquete" type="big_decimal">
+            <column name="unidadesPorPaquete" precision="8" />
+        </property>
+        <property name="piezas" type="big_decimal">
+            <column name="piezas" precision="8" not-null="true" />
+        </property>
+        <property name="costoUnitario" type="big_decimal">
+            <column name="costoUnitario" precision="9" not-null="true" />
+        </property>
+        <property name="costoCaja" type="big_decimal">
+            <column name="costoCaja" precision="9" />
+        </property>
+        <property name="costoPaquete" type="big_decimal">
+            <column name="costoPaquete" precision="9" />
+        </property>
+        <property name="costoPieza" type="big_decimal">
+            <column name="costoPieza" precision="9" />
+        </property>
+        <property name="esResguardo" type="string">
+            <column name="esResguardo" length="1" />
+        </property>
+        <property name="numeroDeSerie" type="string">
+            <column name="numeroDeSerie" length="80" />
+        </property>
+        <property name="observaciones" type="string">
+            <column name="observaciones" />
+        </property>
+        <property name="cbInterno" type="string">
+            <column name="cbInterno" length="45" not-null="true" />
+        </property>
+        <property name="fechaReg" type="timestamp">
+            <column name="fechaReg" length="0" />
+        </property>
+        <set name="articuloSalidas" table="articuloSalida" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_articuloEntrada" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.ArticuloSalida" />
+        </set>
+    </class>
+</hibernate-mapping>

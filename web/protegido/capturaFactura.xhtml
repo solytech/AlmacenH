@@ -1,0 +1,316 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/templates/plantilla.xhtml">
+
+            <ui:define name="content">
+                
+                <h:form id="factura"  >
+                    <p:growl id="growl" showDetail="true" sticky="true" life="3000"  />
+                       
+                    <p:fieldset legend="Datos Factura" style="margin-bottom:20px" id="fielFactura"  >
+                        <h:panelGrid columns="6" id="datosFactura" >
+                            <p:outputLabel for="cboProveedor" value="Proveedor" />
+                            <p:selectOneMenu id="cboProveedor" value="#{facturaBean.idProv}" style="width: 100%" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel=" Proveedor " />
+                                <f:selectItems value="#{facturaBean.listaProv}"  />
+                            </p:selectOneMenu>
+                            <h:column/><h:column/>
+                            <p:commandButton icon="icon-plus-squared" value="Nuevo" onclick="PF('wdialogoProv').show();" />
+                            <h:column/>
+                            <p:outputLabel for="txtFolio" value="Folio Factura"  />
+                            <p:inputText id="txtFolio" value="#{facturaBean.factura.folioFactura}" />
+                            <p:outputLabel for="dteFactura" value="Fecha Factura" />
+                            <p:calendar id="dteFactura" value="#{facturaBean.factura.fechaFactura}" />
+                            <p:outputLabel for="txtImporte" value="Importe Total" />
+                            <p:inputText id="txtImporte" value="#{facturaBean.factura.importeFactura}" />
+                            <h:column/><h:column/>
+                            
+                        </h:panelGrid>
+                    </p:fieldset>
+                    
+                    <p:fieldset legend="Datos Requecision" style="margin-bottom:20px">
+                        <h:panelGrid columns="4" >
+                            <p:outputLabel for="txtFolioReq" value="Folio Requesicion" />
+                            <p:inputText id="txtFolioReq" value="#{facturaBean.factura.folioRequisicion}" />
+                            <p:outputLabel for="txtInstruccion" value="Instruccion" />
+                            <p:inputTextarea id="txtInstruccion" value="#{facturaBean.factura.instruccion}" />
+                            <p:outputLabel for="cboDepto" value="Departamento" />
+                            <p:selectOneMenu id="cboDepto" value="#{facturaBean.idDepto}" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione Departamento" />
+                                <f:selectItems value="#{facturaBean.listaDepto}"  />
+                            </p:selectOneMenu>
+                            <p:outputLabel for="cboPago" value="Forma de pago" />
+                            <p:selectOneMenu id="cboPago" value="#{facturaBean.idFdp}" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione Forma de Pago" />
+                                <f:selectItems value="#{facturaBean.listaFdp}"  />
+                            </p:selectOneMenu>
+                            <p:outputLabel for="cboTipoEntrada" value="Tipo Entrada" />
+                            <p:selectOneMenu id="cboTipoEntrada" value="#{facturaBean.idTe}" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione Tipo Entrada" />
+                                <f:selectItems value="#{facturaBean.listaTipoEntrada}"  />
+                            </p:selectOneMenu>  
+                            <p:outputLabel for="dtaRecepcion" value="Fecha Recepción"/>
+                            <p:calendar id="dtaRecepcion" value="#{facturaBean.factura.fechaRecepcion}" />
+                            <p:outputLabel for="txtDescripcion" value="Descripción" />
+                            <p:inputTextarea id="txtDescripcion" value="#{facturaBean.factura.descripcion}" />
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <h:panelGrid columns="4">
+                        <p:commandButton value="Guardar Factura" actionListener="#{facturaBean.guardarFactura()}"  update="growl">
+                            <p:ajax event="click" listener="#{facturaBean.verFrmArticulos()}" update=":actArt :tablaArt"/>
+                        </p:commandButton>
+                       
+                        <h:commandButton value="Codigos de Barras" actionListener="#{articulosExportBean.generarEtiquetaPorFactura}" image="/resources/imagenes/iconoBarras.png" />
+                        <h:commandButton value="Vale Entrada" actionListener="#{articulosExportBean.generarValeEntrada}" image="/resources/imagenes/valeEntrada.png" />
+                        
+                        <p:commandButton icon="icon-plus-squared" value="Subir Imagen Factura" onclick="PF('wdialogoImgFac').show();" />
+                        
+
+                    </h:panelGrid>
+                    
+                    <!--
+                    <p:commandButton value="Nueva Factura" actionListener="#{facturaBean.ocultarFrmArticulos()}"  process="@this" update=":factura actArt:actA"/>  
+                    !-->
+                </h:form>
+                    <p/>
+                    <p:separator />
+                    <p/>
+                <h:form id="actArt">    
+                    <h:panelGroup id="actArticulos" >  
+
+                        <p:fieldset legend="Articulos de la Factura" style="margin-bottom:20px" id="actA" rendered="#{facturaBean.activaFrmArt}" >
+                            <p:outputLabel value="Selecciones Articulo: " for="themePojo" />
+                            <p:autoComplete id="themePojo"  value="#{completarArticulo.idArticulo}" completeMethod="#{completarArticulo.completarTipo}" 
+                                            var="theme" itemLabel="#{theme.articulo}" itemValue="#{theme}" converter="themeConverter" forceSelection="true" size="60" minQueryLength="2" >
+
+                                <p:column>
+                                    <h:outputText value="#{theme.cb}"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{theme.articulo}"/>
+                                </p:column>
+
+                            </p:autoComplete>
+                            <p:commandButton icon="icon-plus-squared" value="Nuevo Articulo" onclick="PF('wdialogoArt').show();" />
+                            <p/>
+
+                            <h:panelGrid columns="18">
+
+                                <p:outputLabel value="Unidad de Medida" for="cmbUDM" /> 
+                                <p:selectOneMenu id="cmbUDM" value="#{facturaBean.idUdm}"  >
+                                    <f:selectItem itemValue="0" itemLabel="Seleccione Unidad de Medida" />
+                                    <f:selectItems value="#{facturaBean.listaUdm}" />
+                                    <p:ajax event="change"  listener="#{facturaBean.habilitarTxt()}" update="cantidad,caja,paquete,litros" />
+                                </p:selectOneMenu>
+                                <p:column/>
+                                <h:panelGroup id="cantidad" >
+                                    <p:outputLabel value="cantidad " for="txtCantidad" rendered="#{facturaBean.txtCantidad}" />
+                                    <p:inputText id="txtCantidad" size="4" value="#{facturaBean.cantidad}" rendered="#{facturaBean.txtCantidad}" />
+                                </h:panelGroup>
+                                <h:panelGroup id="caja"  >
+                                    <p:outputLabel value="Paquetes x Caja " for="txtCaja" rendered="#{facturaBean.txtCaja}" />
+                                    <p:inputText id="txtCaja" size="4" value="#{facturaBean.uxcaja}" rendered="#{facturaBean.txtCaja}"  />
+                                </h:panelGroup>
+                                <h:panelGroup id="paquete" >
+                                    <p:outputLabel value="Piezas x Paquete " for="txtPaquete" rendered="#{facturaBean.txtPaquete}" />
+                                    <p:inputText id="txtPaquete" size="4" value="#{facturaBean.uxpaquete}" rendered="#{facturaBean.txtPaquete}"/>
+                                </h:panelGroup>
+                                
+                                <h:panelGroup id="litros" >
+                                    <p:outputLabel value="Litros " for="txtLitros" rendered="#{facturaBean.txtLitros}" />
+                                    <p:inputText id="txtLitros" size="4" rendered="#{facturaBean.txtLitros}" />
+                                </h:panelGroup>
+                                <p:column/>
+                                <p:column/>
+                                <p:outputLabel value="Costo Unitario " for="txtCosto" />
+                                <p:inputText id="txtCosto" size="15" value="#{facturaBean.costoUnitario}" />
+                                <p:outputLabel for="chbResguardo" value="Resguardo" />
+                                <p:selectBooleanCheckbox value="#{facturaBean.esResguardo}" id="chbResguardo" />
+
+                            </h:panelGrid>
+                            <p/>
+                            <h:panelGrid columns="4">
+                                
+                                <p:outputLabel for="chbDistribuir" value="Distribuir Articulos" />
+                                <p:selectBooleanCheckbox value="#{facturaBean.distribuir}" id="chbDistribuir" >
+                                    <p:ajax event="change"  listener="#{facturaBean.habilitarCmbAsignacion()}" update="distribucion" />
+                                </p:selectBooleanCheckbox>
+                                
+                                <h:panelGroup id="distribucion" >
+                                    <p:outputLabel value="Departamento a Distribuir     " for="cmbDistribuir" rendered="#{facturaBean.activaCmbDis}"/> 
+                                    <p:selectOneMenu id="cmbDistribuir" value="#{facturaBean.idAsignacion}" rendered="#{facturaBean.activaCmbDis}" >
+                                        <f:selectItem itemValue="0" itemLabel="Seleccione Departamento" />
+                                        <f:selectItems value="#{facturaBean.listaDeptoAsignacion}" />
+                                    </p:selectOneMenu>
+                                </h:panelGroup>
+                                
+                            </h:panelGrid>
+                            <p/>
+                            <p:commandButton value="Agregar Articulo" actionListener="#{facturaBean.guardarArticulo()}" update="cmbUDM,caja :factura:growl :tablaArt:articulos :actArt :actArt:cmbUDM :actArt:themePojo" />
+                            <p/>
+                            <p/>
+                        </p:fieldset>   
+                        <p/>
+                        <p/>
+                    </h:panelGroup>
+                </h:form>
+                
+                <h:form id="tablaArt">
+                        
+                    <p:dataTable id="articulos" var="art" value="#{facturaBean.listaArtEnt}" rendered="#{facturaBean.activaFrmArt}" >  
+                            <f:facet name="header">
+                                ARTICULOS DE LA FACTURA
+                            </f:facet>
+                            <p:column headerText="Codigo" style="width:150px;text-align: center">
+                                <h:outputText value="#{art.articulo.cb}" />
+                            </p:column>
+                            <p:column headerText="Cantidad" style="width:100px;text-align: center">
+                                <h:outputText value="#{art.cantidad} #{art.unidadDeMedida.unidadDeMedida} " />
+                            </p:column>
+                            <p:column headerText="Descripción">
+                                <h:outputText value="#{art.articulo.articulo}" />
+                            </p:column>
+                            <p:column headerText="Precio Unitario" style="width:75px;text-align: center">
+                                <h:outputText value="#{art.costoUnitario}" />
+                            </p:column>
+                            <p:column headerText="Acciones" style="width:75px;text-align: center">
+
+                            </p:column>  
+
+                        </p:dataTable>    
+                </h:form>
+                    
+                <p:dialog id="nuevoArticulo" widgetVar="wdialogoArt" header="Nuevo Articulo" modal="true" resizable="false" closeOnEscape="true" draggable="false" >
+                    <h:form id="formArticulo">
+                        <p:growl id="growl2" showDetail="true" sticky="true" life="3000" />
+                            <h:panelGrid columns="5" id="articulos" >
+                            <p:outputLabel for="cboSubCat" value="SubCatalogo Bienes" />
+                            <p:selectOneMenu id="cboSubCat" value="#{articuloBean.idSubCat}" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione SubCategoria"  />
+                                <f:selectItems value="#{articuloBean.listaSubCatB}"  />
+                            </p:selectOneMenu>
+                            <p:outputLabel for="cboMarca" value="Marca" />
+                            <p:selectOneMenu id="cboMarca" value="#{articuloBean.idMarca}" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione Marca" />
+                                <f:selectItems value="#{articuloBean.listaMarca}"  />
+                            </p:selectOneMenu>
+                            <p:commandButton icon="ui-icon-plusthick" value="Marca" onclick="PF('wdialogoMarca').show();" />
+                            <p:column/>
+                            <p:outputLabel for="txtArticulo" value="Nombre Articulo" />
+                            <p:inputText id="txtArticulo" value="#{articuloBean.articulo.articulo}" required="true" />
+                            
+                            <p:outputLabel for="txtCB" value="Codigo de Barras" />
+                            <p:inputText id="txtCB" value="#{articuloBean.articulo.cb}" required="true" />
+                            <p:column/>
+                            <p:outputLabel for="txtModelo" value="Modelo" />
+                            <p:inputText id="txtModelo" value="#{articuloBean.articulo.modelo}" required="true" />
+                            
+                            <p:outputLabel for="txtUbicacion" value="Ubicación" />
+                            <p:inputText id="txtUbicacion" value="#{articuloBean.articulo.ubicacionFisica}" required="true" />
+                            <p:column/>
+                            <p:outputLabel for="txtMin" value="Minimo" />
+                            <p:inputText id="txtMin" value="#{articuloBean.articulo.minimo}" required="false" />
+                            
+                            <p:outputLabel for="txtMax" value="Maximo" />
+                            <p:inputText id="txtMax" value="#{articuloBean.articulo.maximo}" required="false" />
+                            <p:column/>
+                            <p:outputLabel for="chbConsumible" value="Es Consumible" />
+                            <p:selectBooleanCheckbox value="#{articuloBean.esConsumible}" id="chbConsumible" />
+                            
+                            <p:outputLabel for="txtCaracteristicas" value="Caracteristicas"/>
+                            <p:inputTextarea id="txtCaracteristicas" value="#{articuloBean.articulo.caracteristicas}" />
+                            <p:column/>
+                            <p:outputLabel for="txtObservaciones" value="Observaciones"/>
+                            <p:inputTextarea id="txtObservaciones" value="#{articuloBean.articulo.observaciones}" />
+                            
+                            <p:outputLabel for="dtaFechaCaduca" value="Fecha de Caducidad" />  
+                            <p:calendar id="dtaFechaCaduca" value="#{articuloBean.articulo.fechaCaducidad}" />
+                            </h:panelGrid>
+                        
+                            <h:panelGrid columns="3" >
+                                <p:commandButton value="Registrar" icon="ui-icon-check"  actionListener="#{articuloBean.guardarArticulo()}" update="growl2"  />
+                                <p:commandButton value="Nuevo" icon="ui-icon-plusthick" actionListener="#{articuloBean.limpiaTextos()}" immediate="true"  process="@this" update=":formArticulo" />
+                                <p:commandButton value="Cancelar" icon="ui-icon-cancel" immediate="true" onclick="PF('wdialogoArt').hide();" process="@this" update=":formArticulo" />
+                                
+                            </h:panelGrid>
+                         
+                            <p:fileUpload id="btnUpload" fileUploadListener="#{FileUploadManagedBean.upload}" mode="advanced" dragDropSupport="false" fileLimit="1"
+                                          auto="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="10000000"  />
+
+
+                            
+
+                    </h:form>
+                </p:dialog>
+                
+                <p:dialog id="nuevoProveedor" widgetVar="wdialogoProv" header="Nuevo Proveedor" modal="true" resizable="false" closeOnEscape="true" draggable="false">
+                    <h:form id="altaProveedor">
+                        <p:growl id="growl3" showDetail="true" sticky="true" life="3000" />
+                        <h:panelGrid columns="3" id="proveedor" >
+                            <p:outputLabel for="txtNombreProv" value="Nombre Proveedor" />
+                            <p:inputText id="txtNombreProv" value="#{proveedorBean.proveedor.proveedor}" required="true" />
+                            <h:column/>
+                            <p:outputLabel for="txtRfcProv" value="RFC" />
+                            <p:inputText id="txtRfcProv" value="#{proveedorBean.proveedor.rfc}" required="true"/>
+                            <h:column/>
+                            <p:outputLabel for="txtDireccionProv" value="Direccion" />
+                            <p:inputTextarea id="txtDireccionProv" value="#{proveedorBean.proveedor.direccion}" required="true" />
+                            <h:column/>
+                            <p:outputLabel for="txtTelProv" value="Telefono" />
+                            <p:inputMask id="txtTelProv" value="#{proveedorBean.proveedor.telefono}" mask="(999)9999999"  />
+                            <h:column/>
+                            <p:outputLabel for="txtCorreoProv" value="Correo" />
+                            <p:inputText id="txtCorreoProv" value="#{proveedorBean.proveedor.correo}" />
+                            <h:column/>
+                            <p:outputLabel for="txtPaginaProv" value="Pagina Web" />
+                            <p:inputText id="txtPaginaProv" value="#{proveedorBean.proveedor.paginaWeb}" />
+                            <h:column/>
+                            <p:outputLabel for="txtContactoProv" value="Contacto" />
+                            <p:inputText id="txtContactoProv" value="#{proveedorBean.proveedor.contacto}" />
+                            <h:column/>
+                            <p:outputLabel for="txtObservaProv" value="Observaciones" />
+                            <p:inputTextarea id="txtObservaProv" value="#{proveedorBean.proveedor.observaciones}" />
+                            <h:column/>
+                              
+                            <p:commandButton value="Registrar" icon="ui-icon-check" actionListener="#{proveedorBean.registrar()}" update="growl3 :altaProveedor :factura:cboProveedor" oncomplete="PF('wdialogoProv').hide();"  />
+                            <p:commandButton value="Cancelar" icon="ui-icon-cancel" process="@this" immediate="true" onclick="PF('wdialogoProv').hide();" update=":altaProveedor " />
+                              
+                        </h:panelGrid>
+                    </h:form> 
+
+                </p:dialog>
+                
+                <p:dialog id="nuevaMarca" widgetVar="wdialogoMarca" header="Nueva Marca" modal="true" resizable="false" closeOnEscape="true" draggable="false">
+                    <h:form id="frmMarca">
+                            <p:growl id="growl4" showDetail="true" sticky="true" life="3000" />
+                            <h:panelGrid columns="2" id="marca">
+                                <p:outputLabel for="txtMarca" value="Nombre Marca" />
+                                <p:inputText id="txtMarca" value="#{marcaBean.marca.marca}" required="true" />
+                                <p:commandButton value="Registrar" icon="ui-icon-check" actionListener="#{marcaBean.guardaMarca()}" update="growl4 :formArticulo:cboMarca" oncomplete="PF('wdialogoMarca').hide();"  />
+                            </h:panelGrid>                            
+                        </h:form>
+                </p:dialog>
+                    
+                <p:dialog id="imagenFactura" widgetVar="wdialogoImgFac" header="Subir Imagen Factura" modal="true" resizable="false" closeOnEscape="true" draggable="false">
+                    <h:form id="frmImagenFac">
+                            <p:growl id="growl5" showDetail="true" sticky="true" life="3000" />
+                            <p:fileUpload id="btnUpload" fileUploadListener="#{FileUploadManagedBean.uploadFactura}" mode="advanced" dragDropSupport="false" fileLimit="5"
+                                          auto="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="10000000"  />                           
+                        </h:form>
+                </p:dialog>
+                
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27/06/2016 04:28:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.almacen.model.Departamento" table="departamento" catalog="siswebho_almacen" optimistic-lock="version">
+        <id name="idDepartamento" type="java.lang.Integer">
+            <column name="id_departamento" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="acceso" class="com.almacen.model.Acceso" fetch="select">
+            <column name="id_acceso" not-null="true" />
+        </many-to-one>
+        <property name="idNivelDepartamento" type="java.lang.Byte">
+            <column name="id_nivelDepartamento" />
+        </property>
+        <property name="departamento" type="string">
+            <column name="departamento" length="150" not-null="true" />
+        </property>
+        <property name="cct" type="string">
+            <column name="cct" length="10" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="direccion" length="120" />
+        </property>
+        <property name="municipio" type="string">
+            <column name="municipio" length="80" />
+        </property>
+        <property name="clave" type="string">
+            <column name="clave" length="8" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="16777215" />
+        </property>
+        <property name="vigente" type="string">
+            <column name="vigente" length="1" not-null="true" />
+        </property>
+        <property name="idDeptoPadre" type="java.lang.Byte">
+            <column name="id_deptoPadre" />
+        </property>
+        <property name="fechaReg" type="timestamp">
+            <column name="fechaReg" length="0" not-null="true" />
+        </property>
+        <set name="facturas" table="factura" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_departamento" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Factura" />
+        </set>
+        <set name="articuloEntradas" table="articuloEntrada" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_departamento" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.ArticuloEntrada" />
+        </set>
+        <set name="salidas" table="salida" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_departamento" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Salida" />
+        </set>
+        <set name="empleados" table="empleado" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_departamento" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Empleado" />
+        </set>
+    </class>
+</hibernate-mapping>

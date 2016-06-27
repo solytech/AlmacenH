@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27/06/2016 04:28:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.almacen.model.Permiso" table="permiso" catalog="siswebho_almacen" optimistic-lock="version">
+        <id name="idPermiso" type="java.lang.Integer">
+            <column name="id_permiso" />
+            <generator class="identity" />
+        </id>
+        <property name="permiso" type="string">
+            <column name="permiso" length="80" not-null="true" />
+        </property>
+        <set name="usuarioPermisos" table="usuarioPermiso" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_permiso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.UsuarioPermiso" />
+        </set>
+    </class>
+</hibernate-mapping>

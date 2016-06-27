@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27/06/2016 04:28:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.almacen.model.Acceso" table="acceso" catalog="siswebho_almacen" optimistic-lock="version">
+        <id name="idAcceso" type="java.lang.Integer">
+            <column name="id_acceso" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="usuario" class="com.almacen.model.Usuario" fetch="select">
+            <column name="id_usuario" not-null="true" />
+        </many-to-one>
+        <property name="fechaEntra" type="timestamp">
+            <column name="fechaEntra" length="0" not-null="true" />
+        </property>
+        <property name="fechaSale" type="timestamp">
+            <column name="fechaSale" length="0" not-null="true" />
+        </property>
+        <property name="ip" type="string">
+            <column name="ip" length="15" not-null="true" />
+        </property>
+        <set name="subCatalogoBieneses" table="subCatalogoBienes" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.SubCatalogoBienes" />
+        </set>
+        <set name="usuarioPermisos" table="usuarioPermiso" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.UsuarioPermiso" />
+        </set>
+        <set name="proveedors" table="proveedor" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Proveedor" />
+        </set>
+        <set name="formaDePagos" table="formaDePago" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.FormaDePago" />
+        </set>
+        <set name="facturas" table="factura" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Factura" />
+        </set>
+        <set name="tipoEntradas" table="tipoEntrada" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.TipoEntrada" />
+        </set>
+        <set name="catalogoBieneses" table="catalogoBienes" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.CatalogoBienes" />
+        </set>
+        <set name="empleados" table="empleado" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Empleado" />
+        </set>
+        <set name="articulos" table="articulo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Articulo" />
+        </set>
+        <set name="departamentos" table="departamento" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Departamento" />
+        </set>
+        <set name="tipoPartidas" table="tipoPartida" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.TipoPartida" />
+        </set>
+        <set name="marcas" table="marca" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Marca" />
+        </set>
+        <set name="articuloSalidas" table="articuloSalida" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.ArticuloSalida" />
+        </set>
+        <set name="salidas" table="salida" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Salida" />
+        </set>
+        <set name="articuloEntradas" table="articuloEntrada" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_acceso" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.ArticuloEntrada" />
+        </set>
+    </class>
+</hibernate-mapping>

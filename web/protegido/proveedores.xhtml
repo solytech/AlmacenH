@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        
+        <ui:composition template="./../WEB-INF/templates/plantilla.xhtml">
+
+            <ui:define name="content">
+                <p:growl id="mensajeGeneral" autoUpdate="true" showDetail="true" life="3000" />
+                
+                <h:form id="nuevoProveedor">
+                    <p:commandButton id="btnNuevo" value="Nuevo proveedor" oncomplete="PF('dlgNuevo').show();" update=":formNuevoProveedor"
+                                     actionListener="#{proveedorBean.prepararNuevoProveedor(actionEvent)}" 
+                        />
+                </h:form>
+                
+                <p:dialog id="dlgM" header="Registrar nuevo proveedor" widgetVar="dlgNuevo" showEffect="explode" hideEffect="explode" modal="true" >
+                    <h:form id="formNuevoProveedor">
+                        <p:panelGrid columns="2" style="margin: 0 auto; font-size: 12px;" >
+                            <p:outputLabel value="Proveedor: " />
+                            <p:inputText value="#{proveedorBean.proveedor.proveedor}" 
+                                         required="true" requiredMessage="Nombre del proveedor es obligatorio" size="70"
+                                         />
+
+                            <p:outputLabel value="RFC: " />
+                            <p:inputText value="#{proveedorBean.proveedor.rfc}" 
+                                         required="true" requiredMessage="RFC es obligatorio"
+                                         />
+
+                            <p:outputLabel value="Dirección: " />
+                            <p:inputText value="#{proveedorBean.proveedor.direccion}" 
+                                         required="true" requiredMessage="Dirección es obligatoria" size="70"
+                                         />
+
+                            <p:outputLabel value="Teléfono: " />
+                            <p:inputText value="#{proveedorBean.proveedor.telefono}" 
+                                         required="true" requiredMessage="Teléfono es obligatorio" size="70"
+                                         />
+
+                            <p:outputLabel value="Correo: " />
+                            <p:inputText value="#{proveedorBean.proveedor.correo}" 
+                                         required="true" requiredMessage="Correo es obligatorio" size="70"
+                                         />
+
+                            <p:outputLabel value="Página Web: " />
+                            <p:inputText value="#{proveedorBean.proveedor.paginaWeb}" size="70" />
+
+                            <p:outputLabel value="Contacto: " />
+                            <p:inputText value="#{proveedorBean.proveedor.contacto}" 
+                                         required="true" requiredMessage="Contacto es obligatorio" size="70"
+                                         />
+
+                            <p:outputLabel value="Observaciones: " />
+                            <p:inputText value="#{proveedorBean.proveedor.observaciones}"  size="70" />
+
+                            <p:commandButton value="Guardar" actionListener="#{proveedorBean.registrar()}"
+                                             update=":formMostrarProveedores:tablaMostrarProveedor :formNuevoProveedor"
+                                             oncomplete="PF('dlgNuevo').hide();"
+                                             />
+                            <p:commandButton value="Cancelar" action="#{proveedorBean.cancelar()}" update=":formNuevoProveedor"
+                                     immediate="true" onclick="PF('dlgNuevo').hide();" />
+
+                        </p:panelGrid>
+                        <p:separator />
+                    </h:form>
+                </p:dialog>
+                
+                
+                <p:dialog id="dlg" header="Modificar datos de proveedor" widgetVar="dlgModificar" showEffect="explode" hideEffect="explode" modal="true" >   
+                    <h:form id="formModificarProveedor">
+                        <p:panelGrid columns="2" style="margin: 0 auto; font-size: 12px;" >
+                            <p:outputLabel value="Proveedor: " />
+                            <p:inputText value="#{proveedorBean.proveedor.proveedor}" 
+                                         required="true" requiredMessage="Nombre es obligatorio" size="70"
+                                         />
+
+                            <p:outputLabel value="RFC: " />
+                            <p:inputText value="#{proveedorBean.proveedor.rfc}" 
+                                         required="true" requiredMessage="RFC es obligatorio"
+                                         />
+
+                            <p:outputLabel value="Dirección: " />
+                            <p:inputText value="#{proveedorBean.proveedor.direccion}" 
+                                         required="true" requiredMessage="Dirección es obligatoria" size="70"
+                                         />
+
+                            <p:outputLabel value="Teléfono: " />
+                            <p:inputText value="#{proveedorBean.proveedor.telefono}"
+                                         required="true" requiredMessage="Teléfono es obligatorio" size="70"
+                                         />
+
+                            <p:outputLabel value="Correo: " />
+                            <p:inputText value="#{proveedorBean.proveedor.correo}" 
+                                         required="true" requiredMessage="Correo es obligatorio" size="70"
+                                         />
+
+                            <p:outputLabel value="Página Web: " />
+                            <p:inputText value="#{proveedorBean.proveedor.paginaWeb}" size="70" />
+
+                            <p:outputLabel value="Contacto: " />
+                            <p:inputText value="#{proveedorBean.proveedor.contacto}" 
+                                         required="true" requiredMessage="Contacto es obligatorio" size="70"
+                                         />
+
+                            <p:outputLabel value="Observaciones: " />
+                            <p:inputText value="#{proveedorBean.proveedor.observaciones}" size="70" />
+                            
+                            <p:commandButton value="Guardar cambios" actionListener="#{proveedorBean.registrar()}"
+                                             update=":formMostrarProveedores:tablaMostrarProveedor" 
+                                             oncomplete="PF('dlgModificar').hide();" />
+                            <p:commandButton value="Cancelar" onclick="PF('dlgModificar').hide();" 
+                                             immediate="true" />
+
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                
+                
+                
+                
+                <p:dialog id="dlg2" header="Eliminar Modificar datos de proveedor" widgetVar="dlgEliminar" showEffect="explode" hideEffect="explode" modal="true" >   
+                    <h:form id="formEliminarProveedor">
+                        <h:outputText value="Desea eliminar este proveedor?" />
+                        <p:commandButton value="Si" actionListener="#{proveedorBean.eliminarProveedor()}"
+                                         update=":formMostrarProveedores" oncomplete="PF('dlgEliminar').hide();" />
+                        <p:commandButton value="No" onclick="PF('dlgEliminar').hide();
+                                "/>
+                    </h:form>
+                </p:dialog>
+
+                
+                
+                
+                <h:form id="formMostrarProveedores">
+                    <p:dataTable id="tablaMostrarProveedor" var="prov" value="#{proveedorBean.listar}" 
+                        emptyMessage="No hay datos de proveedores" style="font-size: 12px;">
+                        <p:column headerText="Id" width="10">
+                            <h:outputText value="#{prov.idProveedor}" />
+                        </p:column>
+
+                        <p:column headerText="Proveedor" width="200">
+                            <h:outputText value="#{prov.proveedor}" />
+                        </p:column>
+
+                        <p:column headerText="RFC" width="100">
+                            <h:outputText value="#{prov.rfc}" />
+                        </p:column>
+
+                        <p:column headerText="Dirección" width="150">
+                            <h:outputText value="#{prov.direccion}" />
+                        </p:column>
+
+                        <p:column headerText="Teléfono">
+                            <h:outputText value="#{prov.telefono}" />
+                        </p:column>
+
+                        <p:column headerText="Correo" width="150">
+                            <h:outputText value="#{prov.correo}" />
+                        </p:column>
+
+                        <p:column headerText="Web">
+                            <h:outputText value="#{prov.paginaWeb}" />
+                        </p:column>
+
+                        <p:column headerText="Contacto">
+                            <h:outputText value="#{prov.contacto}" />
+                        </p:column>
+
+                        <p:column headerText="Observaciones" width="150">
+                            <h:outputText value="#{prov.observaciones}" />
+                        </p:column>
+                        
+                        <p:column headerText="Editar">
+                            <p:commandButton icon="editProv" title="Editar proveedor"  oncomplete="PF('dlgModificar').show();" update=":formModificarProveedor">
+                                <f:setPropertyActionListener target="#{proveedorBean.proveedor}" value="#{prov}" />
+                            </p:commandButton>
+                        </p:column>
+                        
+                        <p:column  headerText="Eliminar">
+                            <p:commandButton icon="eliminar" title="Eliminar proveedor" oncomplete="PF('dlgEliminar').show();" update=":formEliminarProveedor">
+                                <f:setPropertyActionListener target="#{proveedorBean.proveedor}" value="#{prov}" />
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+                </h:form>
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

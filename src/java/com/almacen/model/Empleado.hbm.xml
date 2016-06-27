@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27/06/2016 04:28:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.almacen.model.Empleado" table="empleado" catalog="siswebho_almacen" optimistic-lock="version">
+        <id name="idEmpleado" type="java.lang.Integer">
+            <column name="id_empleado" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="acceso" class="com.almacen.model.Acceso" fetch="select">
+            <column name="id_acceso" not-null="true" />
+        </many-to-one>
+        <many-to-one name="departamento" class="com.almacen.model.Departamento" fetch="select">
+            <column name="id_departamento" not-null="true" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="40" not-null="true" />
+        </property>
+        <property name="app" type="string">
+            <column name="app" length="45" not-null="true" />
+        </property>
+        <property name="apm" type="string">
+            <column name="apm" length="45" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="80" />
+        </property>
+        <property name="telefono" type="string">
+            <column name="telefono" length="20" />
+        </property>
+        <property name="celular" type="string">
+            <column name="celular" length="13" />
+        </property>
+        <property name="rfc" type="string">
+            <column name="rfc" length="13" not-null="true" />
+        </property>
+        <property name="curp" type="string">
+            <column name="curp" length="18" not-null="true" unique="true" />
+        </property>
+        <property name="fechaNacimiento" type="date">
+            <column name="fechaNacimiento" length="0" not-null="true" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="direccion" length="250" />
+        </property>
+        <property name="puesto" type="string">
+            <column name="puesto" length="150" />
+        </property>
+        <property name="foto" type="string">
+            <column name="foto" length="100" />
+        </property>
+        <property name="clave" type="string">
+            <column name="clave" length="60" not-null="true" />
+        </property>
+        <property name="vigente" type="string">
+            <column name="vigente" length="1" />
+        </property>
+        <property name="fechaReg" type="timestamp">
+            <column name="fechaReg" length="0" not-null="true" />
+        </property>
+        <set name="salidas" table="salida" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_empleado" not-null="true" />
+            </key>
+            <one-to-many class="com.almacen.model.Salida" />
+        </set>
+    </class>
+</hibernate-mapping>
