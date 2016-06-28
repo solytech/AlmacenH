@@ -3,6 +3,9 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="idFactura" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
      articuloEntrada.`cbInterno` AS articuloEntrada_cbInterno,
@@ -35,7 +38,8 @@ FROM
      AND departamento.`id_departamento` = factura.`id_departamento`
      INNER JOIN `proveedor` proveedor ON factura.`id_proveedor` = proveedor.`id_proveedor`
      INNER JOIN `tipoEntrada` tipoEntrada ON factura.`id_tipoEntrada` = tipoEntrada.`id_tipoEntrada`
-     INNER JOIN `formaDePago` formaDePago ON factura.`id_formaDePago` = formaDePago.`id_formaDePago`]]>
+     INNER JOIN `formaDePago` formaDePago ON factura.`id_formaDePago` = formaDePago.`id_formaDePago`
+     WHERE factura.`id_factura`= $P{idFactura}]]>
 	</queryString>
 	<field name="articuloEntrada_cbInterno" class="java.lang.String"/>
 	<field name="articulo_id_marca" class="java.lang.Long"/>

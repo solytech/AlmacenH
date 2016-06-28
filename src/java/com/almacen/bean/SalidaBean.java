@@ -199,6 +199,7 @@ public class SalidaBean {
 
             salida.setDepartamento(dpto);
             salida.setEmpleado(emp);
+            salida.setFolio("0000");
             salida.setVigente("S");
             salida.setFechaReg(fecha);
             salida.setAcceso(acc);
@@ -206,7 +207,10 @@ public class SalidaBean {
             boolean seGuardaSalida = salidaDao.guardaSalida(salida);
 
             Salida sal = salidaDao.ultimaSalidaAgregada();
-
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idSalida", sal);
+            String idSalida = "000"+sal.getIdSalida().toString();
+            sal.setFolio(idSalida);
+            salidaDao.actualizaSalida(sal);
             //*********** Guardamos los articulos que van a salir ***********
             boolean seGuardanArticulos = salArtDao.guardaSalidaAllArticulo(listaArticulos, sal, fecha, acc);
             

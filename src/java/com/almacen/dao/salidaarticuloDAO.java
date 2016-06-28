@@ -14,4 +14,6 @@ import java.util.List;
 
 public interface salidaarticuloDAO {
     public boolean guardaSalidaAllArticulo(List<ArticuloEntrada> lista, Salida idSalida, Date fecha, Acceso acc);
+    
+   
 }

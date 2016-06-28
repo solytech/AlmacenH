@@ -14,4 +14,6 @@ public interface salidaDAO {
     
     public Salida ultimaSalidaAgregada();
     
+    public boolean actualizaSalida(Salida salida);
+    
 }

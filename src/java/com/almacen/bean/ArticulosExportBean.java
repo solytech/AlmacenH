@@ -6,6 +6,7 @@
 package com.almacen.bean;
 
 import com.almacen.model.Factura;
+import com.almacen.model.Salida;
 import com.almacen.utilerias.Utilerias;
 import java.io.File;
 import java.io.IOException;
@@ -75,12 +76,50 @@ public class ArticulosExportBean {
         
         Connection conexion;
         Class.forName("com.mysql.jdbc.Driver").newInstance();
-        conexion = DriverManager.getConnection(Utilerias.conexionReporte());
+        
+        utiles.obtenerDatosDeAcceso();
+        //System.out.println(" **** host: "+ utiles.getUrl() +"     usuario: "+ utiles.getUser() +"   pass: "+ utiles.getPass());
+        
+        conexion = DriverManager.getConnection(utiles.getUrl(), utiles.getUser(), utiles.getPass());
         
         Map<String, Object> parametros = new HashMap<String, Object>(); 
         parametros.put("id_Entrada22", facAct.getIdFactura()); 
         
         File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/REPORTES/reporteEntrada.jasper"));
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, conexion);
+        
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        response.addHeader("Content-disposition", "attachment; filename="+nombre+".pdf");
+        ServletOutputStream stream = response.getOutputStream();
+        
+        JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+        
+        stream.flush();
+        stream.close();
+        FacesContext.getCurrentInstance().responseComplete();
+        
+        System.out.println("******* sale de la funcion del reporte ******");  
+    }
+    
+    public void generarValeSalida(ActionEvent actionEvent) throws JRException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException{
+        
+        System.out.println("******* entra a la funcion del reporte ******");  
+        
+        Salida salida = (Salida) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idSalida");
+        String nombre = "Vale_Salida_"+salida.getFolio();
+        
+        Connection conexion;  
+        Class.forName("com.mysql.jdbc.Driver").newInstance();  
+        
+        utiles.obtenerDatosDeAcceso();
+        //System.out.println(" **** host: "+ utiles.getUrl() +"     usuario: "+ utiles.getUser() +"   pass: "+ utiles.getPass());
+        
+        conexion = DriverManager.getConnection(utiles.getUrl(), utiles.getUser(), utiles.getPass());
+        
+        Map<String, Object> parametros = new HashMap<String, Object>(); 
+        parametros.put("idSalida", salida.getIdSalida()); 
+        
+        File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/REPORTES/valeSalida.jasper"));
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, conexion);
         
         HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
