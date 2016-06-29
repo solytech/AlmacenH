@@ -59,6 +59,7 @@ public class SalidaBean {
     private Boolean mostrarPorArticulos = false;
     private Boolean mostrarPorFactura = false;
     private Boolean mostrarListado = false;
+    private Boolean desactiva = false;
     
     private Factura factura;
     private Salida salida;
@@ -70,6 +71,14 @@ public class SalidaBean {
     
 
     //************************** get y set *************************************
+
+    public Boolean getDesactiva() {
+        return desactiva;
+    }
+
+    public void setDesactiva(Boolean desactiva) {
+        this.desactiva = desactiva;
+    }
 
     public Salida getSalida() {
         return salida;
@@ -151,7 +160,7 @@ public class SalidaBean {
         List<Proveedor> prv = pDao.listaProveedores();
         listaProv.clear();
         for(Proveedor p: prv){
-            SelectItem provItem = new SelectItem(p.getIdProveedor(), p.getRfc());
+            SelectItem provItem = new SelectItem(p.getIdProveedor(), p.getRfc()+" "+p.getProveedor());
             this.listaProv.add(provItem);
         }
         
@@ -214,7 +223,7 @@ public class SalidaBean {
             //*********** Guardamos los articulos que van a salir ***********
             boolean seGuardanArticulos = salArtDao.guardaSalidaAllArticulo(listaArticulos, sal, fecha, acc);
             
-            
+            desactivaOpcion();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Salida de Articulos Guardada Correctamente" ) );
         }catch(Exception e){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Error al Guardar Salida de Articulos" ) );
@@ -226,7 +235,7 @@ public class SalidaBean {
     
     
     public void mostrarOpcion(){
-        System.out.println("******* valor de opcion ---->>"+opcion);
+        
         if(opcion == 1){
             mostrarPorFactura = true;
             mostrarListado = true;
@@ -239,7 +248,20 @@ public class SalidaBean {
             mostrarPorFactura = false;
             listaArticulos = null;
         }
-        System.out.println("**** valores de variables -->>"+mostrarPorArticulos+" / "+mostrarListado);
+        
+    }
+    
+    public void desactivaOpcion(){
+        desactiva = true;
+    }
+    
+    public void  nuevaSalida(){
+        desactiva = false;   
+        salida = new Salida();
+        idProv = null;
+        idFac = null;
+        idEmpleado = null;
+        listaArticulos = null;
     }
     
 }

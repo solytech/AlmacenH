@@ -27,12 +27,12 @@
                 </h:form>
                 
                 <h:form id="frmPorFactura">
-                    <p:growl id="growl" showDetail="true" sticky="true" life="30000" />
+                    <p:growl id="growl" showDetail="true" sticky="true" life="1000" />
                     <p:fieldset id="fielPorFactura" legend="Salida por factura" style="margin-bottom:20px" rendered="#{salidaBean.mostrarPorFactura}" >
                         <h:panelGrid columns="9" >
                             <p:outputLabel value="Seleccione Proveedor:" for="cboProveedor" />
                             <p:column/>
-                            <p:selectOneMenu id="cboProveedor" value="#{salidaBean.idProv}"  filter="true" filterMatchMode="contains" >
+                            <p:selectOneMenu id="cboProveedor" value="#{salidaBean.idProv}"  filter="true" filterMatchMode="contains" disabled="#{salidaBean.desactiva}">
                                 <f:selectItem itemValue="0" itemLabel=" -- Proveedor -- " />
                                 <f:selectItems value="#{salidaBean.listaProv}"  />
                                 <f:ajax execute="cboProveedor" render="cboFacturas" />
@@ -41,7 +41,7 @@
                             <p:column/>
                             <p:outputLabel value="Seleccione la Factura:" for="cboProveedor" />
                             <p:column/>
-                            <p:selectOneMenu id="cboFacturas" value="#{salidaBean.idFac}" filter="true" filterMatchMode="contains" >
+                            <p:selectOneMenu id="cboFacturas" value="#{salidaBean.idFac}" filter="true" filterMatchMode="contains" disabled="#{salidaBean.desactiva}">
                                 <f:selectItem itemValue="0" itemLabel=" -- Factura -- " />
                                 <f:selectItems value="#{salidaBean.listaFacturas}"  />
                                 <f:ajax execute="cboFacturas" render=":frmArticulosSalida:listadoArticulos verProveedor" />
@@ -56,22 +56,24 @@
                         <h:panelGrid columns="10" >
                             <p:outputLabel value="Seleccione Empleado:" for="cboEmpleado" />
                             <p:column/>
-                            <p:selectOneMenu id="cboEmpleado" value="#{salidaBean.idEmpleado}"  filter="true" filterMatchMode="contains" >
+                            <p:selectOneMenu id="cboEmpleado" value="#{salidaBean.idEmpleado}"  filter="true" filterMatchMode="contains" disabled="#{salidaBean.desactiva}" >
                                 <f:selectItem itemValue="0" itemLabel=" -- Empleado -- " />
                                 <f:selectItems value="#{salidaBean.listaEmpleado}"   />
                             </p:selectOneMenu>
                             <p:commandButton icon="icon-plus-squared" value="Nuevo Empleado" onclick="PF('wdialogoEmpleado').show();" />
                             <p:column/>
-                            <p:outputLabel for="dtaSalida" value="Fecha Salida"/>
-                            <p:calendar id="dtaSalida" value="#{salidaBean.salida.fechaSalida}" />
+                            <p:outputLabel for="dtaSalida" value="Fecha Salida"  />
+                            <p:calendar id="dtaSalida" value="#{salidaBean.salida.fechaSalida}" disabled="#{salidaBean.desactiva}"/>
                             <p:column/>
                             <p:outputLabel for="txtObservaciones" value="Observaciones" />
-                            <p:inputTextarea id="txtObservaciones" value="#{salidaBean.salida.observaciones}" />
+                            <p:inputTextarea id="txtObservaciones" value="#{salidaBean.salida.observaciones}" disabled="#{salidaBean.desactiva}" />
                         </h:panelGrid>
                     <p/>
                     <p/>
-                        <p:commandButton value="Registrar Salida" icon="ui-icon-check" actionListener="#{salidaBean.guardaSalidaFactura()}" update="growl" />
-                        <h:commandButton value="Vale Salida" actionListener="#{articulosExportBean.generarValeSalida}" image="/resources/imagenes/valeEntrada.png" />
+                    <p:commandButton id="btnRegSalida" value="Registrar Salida" icon="ui-icon-check" actionListener="#{salidaBean.guardaSalidaFactura()}" update="growl, btnRegSalida, cboProveedor, cboFacturas, cboEmpleado" disabled="#{salidaBean.desactiva}" />
+                    <p:commandButton value="Nueva Salida" icon="ui-icon-plusthick" actionListener="#{salidaBean.nuevaSalida()}" process="@this" update="frmPorFactura"/> 
+                    <h:commandButton id="btnValeSalida" value="Vale Salida" actionListener="#{articulosExportBean.generarValeSalida}" image="/resources/imagenes/valeEntrada.png" />
+                    <p:tooltip id="tTValeSalida" for="btnValeSalida" value="Imprime Vale de Salida" showEffect="clip" hideEffect="explode" />
                     </p:fieldset>
                 </h:form>
                 
