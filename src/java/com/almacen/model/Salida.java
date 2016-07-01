@@ -1,5 +1,5 @@
 package com.almacen.model;
-// Generated 27/06/2016 04:27:58 PM by Hibernate Tools 4.3.1
+// Generated 29/06/2016 01:34:56 PM by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -20,6 +20,7 @@ public class Salida  implements java.io.Serializable {
      private Date fechaSalida;
      private String observaciones;
      private String vigente;
+     private Byte tipoSalida;
      private Date fechaReg;
      private Set<ArticuloSalida> articuloSalidas = new HashSet<ArticuloSalida>(0);
 
@@ -35,7 +36,7 @@ public class Salida  implements java.io.Serializable {
         this.fechaSalida = fechaSalida;
         this.fechaReg = fechaReg;
     }
-    public Salida(Acceso acceso, Departamento departamento, Empleado empleado, String folio, Date fechaSalida, String observaciones, String vigente, Date fechaReg, Set<ArticuloSalida> articuloSalidas) {
+    public Salida(Acceso acceso, Departamento departamento, Empleado empleado, String folio, Date fechaSalida, String observaciones, String vigente, Byte tipoSalida, Date fechaReg, Set<ArticuloSalida> articuloSalidas) {
        this.acceso = acceso;
        this.departamento = departamento;
        this.empleado = empleado;
@@ -43,6 +44,7 @@ public class Salida  implements java.io.Serializable {
        this.fechaSalida = fechaSalida;
        this.observaciones = observaciones;
        this.vigente = vigente;
+       this.tipoSalida = tipoSalida;
        this.fechaReg = fechaReg;
        this.articuloSalidas = articuloSalidas;
     }
@@ -102,6 +104,13 @@ public class Salida  implements java.io.Serializable {
     
     public void setVigente(String vigente) {
         this.vigente = vigente;
+    }
+    public Byte getTipoSalida() {
+        return this.tipoSalida;
+    }
+    
+    public void setTipoSalida(Byte tipoSalida) {
+        this.tipoSalida = tipoSalida;
     }
     public Date getFechaReg() {
         return this.fechaReg;

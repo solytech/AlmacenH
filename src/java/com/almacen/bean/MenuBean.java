@@ -60,7 +60,7 @@ public class MenuBean implements Serializable{
         
         DefaultSubMenu firstSubmenu = new DefaultSubMenu("Almacen");
         DefaultSubMenu secondSubmenu = new DefaultSubMenu("Entradas");
-        //DefaultSubMenu thirdSubmenu = new DefaultSubMenu("Salidas");
+        DefaultSubMenu thirdSubmenu = new DefaultSubMenu("Salidas");
         //DefaultSubMenu fourSubmenu = new DefaultSubMenu("Herramientas");
         DefaultSubMenu quintoSubmenu = new DefaultSubMenu("Catálogos");
         
@@ -79,9 +79,9 @@ public class MenuBean implements Serializable{
         
         secondSubmenu.addElement(item1);
         secondSubmenu.addElement(item2);
-        //thirdSubmenu.addElement(item3);
+        thirdSubmenu.addElement(item3);
         firstSubmenu.addElement(secondSubmenu);
-        //firstSubmenu.addElement(thirdSubmenu);
+        firstSubmenu.addElement(thirdSubmenu);
         //fourSubmenu.addElement(item5);
         //fourSubmenu.addElement(item6);
         
@@ -90,7 +90,7 @@ public class MenuBean implements Serializable{
         model.addElement(item4); 
         model.addElement(firstSubmenu);
         model.addElement(quintoSubmenu);
-        model.addElement(item3);
+        
         
         
         

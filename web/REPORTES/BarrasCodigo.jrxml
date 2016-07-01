@@ -3,7 +3,7 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="idFactura" class="java.lang.Integer">
+	<parameter name="idFactura" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
@@ -23,23 +23,28 @@
      articuloEntrada.`id_articulo` AS articuloEntrada_id_articulo,
      articulo.`id_articulo` AS articulo_id_articulo,
      articulo.`articulo` AS articulo_articulo,
-     departamento.`departamento` AS departamento_departamento,
+     departamento.`departamento` AS departamento_entrega,
+     departamento2.`departamento` AS departamento_requisicion,
      tipoEntrada.`tipoEntrada` AS tipoEntrada_tipoEntrada,
      formaDePago.`id_formaDePago` AS formaDePago_id_formaDePago,
      factura.`id_formaDePago` AS factura_id_formaDePago,
      formaDePago.`formaDePago` AS formaDePago_formaDePago,
      factura.`fechaFactura` AS factura_fechaFactura,
      factura.`fechaRecepcion` AS factura_fechaRecepcion,
-     articuloEntrada.`id_departamento` AS articuloEntrada_id_departamento
+     articuloEntrada.`id_departamento` AS articuloEntrada_id_departamento,
+     marca.`id_marca` AS marca_id_marca,
+     marca.`marca` AS marca_marca
 FROM
      `articulo` articulo INNER JOIN `articuloEntrada` articuloEntrada ON articulo.`id_articulo` = articuloEntrada.`id_articulo`
      INNER JOIN `factura` factura ON articuloEntrada.`id_factura` = factura.`id_factura`
      INNER JOIN `departamento` departamento ON articuloEntrada.`id_departamento` = departamento.`id_departamento`
-     AND departamento.`id_departamento` = factura.`id_departamento`
+     INNER JOIN `departamento` departamento2 ON factura.`id_departamento` = departamento2.`id_departamento`
      INNER JOIN `proveedor` proveedor ON factura.`id_proveedor` = proveedor.`id_proveedor`
      INNER JOIN `tipoEntrada` tipoEntrada ON factura.`id_tipoEntrada` = tipoEntrada.`id_tipoEntrada`
      INNER JOIN `formaDePago` formaDePago ON factura.`id_formaDePago` = formaDePago.`id_formaDePago`
-     WHERE articuloEntrada.`id_factura`= 1015]]>
+     INNER JOIN `marca` marca ON articulo.`id_marca` = marca.`id_marca`
+WHERE
+     articuloEntrada.`id_factura` = 1015]]>
 	</queryString>
 	<field name="articuloEntrada_cbInterno" class="java.lang.String"/>
 	<field name="articulo_id_marca" class="java.lang.Long"/>
@@ -56,7 +61,8 @@ FROM
 	<field name="articuloEntrada_id_articulo" class="java.lang.Long"/>
 	<field name="articulo_id_articulo" class="java.lang.Long"/>
 	<field name="articulo_articulo" class="java.lang.String"/>
-	<field name="departamento_departamento" class="java.lang.String"/>
+	<field name="departamento_entrega" class="java.lang.String"/>
+	<field name="departamento_requisicion" class="java.lang.String"/>
 	<field name="tipoEntrada_tipoEntrada" class="java.lang.String"/>
 	<field name="formaDePago_id_formaDePago" class="java.lang.Long"/>
 	<field name="factura_id_formaDePago" class="java.lang.Long"/>
@@ -64,6 +70,8 @@ FROM
 	<field name="factura_fechaFactura" class="java.sql.Date"/>
 	<field name="factura_fechaRecepcion" class="java.sql.Date"/>
 	<field name="articuloEntrada_id_departamento" class="java.lang.Long"/>
+	<field name="marca_id_marca" class="java.lang.Long"/>
+	<field name="marca_marca" class="java.lang.String"/>
 	<detail>
 		<band height="213" splitType="Stretch">
 			<textField>
@@ -85,12 +93,12 @@ FROM
 				<textElement>
 					<font fontName="Arial" size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{departamento_departamento}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{departamento_entrega}]]></textFieldExpression>
 			</textField>
 			<componentElement>
 				<reportElement x="155" y="35" width="63" height="86" uuid="55ddbb36-a0d1-4c76-afda-29228b5351d7"/>
 				<jr:DataMatrix xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
-					<jr:codeExpression><![CDATA["RFC: "+$F{proveedor_rfc}+"\n"+"Prov: "+$F{proveedor_proveedor}+"\n"+"Dpto: "+$F{departamento_departamento}+"\n"+"FF: "+$F{factura_folioFactura}+"\n"+"FR: "+$F{factura_folioRequisicion}+"\n"+"TE: "+$F{tipoEntrada_tipoEntrada}+"\n"+"FF: "+$F{factura_fechaFactura}+"\n"+"FE: "+$F{factura_fechaRecepcion}]]></jr:codeExpression>
+					<jr:codeExpression><![CDATA["RFC: "+$F{proveedor_rfc}+"\n"+"Prov"+$F{proveedor_proveedor}+"Dpto: "+$F{departamento_entrega}+"\n"+"FF: "+$F{factura_folioFactura}+"\n"+"FR: "+$F{factura_folioRequisicion}+"\n"+"TE: "+$F{tipoEntrada_tipoEntrada}+"\n"+"FF: "+$F{factura_fechaFactura}+"\n"+"FE: "+$F{factura_fechaRecepcion}]]></jr:codeExpression>
 				</jr:DataMatrix>
 			</componentElement>
 			<componentElement>
@@ -104,7 +112,7 @@ FROM
 				<textElement>
 					<font fontName="Arial" size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Marca: "+$F{articulo_id_marca}+"\n"+"Modelo: "+$F{articulo_modelo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Marca: "+$F{marca_marca}+"\n"+"Modelo: "+$F{articulo_modelo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

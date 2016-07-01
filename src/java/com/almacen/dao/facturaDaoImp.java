@@ -5,6 +5,7 @@
  */
 package com.almacen.dao;
 
+import com.almacen.model.ArticuloSalida;
 import com.almacen.model.Factura;
 import com.almacen.util.HibernateUtil;
 import java.util.List;
@@ -106,6 +107,7 @@ public class facturaDaoImp implements facturaDAO{
         try {
             
             String hql = "FROM Factura d join fetch d.proveedor p where p.idProveedor = "+idProv;
+            
             p = session.createQuery(hql).list();
             transaction.commit();
             session.close();
@@ -116,6 +118,42 @@ public class facturaDaoImp implements facturaDAO{
         } 
         
         return p;
+        
+    }
+    
+    @Override
+    public boolean facturaSalio(Integer idFactura){
+        List<ArticuloSalida> p = null;
+        boolean respuesta = false;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+
+        try {
+            
+            String hql = "FROM ArticuloSalida s" +
+                         " join fetch s.articuloEntrada ae" +
+                         " join fetch ae.factura f" +
+                         " join fetch s.salida sa" +
+                         " where f.idFactura = "+idFactura+" and sa.tipoSalida = 1" +
+                         " group by f.idFactura";
+            
+            p = session.createQuery(hql).list();
+            transaction.commit();
+            session.close();
+            
+            if(!p.isEmpty()){
+                
+                    respuesta = true;
+                
+            }
+            
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            transaction.rollback();
+        } 
+        System.out.println("************* valor de respuesta ----->>>"+respuesta);
+        return respuesta;
         
     } 
     

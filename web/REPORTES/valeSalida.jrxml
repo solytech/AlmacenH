@@ -358,42 +358,42 @@ WHERE
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="233" y="47" width="146" height="27" uuid="358268b2-59e2-4e7c-8097-441b71945c4a"/>
+				<reportElement x="233" y="43" width="146" height="27" uuid="358268b2-59e2-4e7c-8097-441b71945c4a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[TEC. MIGUEL ANGEL CHAVEZ GONZALEZ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="35" y="49" width="137" height="12" uuid="e8d18e02-fc64-4f23-b65d-2e7c05df89f5"/>
+				<reportElement x="35" y="45" width="137" height="12" uuid="e8d18e02-fc64-4f23-b65d-2e7c05df89f5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[C.P. LUCINA PORTILLA MORA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="36" y="60" width="137" height="26" uuid="2b11d8fe-be21-434d-9270-0cc113a6354e"/>
+				<reportElement x="36" y="59" width="137" height="26" uuid="2b11d8fe-be21-434d-9270-0cc113a6354e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[JEFE DEL DEPTO. DE RECS. MATS. Y SERVS.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="234" y="73" width="148" height="12" uuid="36725a24-6346-40a0-8412-52e7f4a747c7"/>
+				<reportElement x="233" y="72" width="148" height="12" uuid="36725a24-6346-40a0-8412-52e7f4a747c7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[SUBJEFE DEL ALMACEN]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="422" y="50" width="131" height="14" uuid="6ee46299-0c8d-4020-998c-6f9759e3a3f6"/>
+				<reportElement x="422" y="53" width="131" height="14" uuid="6ee46299-0c8d-4020-998c-6f9759e3a3f6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[NOMBRE Y SELLO]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="397" y="25" width="186" height="11" uuid="c2f53b26-af48-42c8-a408-3880364d50e4"/>
+				<reportElement x="397" y="40" width="186" height="11" uuid="c2f53b26-af48-42c8-a408-3880364d50e4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="9"/>
 				</textElement>

@@ -20,4 +20,6 @@ public interface facturaDAO {
     
     public List<Factura> facturasPorProv(Integer idProv);
     
+    public boolean facturaSalio(Integer idFactura);
+    
 }

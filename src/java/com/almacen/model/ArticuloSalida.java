@@ -1,5 +1,5 @@
 package com.almacen.model;
-// Generated 27/06/2016 04:27:58 PM by Hibernate Tools 4.3.1
+// Generated 29/06/2016 01:34:56 PM by Hibernate Tools 4.3.1
 
 
 import java.math.BigDecimal;

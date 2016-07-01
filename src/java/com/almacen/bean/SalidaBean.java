@@ -34,6 +34,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.RowEditEvent;
 
 @ManagedBean
 @ViewScoped
@@ -63,14 +65,24 @@ public class SalidaBean {
     
     private Factura factura;
     private Salida salida;
+    private ArticuloEntrada artEnt;
     
     
     public SalidaBean(){
         salida = new Salida();
+        artEnt = new ArticuloEntrada();
     }
     
 
     //************************** get y set *************************************
+
+    public ArticuloEntrada getArtEnt() {
+        return artEnt;
+    }
+
+    public void setArtEnt(ArticuloEntrada artEnt) {
+        this.artEnt = artEnt;
+    }
 
     public Boolean getDesactiva() {
         return desactiva;
@@ -160,7 +172,7 @@ public class SalidaBean {
         List<Proveedor> prv = pDao.listaProveedores();
         listaProv.clear();
         for(Proveedor p: prv){
-            SelectItem provItem = new SelectItem(p.getIdProveedor(), p.getRfc()+" "+p.getProveedor());
+            SelectItem provItem = new SelectItem(p.getIdProveedor(), p.getRfc()+" - "+p.getProveedor());
             this.listaProv.add(provItem);
         }
         
@@ -173,8 +185,10 @@ public class SalidaBean {
         List<Factura> fac = fDao.facturasPorProv(idProv);
         listaFacturas.clear();
         for(Factura f: fac){
-            SelectItem provItem = new SelectItem(f.getIdFactura(), f.getFolioFactura());
-            this.listaFacturas.add(provItem);
+            if(fDao.facturaSalio(f.getIdFactura()) == false){
+                SelectItem provItem = new SelectItem(f.getIdFactura(), f.getFolioFactura());
+                this.listaFacturas.add(provItem);
+            }
         }
         
         return listaFacturas;
@@ -208,6 +222,7 @@ public class SalidaBean {
 
             salida.setDepartamento(dpto);
             salida.setEmpleado(emp);
+            salida.setTipoSalida(opcion.byteValue());
             salida.setFolio("0000");
             salida.setVigente("S");
             salida.setFechaReg(fecha);
@@ -231,9 +246,20 @@ public class SalidaBean {
         
     }
     
-    
-    
-    
+    public void guardaNumSerie(){
+        
+        articuloentradaDAO ae = new articuloentradaDaoImp();
+        try{
+            ae.guardaArticuloEntrada(artEnt);
+            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Número de Serie Capturado" ) );
+            
+        }catch(Exception e){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "NO se Capturo Número de Serie" ) );
+        }
+        artEnt = null;    
+    }
+   
     public void mostrarOpcion(){
         
         if(opcion == 1){

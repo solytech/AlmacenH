@@ -579,7 +579,7 @@ public class FacturaBean {
                 artEnt.setEsResguardo("N");
             }
             
-            artEnt.setNumeroDeSerie(art.getCb());
+            //artEnt.setNumeroDeSerie(art.getCb());
             //artEnt.setObservaciones("qaz");
             artEnt.setCbInterno("1-1-07062016");
             
