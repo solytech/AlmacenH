@@ -53,5 +53,26 @@ public class salidaarticuloDaoImp implements salidaarticuloDAO{
         
     }
     
+    @Override
+    public List<ArticuloSalida> listaArtSalida (Integer idArtSal){
+        
+        List<ArticuloSalida> lista = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction  transaction = session.beginTransaction();
+        
+        try {
+            
+            String hql = "FROM ArticuloSalida asal WHERE asal.articuloEntrada.idArticuloEntrada = "+idArtSal;
+            lista = session.createQuery(hql).list();
+            transaction.commit();
+            session.close();
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            transaction.rollback();
+        } 
+       
+        return lista;
+    }
     
 }

@@ -27,7 +27,7 @@
                 </h:form>
                 
                 <h:form id="frmPorFactura">
-                    <p:growl id="growl" autoUpdate="true" showDetail="true" sticky="true" life="3000" />
+                    <p:growl id="growl" autoUpdate="true" showDetail="true" sticky="true" life="20000" />
                     <p:fieldset id="fielPorFactura" legend="Salida por factura" style="margin-bottom:20px" rendered="#{salidaBean.mostrarPorFactura}" >
                         <h:panelGrid columns="9" >
                             <p:outputLabel value="Seleccione Proveedor:" for="cboProveedor" />
@@ -56,14 +56,14 @@
                         <h:panelGrid columns="10" >
                             <p:outputLabel value="Seleccione Empleado:" for="cboEmpleado" />
                             <p:column/>
-                            <p:selectOneMenu id="cboEmpleado" value="#{salidaBean.idEmpleado}"  filter="true" filterMatchMode="contains" disabled="#{salidaBean.desactiva}" required="true" >
+                            <p:selectOneMenu id="cboEmpleado" value="#{salidaBean.idEmpleado}"  filter="true" filterMatchMode="contains" disabled="#{salidaBean.desactiva}"  >
                                 <f:selectItem itemValue="0" itemLabel=" -- Empleado -- " />
                                 <f:selectItems value="#{salidaBean.listaEmpleado}"   />
                             </p:selectOneMenu>
                             <p:commandButton icon="icon-plus-squared" value="Nuevo Empleado" onclick="PF('wdialogoEmpleado').show();" />
                             <p:column/>
                             <p:outputLabel for="dtaSalida" value="Fecha Salida"  />
-                            <p:calendar id="dtaSalida" value="#{salidaBean.salida.fechaSalida}" disabled="#{salidaBean.desactiva}" required="true" />
+                            <p:calendar id="dtaSalida" value="#{salidaBean.salida.fechaSalida}" disabled="#{salidaBean.desactiva}"  />
                             <p:column/>
                             <p:outputLabel for="txtObservaciones" value="Observaciones" />
                             <p:inputTextarea id="txtObservaciones" value="#{salidaBean.salida.observaciones}" disabled="#{salidaBean.desactiva}" />
@@ -83,32 +83,56 @@
                 </h:form>
                 
                 <h:form id="frmPorArticulo">
+                    <p:growl id="avisoPorArt" autoUpdate="true" showDetail="true" sticky="true" life="30000" />
                     <p:fieldset id="fielPorArticulo" legend="Salida por articulo" style="margin-bottom:20px" rendered="#{salidaBean.mostrarPorArticulos}" >
-                        <p:outputLabel value="Selecciones Articulo: " for="themePojo" />
-                        <p:autoComplete id="themePojo"  value="#{completarArticulo.idArtEnt}" completeMethod="#{completarArticulo.completarArtEnt}" 
-                                        var="theme" itemLabel="#{theme.articulo.articulo}" itemValue="#{theme}" converter="articuloConverter" forceSelection="true" size="60" minQueryLength="2"  >
-
-                            <p:column>
-                                <h:outputText value="#{theme.cbInterno}"/>
-                            </p:column>
-                            <p:column>
-                                <h:outputText value="#{theme.articulo.articulo}"/>
-                            </p:column>
-
-                        </p:autoComplete>
+                        <h:panelGrid columns="10" >
+                            <p:outputLabel value="Seleccione Empleado:" for="cboEmpleado" />
+                            <p:column/>
+                            <p:selectOneMenu id="cboEmpleado" value="#{salidaBean.idEmpleado}"  filter="true" filterMatchMode="contains" disabled="#{salidaBean.desactiva}" required="#{salidaBean.desactiva}" >
+                                <f:selectItem itemValue="0" itemLabel=" -- Empleado -- " />
+                                <f:selectItems value="#{salidaBean.listaEmpleado}"   />
+                            </p:selectOneMenu>
+                            <p:commandButton icon="icon-plus-squared" value="Nuevo Empleado" onclick="PF('wdialogoEmpleado').show();" />
+                            <p:column/>
+                            <p:outputLabel for="dtaSalida" value="Fecha Salida"  />
+                            <p:calendar id="dtaSalida" value="#{salidaBean.salida.fechaSalida}" disabled="#{salidaBean.desactiva}" required="#{salidaBean.desactiva}" />
+                            <p:column/>
+                            <p:outputLabel for="txtObservaciones" value="Observaciones" />
+                            <p:inputTextarea id="txtObservaciones" value="#{salidaBean.salida.observaciones}" disabled="#{salidaBean.desactiva}" />
+                        </h:panelGrid>
                         
-                        <h:panelGroup id="cantidad" >
-                            <p:outputLabel value="cantidad " for="txtCantidad" rendered="#{facturaBean.txtCantidad}" />
-                            <p:inputText id="txtCantidad" size="4" value="#{facturaBean.cantidad}" rendered="#{facturaBean.txtCantidad}" />
-                        </h:panelGroup>
-                        <h:panelGroup id="caja"  >
-                            <p:outputLabel value="Paquetes x Caja " for="txtCaja" rendered="#{facturaBean.txtCaja}" />
-                            <p:inputText id="txtCaja" size="4" value="#{facturaBean.uxcaja}" rendered="#{facturaBean.txtCaja}"  />
-                        </h:panelGroup>
-                        <h:panelGroup id="paquete" >
-                            <p:outputLabel value="Piezas x Paquete " for="txtPaquete" rendered="#{facturaBean.txtPaquete}" />
-                            <p:inputText id="txtPaquete" size="4" value="#{facturaBean.uxpaquete}" rendered="#{facturaBean.txtPaquete}"/>
-                        </h:panelGroup>
+                        <h:panelGrid columns="3" >
+                            <p:outputLabel value="Buscar Articulo:" for="cboArtEntra" />
+                            <p:column/>
+                            <p:selectOneMenu id="cboArtEntra" value="#{salidaBean.idArtEnt}"  filter="true" filterMatchMode="contains" style="width: 100%"  >
+                                <f:selectItem itemValue="0" itemLabel=" -- Articulo Salida -- " />
+                                <f:selectItems value="#{salidaBean.listaArtEntrada}"   />
+                                <f:ajax execute="cboArtEntra" render="existencia" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid columns="5" >
+                            <p:outputLabel value="Existencia: " id="titulo"  />
+                            <p:outputLabel value="#{salidaBean.aePorArt.piezas}" id="existencia" />
+                            <p:column/>
+                            <p:column/>
+                            <p:column/>
+                            <p:outputLabel value="Cantidad  " for="txtCantidad"  />
+                            <p:inputText id="txtCantidad"  value="#{salidaBean.pzsSalida}"  />
+                            <p:column/>
+                            <p:commandButton id="cmbAgregarArt" value="Agregar Articulo" icon="ui-icon-plusthick" actionListener="#{salidaBean.agragarArticulo()}" update=":frmArticulosSalida:listadoArticulos" /> 
+                        </h:panelGrid>
+                        <p/>
+                        <p/>
+                        <h:panelGrid columns="6">
+                            <p:commandButton id="btnRegSalida" value="Registrar Salida" icon="ui-icon-check" actionListener="#{salidaBean.guardarSalidaArticulo()}" update="avisoPorArt,cboEmpleado,dtaSalida,txtObservaciones,cboArtEntra,txtCantidad,btnRegSalida,cmbAgregarArt"  />
+                            <p:commandButton value="Nueva Salida" icon="ui-icon-plusthick" actionListener="#{salidaBean.nuevaSalida()}" process="@this" update="frmPorArticulo :frmArticulosSalida:listadoArticulos"/> 
+                            <h:commandButton id="btnValeSalida" value="Vale Salida" actionListener="#{articulosExportBean.generarValeSalida}" image="/resources/imagenes/valeEntrada.png" />
+                            <p:tooltip id="tTValeSalida" for="btnValeSalida" value="Imprime Vale de Salida" showEffect="clip" hideEffect="explode" />
+                            <h:commandButton id="btnValeRes" value="Vale Resguardo" actionListener="#{articulosExportBean.generarValeResguardo}" image="/resources/imagenes/valeRes.png" />
+                            <p:tooltip id="tTValeRes" for="btnValeRes" value="Imprime Vale de Resguardo" showEffect="clip" hideEffect="explode" />
+                        </h:panelGrid>
+                        
                         
                         
                     </p:fieldset>
@@ -124,7 +148,7 @@
                             <h:outputText value="#{art.cbInterno}" />
                         </p:column>
                         <p:column headerText="Cantidad" style="width:150px;text-align: center">
-                            <h:outputText value="#{art.cantidad} #{art.unidadDeMedida.unidadDeMedida}" />
+                            <h:outputText value="#{art.piezas} pzs" />
                         </p:column>
                         <p:column headerText="Articulo" style="width:250px;text-align: center">
                             <h:outputText value="#{art.articulo.articulo}" />
@@ -147,7 +171,7 @@
                     </p:dataTable>
                 </h:form>
                 
-                <p:dialog id="empleado" widgetVar="wdialogoEmpleado" header="Nuevo Empleado" modal="true" resizable="false" closeOnEscape="true" draggable="false">
+                <p:dialog id="empleado" widgetVar="wdialogoEmpleado" header="Nuevo Empleado" modal="true" resizable="false" closeOnEscape="true" draggable="false" hideEffect="explode" >
                     <h:form id="frmEmpleado">
                         <p:growl id="growl3" showDetail="true" sticky="true" life="3000" />
                         <h:panelGrid columns="6" >
@@ -163,12 +187,12 @@
                             <p:outputLabel value="RFC" for="txtRfc" />
                             <p:inputText id="txtRfc"  value="#{empleadoBean.empleado.rfc}"  />
                             <p:outputLabel value="Fecha de Nacimiento" for="dteFechaNac" />
-                            <p:calendar id="dteFechaNac" value="#{empleadoBean.empleado.fechaNacimiento}" />
+                            <p:calendar id="dteFechaNac" value="#{empleadoBean.empleado.fechaNacimiento}" locale="de" navigator="true" />
                         </h:panelGrid>
                         <p:outputLabel value="Dirección" for="txtDireccion" />
                         <p:inputText id="txtDireccion"  value="#{empleadoBean.empleado.direccion}" size="60" />
                         <h:panelGrid columns="6" >
-                            <p:outputLabel value="Correo" for="txtCorreo" />
+                            <p:outputLabel value="Correo" for="txtCorreo" /> 
                             <p:inputText id="txtCorreo"  value="#{empleadoBean.empleado.email}"  />
                             <p:outputLabel value="Celular" for="txtCelular" />
                             <p:inputText id="txtCelular"  value="#{empleadoBean.empleado.celular}"  />
@@ -178,15 +202,15 @@
                             <p:outputLabel value="Puesto" for="txtPuesto" />
                             <p:inputText id="txtPuesto"  value="#{empleadoBean.empleado.puesto}"  />
                             <p:outputLabel value="Clave Presupuestal" for="txtClave" />
-                            <p:inputText id="txtClave"  value="#{empleadoBean.empleado.clave}"  />
+                            <p:inputText id="txtClave"  value="#{empleadoBean.empleado.clave}"   />
                             <p:outputLabel for="cboDepto" value="Departamento al que pertenece" />
-                            <p:selectOneMenu id="cboDepto" value="#{empleadoBean.idDepto}" filter="true" filterMatchMode="contains" >
+                            <p:selectOneMenu id="cboDepto" value="#{empleadoBean.idDepto}" filter="true" filterMatchMode="contains"  >
                                 <f:selectItem itemValue="0" itemLabel="Seleccione Departamento" />
                                 <f:selectItems value="#{empleadoBean.listaDpto}"  />
                             </p:selectOneMenu>
                         </h:panelGrid>
                         
-                        <p:commandButton value="Registrar" icon="ui-icon-check" actionListener="#{empleadoBean.guardaEmpleado()}" update="growl3 :frmEmpleado :frmPorFactura:cboEmpleado" oncomplete="PF('wdialogoEmpleado').hide();"  />
+                        <p:commandButton value="Registrar" icon="ui-icon-check" actionListener="#{empleadoBean.guardaEmpleado()}" update="growl3 :frmPorFactura:cboEmpleado :frmPorArticulo:cboEmpleado" oncomplete="PF('wdialogoEmpleado').hide();"  />
                             <p:commandButton value="Cancelar" icon="ui-icon-cancel" process="@this" immediate="true" onclick="PF('wdialogoEmpleado').hide();"  />
                             
                     </h:form>

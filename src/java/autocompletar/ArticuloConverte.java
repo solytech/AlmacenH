@@ -32,11 +32,13 @@ public class ArticuloConverte implements Converter{
                 //Theme theme = null;
                 //Integer v = Integer.valueOf(value);
                 Integer v = Integer.parseInt(value) ;
-                ArticuloEntrada art = artEntDao.encuentraArtEnt(v);
+                System.out.println("***************  Entra a getAsObjeto-- lo que retorna--->>"+v);
+                //ArticuloEntrada art = artEntDao.encuentraArtEnt(v);
+                ArticuloEntrada art = new ArticuloEntrada();
                 //theme.setId(v);
                 //System.out.println("***************  lo que tiene v -->>"+v);
                 //System.out.println("***************  Entra a getAsObjeto-- lo que retorna--->>"+ service.getThemes().get(v));
-                //System.out.println("***************  Entra a getAsObjeto-- lo que retorna--->>"+art.getArticulo());
+                
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idArtEntrada",v);
                 //return service.getThemes().get(v);
                 return art;

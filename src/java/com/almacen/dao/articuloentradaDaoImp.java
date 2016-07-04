@@ -80,6 +80,28 @@ public class articuloentradaDaoImp implements articuloentradaDAO{
     }
     
     @Override
+    public List<ArticuloEntrada> allArtEnt(){
+        
+        List<ArticuloEntrada> lista = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction  transaction = session.beginTransaction();
+        
+        try {
+            
+            String hql = "FROM ArticuloEntrada ae join fetch ae.unidadDeMedida um join fetch ae.articulo a join fetch ae.departamento";
+            lista = session.createQuery(hql).list();
+            transaction.commit();
+            session.close();
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            transaction.rollback();
+        } 
+       
+        return lista;
+    }
+    
+    @Override
     public ArticuloEntrada ultimoAgregado(Integer idFactura){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction  transaction = session.beginTransaction();
@@ -132,7 +154,7 @@ public class articuloentradaDaoImp implements articuloentradaDAO{
 
         try {
             
-            String hql = "FROM ArticuloEntrada d where d.idArticuloEntrada = "+idArt;
+            String hql = "FROM ArticuloEntrada ae join fetch ae.unidadDeMedida um join fetch ae.articulo a join fetch ae.departamento d where ae.idArticuloEntrada = "+idArt;
             p = (ArticuloEntrada) session.createQuery(hql).uniqueResult();
             transaction.commit();
             session.close();

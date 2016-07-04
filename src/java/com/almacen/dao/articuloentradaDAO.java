@@ -22,4 +22,6 @@ public interface articuloentradaDAO {
     
     public ArticuloEntrada encuentraArtEnt(Integer idArt);
     
+    public List<ArticuloEntrada> allArtEnt();
+    
 }

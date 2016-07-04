@@ -21,11 +21,13 @@ import com.almacen.dao.salidaarticuloDAO;
 import com.almacen.dao.salidaarticuloDaoImp;
 import com.almacen.model.Acceso;
 import com.almacen.model.ArticuloEntrada;
+import com.almacen.model.ArticuloSalida;
 import com.almacen.model.Departamento;
 import com.almacen.model.Empleado;
 import com.almacen.model.Factura;
 import com.almacen.model.Proveedor;
 import com.almacen.model.Salida;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,8 +36,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import org.primefaces.event.CellEditEvent;
-import org.primefaces.event.RowEditEvent;
+
 
 @ManagedBean
 @ViewScoped
@@ -50,13 +51,16 @@ public class SalidaBean {
     private List<SelectItem> listaProv;
     private List<SelectItem> listaFacturas;
     private List<SelectItem> listaEmpleado;
+    private List<SelectItem> listaArtEntrada;
     
     private List<ArticuloEntrada> listaArticulos;
+    private List<ArticuloEntrada> listaArtPorArt = new ArrayList<>();
     
     private Integer opcion;
     private Integer idProv;
     private Integer idFac;
     private Integer idEmpleado;
+    private Integer idArtEnt;
     
     private Boolean mostrarPorArticulos = false;
     private Boolean mostrarPorFactura = false;
@@ -66,16 +70,49 @@ public class SalidaBean {
     private Factura factura;
     private Salida salida;
     private ArticuloEntrada artEnt;
+    private ArticuloEntrada aePorArt;
     
+    private BigDecimal pzsSalida;
     
     public SalidaBean(){
         salida = new Salida();
         artEnt = new ArticuloEntrada();
     }
-    
 
     //************************** get y set *************************************
+    public List<ArticuloEntrada> getListaArtPorArt() {
+        return listaArtPorArt;
+    }
+    
+    public void setListaArtPorArt(List<ArticuloEntrada> listaArtPorArt) {
+        this.listaArtPorArt = listaArtPorArt;
+    }
 
+    public BigDecimal getPzsSalida() {
+        return pzsSalida;
+    }
+    
+    public void setPzsSalida(BigDecimal pzsSalida) {
+        this.pzsSalida = pzsSalida;
+    }
+
+    public ArticuloEntrada getAePorArt() {
+        this.aePorArt = existenciasReales(idArtEnt);
+        return aePorArt;
+    }
+    
+    public void setAePorArt(ArticuloEntrada aePorArt) {    
+        this.aePorArt = aePorArt;
+    }
+
+    public Integer getIdArtEnt() {
+        return idArtEnt;
+    }
+
+    public void setIdArtEnt(Integer idArtEnt) {
+        this.idArtEnt = idArtEnt;
+    }
+    
     public ArticuloEntrada getArtEnt() {
         return artEnt;
     }
@@ -114,7 +151,12 @@ public class SalidaBean {
     }
 
     public List<ArticuloEntrada> getListaArticulos() {
-        this.listaArticulos = artEntDao.listaArtEnt(idFac);
+        if(opcion == 1){
+            this.listaArticulos = artEntDao.listaArtEnt(idFac);
+        }
+        if(opcion == 2){
+            this.listaArticulos = listaArtPorArt;
+        }
         return listaArticulos;
     }
 
@@ -206,6 +248,17 @@ public class SalidaBean {
         return listaEmpleado;
     }
     
+    public List<SelectItem> getListaArtEntrada() {
+        this.listaArtEntrada = new ArrayList<>();
+        List<ArticuloEntrada> lista = artEntDao.allArtEnt();
+        listaArtEntrada.clear();
+        for(ArticuloEntrada ae: lista){
+            SelectItem provItem = new SelectItem(ae.getIdArticuloEntrada(), ae.getCbInterno()+" | "+ae.getArticulo().getArticulo());
+            this.listaArtEntrada.add(provItem);
+        }
+        
+        return listaArtEntrada;
+    }
     
     
     
@@ -246,6 +299,39 @@ public class SalidaBean {
         
     }
     
+    public void guardarSalidaArticulo(){
+        Date fecha = new Date();
+        Acceso acc = (Acceso) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("acceso");
+           
+        try{
+            //********** Guardamos Primeo datos de la salida *************
+            Departamento dpto = dptoDao.encuentraUnDepto(aePorArt.getDepartamento().getIdDepartamento());
+            Empleado emp = empleadoDao.encuentraEmpleado(idEmpleado);
+
+            salida.setDepartamento(dpto);
+            salida.setEmpleado(emp);
+            salida.setTipoSalida(opcion.byteValue());
+            salida.setFolio("0000");
+            salida.setVigente("S");
+            salida.setFechaReg(fecha);
+            salida.setAcceso(acc);
+
+            boolean seGuardaSalida = salidaDao.guardaSalida(salida);
+
+            Salida sal = salidaDao.ultimaSalidaAgregada();
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idSalida", sal);
+            String idSalida = "000"+sal.getIdSalida().toString();
+            sal.setFolio(idSalida);
+            salidaDao.actualizaSalida(sal);
+            //*********** Guardamos los articulos que van a salir ***********
+            boolean seGuardanArticulos = salArtDao.guardaSalidaAllArticulo(listaArtPorArt, sal, fecha, acc);
+            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Salida de Articulos Guardada Correctamente" ) );
+        }catch(Exception e){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Error al Guardar Salida de Articulos" ) );
+        }
+    }
+    
     public void guardaNumSerie(){
         
         articuloentradaDAO ae = new articuloentradaDaoImp();
@@ -258,6 +344,31 @@ public class SalidaBean {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "NO se Capturo Número de Serie" ) );
         }
         artEnt = null;    
+    }
+    
+    public void agragarArticulo(){
+        ArticuloEntrada agregar = aePorArt;
+        System.out.println("***** lo que tiene pzasSalida -->>"+pzsSalida);
+        agregar.setCantidad(pzsSalida);
+        agregar.setPiezas(pzsSalida);
+        System.out.println("***** lo que tiene agregar  -->>"+agregar.getPiezas());
+        listaArtPorArt.add(agregar);
+        
+    }
+    
+    public ArticuloEntrada existenciasReales(Integer idAE){
+        Double totalSalida = 0.0; Double existencias = 0.0;
+        ArticuloEntrada ae = artEntDao.encuentraArtEnt(idAE);
+        List<ArticuloSalida> listaAS = salArtDao.listaArtSalida(idAE);
+        if(!listaAS.isEmpty()){
+            for(ArticuloSalida as : listaAS){    
+                totalSalida = totalSalida + as.getCantidadPieza().doubleValue();
+            }
+            existencias = totalSalida - ae.getPiezas().doubleValue();
+            ae.setPiezas(new BigDecimal(existencias));
+        }
+        
+        return ae;
     }
    
     public void mostrarOpcion(){
@@ -287,7 +398,12 @@ public class SalidaBean {
         idProv = null;
         idFac = null;
         idEmpleado = null;
+        idArtEnt = null;
         listaArticulos = null;
+        listaArtPorArt = null;
+        aePorArt = null;
+        pzsSalida = null;
     }
+    
     
 }
