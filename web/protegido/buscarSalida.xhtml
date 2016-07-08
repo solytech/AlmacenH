@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/templates/plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:form id="listaResultados" >
+                    <p:dataTable id="listadoArticulos" value="#{salidaBean.listadoSalidas}" var="salida" >
+                        <f:facet name="header">
+                                LISTADO DE SALIDAS DE ALMACEN
+                        </f:facet>
+                        
+                        <p:column headerText="Folio" filterBy="#{salida.folio}" filterMatchMode="contains" style="width:70px;text-align: center" >
+                            <h:outputText value="#{salida.folio}" />
+                        </p:column>
+                        <p:column headerText="Departamento" filterBy="#{salida.departamento.departamento}" filterMatchMode="contains" style="width:250px;text-align: center" >
+                            <h:outputText value="#{salida.departamento.departamento}" />
+                        </p:column>
+                        <p:column headerText="Empleado Que Recicbio" style="width:150px;text-align: center" >
+                            <h:outputText value="#{salida.empleado.nombre} #{salida.empleado.app} #{salida.empleado.apm}" />
+                        </p:column>
+                        <p:column headerText="Fecha Salida" filterBy="#{salida.fechaSalida}" filterMatchMode="contains" style="width:100px;text-align: center" >
+                            <h:outputText value="#{salida.fechaSalida}" />
+                        </p:column>
+                        <p:column headerText="Detalles Salida" style="width:100px;text-align: center" >
+                            <p:commandButton icon="lupa" title="Detalle Salida" oncomplete="PF('wdlDetalleFactura').show();" update=":frmDetalleFactura">
+                                <f:setPropertyActionListener target="#{salidaBean.detalleSalida}" value="#{salida}" />
+                            </p:commandButton>
+                        </p:column>
+                        
+                    </p:dataTable>
+                </h:form>
+                
+                <p:dialog id="detalleFactura" widgetVar="wdlDetalleFactura" header="Detalle de Factura" modal="true" resizable="false" closeOnEscape="true" draggable="false" hideEffect="explode" >
+                    <h:form id="frmDetalleFactura" >
+                        <h:panelGrid columns="1" >
+                            <p:outputLabel value="Folio Salida: #{salidaBean.detalleSalida.folio}" id="txtFolio" />
+                            <p:outputLabel value="Departamento: #{salidaBean.detalleSalida.departamento.departamento}" id="txtDepto" />
+                            <p:outputLabel value="Fecha de Salida: #{salidaBean.detalleSalida.fechaSalida}" id="txtFechaSalida" />
+                            <p:outputLabel value="Empleado que Recicbio: #{salidaBean.detalleSalida.empleado.nombre} #{salidaBean.detalleSalida.empleado.app} #{salidaBean.detalleSalida.empleado.apm}" id="txtEmpleado" />
+                        </h:panelGrid>                        
+                        <p/>
+                        <p/>
+                        <p:dataTable id="dialogoListado" value="#{salidaBean.listadoSalidasDetalle}"  var="art"  >
+                            <f:facet name="header">
+                                LISTADO DE SALIDAS DE ALMACEN
+                            </f:facet>
+                            
+                            <p:column headerText="Codigo" style="width:150px;text-align: center">
+                                <h:outputText value="#{art.articuloEntrada.cbInterno}" />
+                            </p:column>
+                            <p:column headerText="Piezas" style="width:150px;text-align: center">
+                                <h:outputText value="#{art.cantidadPieza} Pzs."  />
+                            </p:column>
+                            <p:column headerText="Articulo" style="width:150px;text-align: center">
+                                <h:outputText value="#{art.articuloEntrada.articulo.articulo}"  />
+                            </p:column>
+                            
+                        </p:dataTable>
+                    </h:form>
+                </p:dialog>
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

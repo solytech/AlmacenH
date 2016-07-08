@@ -5,7 +5,9 @@
  */
 package com.almacen.dao;
 
+import com.almacen.model.ArticuloSalida;
 import com.almacen.model.Salida;
+import java.util.List;
 
 
 public interface salidaDAO {
@@ -15,5 +17,9 @@ public interface salidaDAO {
     public Salida ultimaSalidaAgregada();
     
     public boolean actualizaSalida(Salida salida);
+    
+    public List<Salida> listadoSalidas();
+    
+    public List<ArticuloSalida> articulosPorSalida(Integer idSalida);
     
 }

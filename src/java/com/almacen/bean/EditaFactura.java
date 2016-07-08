@@ -10,7 +10,6 @@ import com.almacen.dao.articuloDaoImp;
 import com.almacen.dao.articuloentradaDaoImp;
 import com.almacen.dao.departamentoDAO;
 import com.almacen.dao.departamentoDaoImp;
-import com.almacen.dao.facturaDAO;
 import com.almacen.dao.facturaDaoImp;
 import com.almacen.dao.formadepagoDAO;
 import com.almacen.dao.formadepagoDaoImp;
@@ -20,6 +19,7 @@ import com.almacen.dao.tipoentradaDAO;
 import com.almacen.dao.tipoentradaDaoImp;
 import com.almacen.dao.unidadmedidaDAO;
 import com.almacen.dao.unidadmedidaDaoImp;
+import com.almacen.dto.listaArtEntDTO;
 import com.almacen.model.Acceso;
 import com.almacen.model.Articulo;
 import com.almacen.model.ArticuloEntrada;
@@ -60,9 +60,12 @@ public class EditaFactura {
     List<SelectItem> listaUdm;
     
     private List<ArticuloEntrada> listaArtEnt;
+    private List<listaArtEntDTO> listaArtEntDTO;
     
     Factura factura;
     ArticuloEntrada artEnt;
+    ArticuloEntrada eliminaArt;
+    listaArtEntDTO eliminaDTO;
     
     Integer idProv;
     Integer idDepto;
@@ -70,6 +73,7 @@ public class EditaFactura {
     Integer IdTe;
     Integer idUdm;
     Integer idAsignacion;
+    Integer elimina;
     
     private BigDecimal cantidad;
     private BigDecimal uxcaja;
@@ -93,6 +97,36 @@ public class EditaFactura {
         
         factura = new Factura();
         artEnt = new ArticuloEntrada();
+        eliminaArt = new ArticuloEntrada();
+        
+    }
+
+    public listaArtEntDTO getEliminaDTO() {
+        System.out.println("*** id que recibe --->>"+eliminaDTO.getIdArtEnt());
+        return eliminaDTO;
+    }
+
+    public void setEliminaDTO(listaArtEntDTO eliminaDTO) {
+        this.eliminaDTO = eliminaDTO;
+    }
+
+    public Integer getElimina() {
+        System.out.println("*** id que recibe --->>"+elimina);
+        return elimina;
+    }
+
+    public void setElimina(Integer elimina) {
+        this.elimina = elimina;
+    }
+    
+    public ArticuloEntrada getEliminaArt() {
+        System.out.println("*** lo que recibe --->>"+eliminaArt.getIdArticuloEntrada());
+        return eliminaArt;
+    }
+
+    public void setEliminaArt(ArticuloEntrada eliminaArt) {
+        System.out.println("*** lo que envia --->>"+eliminaArt.getIdArticuloEntrada());
+        this.eliminaArt = eliminaArt;
     }
 
     public Boolean getDistribuir() {
@@ -221,6 +255,10 @@ public class EditaFactura {
 
     public void setIdAsignacion(Integer idAsignacion) {
         this.idAsignacion = idAsignacion;
+    }
+
+    public List<listaArtEntDTO> getListaArtEntDTO() {
+        return listaArtEntDTO;
     }
 
     public List<ArticuloEntrada> getListaArtEnt() {
@@ -353,8 +391,8 @@ public class EditaFactura {
         IdFdp = factura.getFormaDePago().getIdFormaDePago();
         IdTe = factura.getTipoEntrada().getIdTipoEntrada();
         //facturaBean.listaDeEntradas(factura);
-        listaArtEnt = artEntDao.listaArtEnt(factura.getIdFactura());
-        
+        //listaArtEnt = artEntDao.listaArtEnt(factura.getIdFactura());
+        listaArtEntDTO = artEntDao.listaArtEntDTO(factura.getIdFactura());
         //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("esEditar", true);
         //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idEdita", factura);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("factura", factura);
@@ -480,7 +518,7 @@ public class EditaFactura {
             //System.out.println("*** lo que tiene cpz -->"+df.format(cpieza));
             System.out.println("************* pasa operaciones matematicas**********************");
             
-            if( idAsignacion == null ){
+            if( idAsignacion == null || idAsignacion == 0){
                 //System.out.println("**** entra al if de departamento *****");
                 dep = departamentoDAO.encuentraUnDepto(fac.getDepartamento().getIdDepartamento());
             }else{
@@ -525,7 +563,8 @@ public class EditaFactura {
             ae.setCbInterno(idArticuloEntrada + "-" + fac.getProveedor().getIdProveedor()+ "-" + formateador.format(fecha));
             artEntDao.actualizarArticuloEntrada(ae);
             //System.out.println("*************lista de articulo **********************");
-            listaArtEnt = artEntDao.listaArtEnt(fac.getIdFactura());
+            //listaArtEnt = artEntDao.listaArtEnt(fac.getIdFactura());
+            listaArtEntDTO = artEntDao.listaArtEntDTO(fac.getIdFactura());
             //System.out.println("*************total de articulos traidos--->>"+listaArtEnt.size());
             //for(ArticulosEntDTO a: lista){
             //    System.out.println("articulos de lalista --->>"+a.getArticulo().getArticulo());
@@ -539,7 +578,24 @@ public class EditaFactura {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Articulo No Agregado" ) );
         }      
       
-    } 
+    }
+    
+    public void eliminaArticulo(){
+        System.out.println("****** entra a funcion eliminar *********");
+        try{
+            for (listaArtEntDTO ae : listaArtEntDTO) {
+                if (ae.getSeleccionado()) {
+                    artEntDao.eliminaArticuloEntrada(ae.getArtEnt());
+                }
+            }
+            listaArtEntDTO = artEntDao.listaArtEntDTO(factura.getIdFactura());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Articulos Eliminados" ) );
+        }catch(Exception e){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Articulos No Eliminados" ) );
+        }
+    }
+        
+        
     
     
     public void habilitarTxt(){

@@ -55,6 +55,8 @@ public class SalidaBean {
     
     private List<ArticuloEntrada> listaArticulos;
     private List<ArticuloEntrada> listaArtPorArt = new ArrayList<>();
+    private List<Salida> listadoSalidas;
+    private List<ArticuloSalida> listadoSalidasDetalle;
     
     private Integer opcion;
     private Integer idProv;
@@ -69,6 +71,7 @@ public class SalidaBean {
     
     private Factura factura;
     private Salida salida;
+    private Salida detalleSalida;
     private ArticuloEntrada artEnt;
     private ArticuloEntrada aePorArt;
     
@@ -80,6 +83,29 @@ public class SalidaBean {
     }
 
     //************************** get y set *************************************
+
+    public List<ArticuloSalida> getListadoSalidasDetalle() {
+        
+        this.listadoSalidasDetalle = salidaDao.articulosPorSalida(detalleSalida.getIdSalida());
+        
+        return listadoSalidasDetalle;
+    }
+
+    public Salida getDetalleSalida() {
+        return detalleSalida;
+    }
+
+    public void setDetalleSalida(Salida detalleSalida) {
+        this.detalleSalida = detalleSalida;
+    }
+
+    public List<Salida> getListadoSalidas() {
+        
+        this.listadoSalidas = salidaDao.listadoSalidas();
+        
+        return listadoSalidas;
+    }
+    
     public List<ArticuloEntrada> getListaArtPorArt() {
         return listaArtPorArt;
     }
@@ -278,14 +304,14 @@ public class SalidaBean {
             salida.setTipoSalida(opcion.byteValue());
             salida.setFolio("0000");
             salida.setVigente("S");
-            salida.setFechaReg(fecha);
+            salida.setFechaReg(fecha); 
             salida.setAcceso(acc);
 
             boolean seGuardaSalida = salidaDao.guardaSalida(salida);
 
             Salida sal = salidaDao.ultimaSalidaAgregada();
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idSalida", sal);
-            String idSalida = "000"+sal.getIdSalida().toString();
+            String idSalida = factura.getFolioRequisicion()+"-"+sal.getIdSalida().toString();
             sal.setFolio(idSalida);
             salidaDao.actualizaSalida(sal);
             //*********** Guardamos los articulos que van a salir ***********
@@ -402,7 +428,7 @@ public class SalidaBean {
         listaArticulos = null;
         listaArtPorArt = null;
         aePorArt = null;
-        pzsSalida = null;
+        pzsSalida = null;  
     }
     
     

@@ -5,6 +5,7 @@
  */
 package com.almacen.dao;
 
+import com.almacen.dto.listaArtEntDTO;
 import com.almacen.model.ArticuloEntrada;
 import java.util.List;
 
@@ -23,5 +24,9 @@ public interface articuloentradaDAO {
     public ArticuloEntrada encuentraArtEnt(Integer idArt);
     
     public List<ArticuloEntrada> allArtEnt();
+    
+    public Boolean eliminaArticuloEntrada(ArticuloEntrada artEnt);
+    
+    public List<listaArtEntDTO> listaArtEntDTO (Integer idFactura);
     
 }

@@ -68,6 +68,7 @@ public class MenuBean implements Serializable{
         DefaultMenuItem item1 = new DefaultMenuItem("Captura Factura");
         DefaultMenuItem item2 = new DefaultMenuItem("Buscar Factura");
         DefaultMenuItem item3 = new DefaultMenuItem("Salida Mercancia");
+        DefaultMenuItem item7 = new DefaultMenuItem("Buscar Salida");
         DefaultMenuItem item5 = new DefaultMenuItem("Proveedores");
         DefaultMenuItem item6 = new DefaultMenuItem("Articulos");
         item4.setUrl("../protegido/principal.xhtml");
@@ -76,10 +77,12 @@ public class MenuBean implements Serializable{
         item3.setUrl("../protegido/salidaArticulos.xhtml");
         item5.setUrl("../protegido/proveedores.xhtml");
         item6.setUrl("/protegido/altaArticulo.almacen");
+        item7.setUrl("../protegido/buscarSalida.xhtml");
         
         secondSubmenu.addElement(item1);
         secondSubmenu.addElement(item2);
         thirdSubmenu.addElement(item3);
+        thirdSubmenu.addElement(item7);
         firstSubmenu.addElement(secondSubmenu);
         firstSubmenu.addElement(thirdSubmenu);
         //fourSubmenu.addElement(item5);

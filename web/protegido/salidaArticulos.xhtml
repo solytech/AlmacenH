@@ -88,17 +88,17 @@
                         <h:panelGrid columns="10" >
                             <p:outputLabel value="Seleccione Empleado:" for="cboEmpleado" />
                             <p:column/>
-                            <p:selectOneMenu id="cboEmpleado" value="#{salidaBean.idEmpleado}"  filter="true" filterMatchMode="contains" disabled="#{salidaBean.desactiva}" required="#{salidaBean.desactiva}" >
+                            <p:selectOneMenu id="cboEmpleado" value="#{salidaBean.idEmpleado}"  filter="true" filterMatchMode="contains"   >
                                 <f:selectItem itemValue="0" itemLabel=" -- Empleado -- " />
                                 <f:selectItems value="#{salidaBean.listaEmpleado}"   />
                             </p:selectOneMenu>
                             <p:commandButton icon="icon-plus-squared" value="Nuevo Empleado" onclick="PF('wdialogoEmpleado').show();" />
                             <p:column/>
                             <p:outputLabel for="dtaSalida" value="Fecha Salida"  />
-                            <p:calendar id="dtaSalida" value="#{salidaBean.salida.fechaSalida}" disabled="#{salidaBean.desactiva}" required="#{salidaBean.desactiva}" />
+                            <p:calendar id="dtaSalida" value="#{salidaBean.salida.fechaSalida}"   />
                             <p:column/>
                             <p:outputLabel for="txtObservaciones" value="Observaciones" />
-                            <p:inputTextarea id="txtObservaciones" value="#{salidaBean.salida.observaciones}" disabled="#{salidaBean.desactiva}" />
+                            <p:inputTextarea id="txtObservaciones" value="#{salidaBean.salida.observaciones}"  />
                         </h:panelGrid>
                         
                         <h:panelGrid columns="3" >

@@ -5,6 +5,7 @@
  */
 package com.almacen.dao;
 
+import com.almacen.model.ArticuloSalida;
 import com.almacen.model.Salida;
 import com.almacen.util.HibernateUtil;
 import java.util.List;
@@ -74,6 +75,50 @@ public class salidaDaoImp implements salidaDAO{
         } 
         
         return salida;
+    }
+    
+    @Override
+    public List<Salida> listadoSalidas(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction  transaction = session.beginTransaction();
+        List<Salida> lista = null;
+        
+        try {
+            
+            String hql = "FROM Salida s join fetch s.departamento d join fetch s.empleado order by s.fechaSalida";
+            lista = session.createQuery(hql).list();
+            transaction.commit();
+            session.close();
+            
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            transaction.rollback();
+        } 
+        
+        return lista;
+    }
+    
+    @Override
+    public List<ArticuloSalida> articulosPorSalida(Integer idSalida){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction  transaction = session.beginTransaction();
+        List<ArticuloSalida> lista = null;
+        
+        try {
+            
+            String hql = "FROM ArticuloSalida asal join fetch asal.salida s join fetch asal.articuloEntrada ae join fetch ae.articulo a where s.idSalida = "+idSalida;
+            lista = session.createQuery(hql).list();
+            transaction.commit();
+            session.close();
+            
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            transaction.rollback();
+        } 
+        
+        return lista;
     }
     
 }

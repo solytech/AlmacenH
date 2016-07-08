@@ -63,6 +63,7 @@ public class FacturaBean {
     
     Factura factura;
     ArticuloEntrada artEnt;
+    private ArticuloEntrada eliminaArt;
     
     private List<ArticuloEntrada> listaArtEnt;
     private List<Factura> listaFacturas;
@@ -99,10 +100,19 @@ public class FacturaBean {
         
         factura = new Factura();
         artEnt = new ArticuloEntrada();
+        eliminaArt = new ArticuloEntrada();
         
     }
     
     // geters y seters*************************+
+
+    public ArticuloEntrada getEliminaArt() {
+        return eliminaArt;
+    }
+
+    public void setEliminaArt(ArticuloEntrada eliminaArt) {
+        this.eliminaArt = eliminaArt;
+    }
 
     public Integer getIdFactura() {
         return idFactura;
@@ -629,7 +639,20 @@ public class FacturaBean {
         //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idEdita", factura);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("factura", factura);
       
-    } 
+    }
+    
+    public void eliminaArticulo(){
+        Boolean exito;
+        try{
+            
+            exito = artEntDao.eliminaArticuloEntrada(eliminaArt);
+            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Articulo Eliminado" ) );
+        }catch(Exception e){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Articulo No Elimindo" ) );
+        }
+        
+    }
    
     
      public void habilitarTxt(){

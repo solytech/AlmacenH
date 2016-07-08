@@ -5,8 +5,10 @@
  */
 package com.almacen.dao;
 
+import com.almacen.dto.listaArtEntDTO;
 import com.almacen.model.ArticuloEntrada;
 import com.almacen.util.HibernateUtil;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -77,6 +79,36 @@ public class articuloentradaDaoImp implements articuloentradaDAO{
         } 
        
         return lista;
+    }
+    
+    @Override
+    public List<listaArtEntDTO> listaArtEntDTO (Integer idFactura){
+        
+        List<ArticuloEntrada> lista = null;
+        List<listaArtEntDTO> listaDTO = new ArrayList<>();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction  transaction = session.beginTransaction();
+        
+        try {
+            
+            String hql = "FROM ArticuloEntrada ae join fetch ae.unidadDeMedida um join fetch ae.articulo a join fetch ae.departamento WHERE ae.factura.idFactura = "+idFactura ;
+            lista = session.createQuery(hql).list();
+            transaction.commit();
+            session.close();
+            for(ArticuloEntrada ae: lista){
+                listaArtEntDTO aeDTO = new listaArtEntDTO();
+                aeDTO.setArtEnt(ae);
+                aeDTO.setIdArtEnt(ae.getIdArticuloEntrada());
+                aeDTO.setSeleccionado(Boolean.FALSE);
+                
+                listaDTO.add(aeDTO);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            transaction.rollback();
+        } 
+       
+        return listaDTO;
     }
     
     @Override
@@ -166,6 +198,23 @@ public class articuloentradaDaoImp implements articuloentradaDAO{
         
         return p;
         
+    }
+    
+    @Override
+    public Boolean eliminaArticuloEntrada(ArticuloEntrada artEnt) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction  transaction = session.beginTransaction();
+        Boolean exito = false;
+        try{
+            session.delete(artEnt);
+            transaction.commit();
+            session.close();
+            exito = true;
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            transaction.rollback();
+        }
+        return exito; 
     }
     
 }
