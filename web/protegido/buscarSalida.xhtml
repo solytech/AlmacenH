@@ -38,29 +38,36 @@
                     </p:dataTable>
                 </h:form>
                 
-                <p:dialog id="detalleFactura" widgetVar="wdlDetalleFactura" header="Detalle de Factura" modal="true" resizable="false" closeOnEscape="true" draggable="false" hideEffect="explode" >
+                <p:dialog id="detalleFactura" widgetVar="wdlDetalleFactura" header="Detalle de Salida Articulos" modal="true" resizable="false" closeOnEscape="true" draggable="false" hideEffect="explode" >
                     <h:form id="frmDetalleFactura" >
                         <h:panelGrid columns="1" >
                             <p:outputLabel value="Folio Salida: #{salidaBean.detalleSalida.folio}" id="txtFolio" />
                             <p:outputLabel value="Departamento: #{salidaBean.detalleSalida.departamento.departamento}" id="txtDepto" />
                             <p:outputLabel value="Fecha de Salida: #{salidaBean.detalleSalida.fechaSalida}" id="txtFechaSalida" />
                             <p:outputLabel value="Empleado que Recicbio: #{salidaBean.detalleSalida.empleado.nombre} #{salidaBean.detalleSalida.empleado.app} #{salidaBean.detalleSalida.empleado.apm}" id="txtEmpleado" />
+                            <p:outputLabel value="Numero de Articulos: #{salidaBean.listadoSalidasDetalle.size()}" id="txtNumSalidas" />
                         </h:panelGrid>                        
                         <p/>
                         <p/>
-                        <p:dataTable id="dialogoListado" value="#{salidaBean.listadoSalidasDetalle}"  var="art"  >
+                        <p:dataTable id="dialogoListado" value="#{salidaBean.listadoSalidasDetalle}"  var="art" scrollable="true" scrollWidth="90%" scrollHeight="250" >
                             <f:facet name="header">
-                                LISTADO DE SALIDAS DE ALMACEN
+                                LISTADO DE SALIDAS DE ARTICULOS
                             </f:facet>
                             
-                            <p:column headerText="Codigo" style="width:150px;text-align: center">
+                            <p:column headerText="Codigo" style="width:50px;text-align: center">
                                 <h:outputText value="#{art.articuloEntrada.cbInterno}" />
                             </p:column>
-                            <p:column headerText="Piezas" style="width:150px;text-align: center">
+                            <p:column headerText="Piezas" style="width:40px;text-align: center">
                                 <h:outputText value="#{art.cantidadPieza} Pzs."  />
                             </p:column>
                             <p:column headerText="Articulo" style="width:150px;text-align: center">
                                 <h:outputText value="#{art.articuloEntrada.articulo.articulo}"  />
+                            </p:column>
+                            <p:column headerText="Factura" style="width:40px;text-align: center">
+                                <h:outputText value="#{art.articuloEntrada.factura.folioFactura}"  />
+                            </p:column>
+                            <p:column headerText="Proveedor" style="width:100px;text-align: center">
+                                <h:outputText value="#{art.articuloEntrada.factura.proveedor.proveedor}"  />
                             </p:column>
                             
                         </p:dataTable>

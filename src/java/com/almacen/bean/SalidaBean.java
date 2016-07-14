@@ -56,7 +56,7 @@ public class SalidaBean {
     private List<ArticuloEntrada> listaArticulos;
     private List<ArticuloEntrada> listaArtPorArt = new ArrayList<>();
     private List<Salida> listadoSalidas;
-    private List<ArticuloSalida> listadoSalidasDetalle;
+    private List<ArticuloSalida> listadoSalidasDetalle = new ArrayList<>();
     
     private Integer opcion;
     private Integer idProv;
@@ -85,9 +85,9 @@ public class SalidaBean {
     //************************** get y set *************************************
 
     public List<ArticuloSalida> getListadoSalidasDetalle() {
-        
-        this.listadoSalidasDetalle = salidaDao.articulosPorSalida(detalleSalida.getIdSalida());
-        
+        if(detalleSalida != null){
+            this.listadoSalidasDetalle = salidaDao.articulosPorSalida(detalleSalida.getIdSalida());
+        }
         return listadoSalidasDetalle;
     }
 

@@ -37,7 +37,9 @@ public class ThemeConverter implements Converter {
                 System.out.println("***************  Entra a getAsObjeto-- lo que retorna--->>"+art.getArticulo());
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idArticulo",v);
                 //return service.getThemes().get(v);
+                
                 return art;
+                
                 //return service.getThemes().get(v);
             } catch(NumberFormatException e) {
                 throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid theme."));

@@ -178,6 +178,9 @@
                             <p:column headerText="Descripción">
                                 <h:outputText value="#{art.articulo.articulo}" />
                             </p:column>
+                            <p:column headerText="Depto. Asignado">
+                                <h:outputText value="#{art.departamento.departamento}" />
+                            </p:column>
                             <p:column headerText="Precio Unitario" style="width:75px;text-align: center">
                                 <h:outputText value="#{art.costoUnitario}" />
                             </p:column>
@@ -193,8 +196,11 @@
                 <p:dialog id="dlgElimaArt" header="Eliminar Articulo" widgetVar="dlgEliminarArt" showEffect="explode" hideEffect="explode" modal="true" >   
                     <h:form id="formEliminarArticulo">
                         <h:outputText value="Desea eliminar este articulo de la factura?" />
+                        <p/>
+                        <h:outputText value="#{facturaBean.eliminaArt.articulo.articulo}" />
+                        <p/>
                         <p:commandButton value="Si" actionListener="#{facturaBean.eliminaArticulo()}"
-                                         update=":tablaArt:articulos growl" oncomplete="PF('dlgEliminarArt').hide();" />
+                                         update=":tablaArt:articulos :factura:growl" oncomplete="PF('dlgEliminarArt').hide();" />
                         <p:commandButton value="No" onclick="PF('dlgEliminarArt').hide();
                                 "/>
                     </h:form>

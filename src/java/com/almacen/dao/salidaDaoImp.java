@@ -107,7 +107,7 @@ public class salidaDaoImp implements salidaDAO{
         
         try {
             
-            String hql = "FROM ArticuloSalida asal join fetch asal.salida s join fetch asal.articuloEntrada ae join fetch ae.articulo a where s.idSalida = "+idSalida;
+            String hql = "FROM ArticuloSalida asal join fetch asal.salida s join fetch asal.articuloEntrada ae join fetch ae.articulo a join fetch ae.factura f join fetch f.proveedor p where s.idSalida = "+idSalida;
             lista = session.createQuery(hql).list();
             transaction.commit();
             session.close();

@@ -152,14 +152,15 @@
                         <p/>
                         <p/>
                     </h:panelGroup>
-                </h:form>
-                
-                <h:form id="tablaArt">
                     <h:panelGrid columns="4">
                         <p:outputLabel value="Elimina Articulos Seleccionados:" />
                         <p:column/>
                         <p:commandButton icon="eliminar" title="Eliminar Articulo" oncomplete="PF('dlgEliminarArt').show();"  />           
                     </h:panelGrid>
+                </h:form>
+                
+                <h:form id="tablaArt">
+                    
                     <p/>
                     <p:dataTable id="articulos" var="art" value="#{editaFactura.listaArtEntDTO}" rendered="true" >  
                             <f:facet name="header">
@@ -182,6 +183,14 @@
                             </p:column>
                             <p:column headerText="Acciones" style="width:75px;text-align: center">
                                 <p:selectBooleanCheckbox value="#{art.seleccionado}" />
+                                <p:commandButton value="Elimina" >
+                                    <f:setPropertyActionListener value="art" target="#{editaFactura.eliminaDTO}" />
+                                </p:commandButton>
+                                <p:commandLink value="Elimina3" actionListener="#{editaFactura.eliminaArtEntrada(art)}"/>
+                                <h:commandButton value="elimina dos" >
+                                    <f:setPropertyActionListener value="art" target="#{editaFactura.eliminaDTO}" />
+                                </h:commandButton>
+                                <h:commandLink value="elimina4" actionListener="#{editaFactura.eliminaArtEntrada(art)}" />
                             </p:column>   
 
                         </p:dataTable>    

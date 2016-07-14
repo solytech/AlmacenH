@@ -38,6 +38,7 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
@@ -259,6 +260,10 @@ public class EditaFactura {
 
     public List<listaArtEntDTO> getListaArtEntDTO() {
         return listaArtEntDTO;
+    }
+
+    public void setListaArtEntDTO(List<listaArtEntDTO> listaArtEntDTO) {
+        this.listaArtEntDTO = listaArtEntDTO;
     }
 
     public List<ArticuloEntrada> getListaArtEnt() {
@@ -515,7 +520,8 @@ public class EditaFactura {
             cpiezaE = ctotalE / totalpE;
             //cpz = ct.divide(totalPzs);
             //cpz = cpz.setScale(2, BigDecimal.ROUND_HALF_UP);
-            //System.out.println("*** lo que tiene cpz -->"+df.format(cpieza));
+            System.out.println("*** lo que tiene totalPzs -->>"+totalpE);
+            System.out.println("*** lo que tiene cpz -->"+df.format(cpiezaE));
             System.out.println("************* pasa operaciones matematicas**********************");
             
             if( idAsignacion == null || idAsignacion == 0){
@@ -582,9 +588,13 @@ public class EditaFactura {
     
     public void eliminaArticulo(){
         System.out.println("****** entra a funcion eliminar *********");
+        //listaArtEntDTO = artEntDao.listaArtEntDTO(factura.getIdFactura());
+        System.out.println("****** tamaño de la lista --->>"+listaArtEntDTO.size());
         try{
             for (listaArtEntDTO ae : listaArtEntDTO) {
+                System.out.println("****** entra al for --->>"+ae.getSeleccionado());
                 if (ae.getSeleccionado()) {
+                    System.out.println("****** entra al if *********");
                     artEntDao.eliminaArticuloEntrada(ae.getArtEnt());
                 }
             }
@@ -594,7 +604,12 @@ public class EditaFactura {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Articulos No Eliminados" ) );
         }
     }
+    
+    public void eliminaArtEntrada(listaArtEntDTO artEnt){
         
+        System.out.println("*** objeto que recibe -->>"+artEnt.getArtEnt().getCbInterno());
+        
+    }
         
     
     

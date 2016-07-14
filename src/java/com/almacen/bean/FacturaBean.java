@@ -100,7 +100,7 @@ public class FacturaBean {
         
         factura = new Factura();
         artEnt = new ArticuloEntrada();
-        eliminaArt = new ArticuloEntrada();
+        
         
     }
     
@@ -559,7 +559,8 @@ public class FacturaBean {
             cpieza = ctotal / totalp;
             //cpz = ct.divide(totalPzs);
             //cpz = cpz.setScale(2, BigDecimal.ROUND_HALF_UP);
-            //System.out.println("*** lo que tiene cpz -->"+df.format(cpieza));
+            System.out.println("*** lo que tiene cpz -->"+df.format(cpieza));
+            System.out.println("*** lo que tiene totalp -->>"+totalp);
             System.out.println("************* pasa operaciones matematicas**********************");
             
             if( idAsignacion == null ){
@@ -623,29 +624,12 @@ public class FacturaBean {
     }
     
     
-    
-    public void editaFactura(Factura seleccionFact){
-        this.factura = seleccionFact;
-        System.out.println("*** Folio factura seleccionado --->>"+factura.getFolioFactura());
-        idProv = factura.getProveedor().getIdProveedor();
-        idDepto = factura.getDepartamento().getIdDepartamento();
-        IdFdp = factura.getFormaDePago().getIdFormaDePago();
-        IdTe = factura.getTipoEntrada().getIdTipoEntrada();
-        //facturaBean.listaDeEntradas(factura);
-        activaFrmArt = true;  
-        listaArtEnt = artEntDao.listaArtEnt(factura.getIdFactura());
-        System.out.println("*** tamaño de la lista-->>"+listaArtEnt.size());
-        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("esEditar", true);
-        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idEdita", factura);
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("factura", factura);
-      
-    }
-    
     public void eliminaArticulo(){
         Boolean exito;
         try{
             
             exito = artEntDao.eliminaArticuloEntrada(eliminaArt);
+            listaArtEnt = artEntDao.listaArtEnt(factura.getIdFactura());
             
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Articulo Eliminado" ) );
         }catch(Exception e){
@@ -655,7 +639,7 @@ public class FacturaBean {
     }
    
     
-     public void habilitarTxt(){
+    public void habilitarTxt(){
         if(idUdm == 1){
             uxcaja = null;
             uxpaquete = null;

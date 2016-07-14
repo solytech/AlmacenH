@@ -3,15 +3,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
 
         <ui:composition template="./../WEB-INF/templates/plantilla.xhtml">
 
             <ui:define name="content">
-                <h:form>
-                    <p:dataTable id="tablafacturas" value="#{facturaBean.listaFacturas}" var="fac" >
+                <h:form id="busquedaFactura">
+                    <p:dataTable id="tablafacturas" value="#{facturaBean.listaFacturas}" var="fac" rows="10" 
+                                 paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rendered="#{proveedorBean.verBusqueda}">
                         <p:column headerText="Folio Factura" filterBy="#{fac.folioFactura}" filterMatchMode="contains" style="width:110px; text-align: center" sortBy="#{fac.folioFactura}" >
                             <h:outputText value="#{fac.folioFactura}"/>
                         </p:column>
@@ -28,13 +30,203 @@
                             <h:outputText value="#{fac.fechaRecepcion}"/>
                         </p:column>
                         <p:column headerText="Ver Factura" style="width:110px; text-align: center" >
-                            <p:commandLink  action="editaFactura"  actionListener="#{editaFactura.editaFactura(fac)}" >
+                            <p:commandLink  actionListener="#{proveedorBean.verFactura(fac)}" update=":factura :tablaArt :actArt :busquedaFactura"  >
                                 <p:graphicImage library="imagenes" name="iconoEdita.png" />
                             </p:commandLink>
                         </p:column> 
                     </p:dataTable>
                 </h:form>
                 
+                
+                <h:form id="factura"  >
+                    <p:growl id="growl" showDetail="true" sticky="true" life="3000"  />
+                       
+                    <p:fieldset legend="Datos Factura" style="margin-bottom:20px" id="fielFactura"  rendered="#{proveedorBean.verFac}" >
+                        <h:panelGrid columns="6" id="datosFactura" >
+                            <p:outputLabel for="cboProveedor" value="Proveedor" />
+                            <p:selectOneMenu id="cboProveedor" value="#{proveedorBean.idProv}" style="width: 100%" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel=" Proveedor " />
+                                <f:selectItems value="#{proveedorBean.listaProv}"  />
+                            </p:selectOneMenu>
+                            <h:column/><h:column/>
+                            <h:column/>
+                            <h:column/>
+                            <p:outputLabel for="txtFolio" value="Folio Factura"  />
+                            <p:inputText id="txtFolio" value="#{proveedorBean.factura.folioFactura}" />
+                            <p:outputLabel for="dteFactura" value="Fecha Factura" />
+                            <p:calendar id="dteFactura" value="#{proveedorBean.factura.fechaFactura}" />
+                            <p:outputLabel for="txtImporte" value="Importe Total" />
+                            <p:inputText id="txtImporte" value="#{proveedorBean.factura.importeFactura}" />
+                            <h:column/><h:column/>
+                            
+                        </h:panelGrid>
+                    </p:fieldset>
+                    
+                    <p:fieldset legend="Datos Requicisión" style="margin-bottom:20px" rendered="#{proveedorBean.verFac}">
+                        <h:panelGrid columns="4" >
+                            <p:outputLabel for="txtFolioReq" value="Folio Requesicion" />
+                            <p:inputText id="txtFolioReq" value="#{proveedorBean.factura.folioRequisicion}" />
+                            <p:outputLabel for="txtInstruccion" value="Instruccion" />
+                            <p:inputTextarea id="txtInstruccion" value="#{proveedorBean.factura.instruccion}" />
+                            <p:outputLabel for="cboDepto" value="Departamento" />
+                            <p:selectOneMenu id="cboDepto" value="#{proveedorBean.idDepto}" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione Departamento" />
+                                <f:selectItems value="#{proveedorBean.listaDepto}"  />
+                            </p:selectOneMenu>
+                            <p:outputLabel for="cboPago" value="Forma de pago" />
+                            <p:selectOneMenu id="cboPago" value="#{proveedorBean.idFdp}" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione Forma de Pago" />
+                                <f:selectItems value="#{proveedorBean.listaFdp}"  />
+                            </p:selectOneMenu>
+                            <p:outputLabel for="cboTipoEntrada" value="Tipo Entrada" />
+                            <p:selectOneMenu id="cboTipoEntrada" value="#{proveedorBean.idTe}" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione Tipo Entrada" />
+                                <f:selectItems value="#{proveedorBean.listaTipoEntrada}"  />
+                            </p:selectOneMenu>  
+                            <p:outputLabel for="dtaRecepcion" value="Fecha Recepción"/>
+                            <p:calendar id="dtaRecepcion" value="#{proveedorBean.factura.fechaRecepcion}" />
+                            <p:outputLabel for="txtDescripcion" value="Descripción" />
+                            <p:inputTextarea id="txtDescripcion" value="#{proveedorBean.factura.descripcion}" />
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <h:panelGrid columns="5" rendered="#{proveedorBean.verFac}">
+                        <p:commandButton value="Actualiza Factura" actionListener="#{proveedorBean.editaFactura()}"  update="growl" />
+                        <h:commandButton value="Codigos de Barras" actionListener="#{articulosExportBean.generarEtiquetaPorFactura}" image="/resources/imagenes/iconoBarras.png" />
+                        <h:commandButton value="Vale Entrada" actionListener="#{articulosExportBean.generarValeEntrada}" image="/resources/imagenes/valeEntrada.png" />
+                        
+                        <p:commandButton icon="icon-plus-squared" value="Subir Imagen Factura" onclick="PF('wdialogoImgFac').show();" />
+                        
+                        <p:commandButton value="Buscar Otra Factura" actionListener="#{proveedorBean.verCamposBusqueda()}" update=":factura :actArt :tablaArt :busquedaFactura"/>  
+                    </h:panelGrid>
+                    
+                </h:form>
+                
+                 <p/>
+                    <p:separator />
+                    <p/>
+                <h:form id="actArt">    
+                    <h:panelGroup id="actArticulos" >  
+
+                        <p:fieldset legend="Articulos de la Factura" style="margin-bottom:20px" id="actA" rendered="#{proveedorBean.verFac}" >
+                            <p:outputLabel value="Selecciones Articulo: " for="themePojo" />
+                            <p:autoComplete id="themePojo"  value="#{completarArticulo.idArticulo}" completeMethod="#{completarArticulo.completarTipo}" 
+                                            var="theme" itemLabel="#{theme.articulo}" itemValue="#{theme}" converter="themeConverter" forceSelection="true" size="60" minQueryLength="2" >
+
+                                <p:column>
+                                    <h:outputText value="#{theme.cb}"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{theme.articulo}"/>
+                                </p:column>
+
+                            </p:autoComplete>
+                            <p:commandButton icon="icon-plus-squared" value="Nuevo Articulo" onclick="PF('wdialogoArt').show();" />
+                            <p/>
+
+                            <h:panelGrid columns="18">
+
+                                <p:outputLabel value="Unidad de Medida" for="cmbUDM" /> 
+                                <p:selectOneMenu id="cmbUDM" value="#{proveedorBean.idUdm}"  >
+                                    <f:selectItem itemValue="0" itemLabel="Seleccione Unidad de Medida" />
+                                    <f:selectItems value="#{proveedorBean.listaUdm}" />
+                                    <p:ajax event="change"  listener="#{proveedorBean.habilitarTxt()}" update="cantidad,caja,paquete,litros" />
+                                </p:selectOneMenu>
+                                <p:column/>
+                                <h:panelGroup id="cantidad" >
+                                    <p:outputLabel value="cantidad " for="txtCantidad" rendered="#{proveedorBean.txtCantidad}" />
+                                    <p:inputText id="txtCantidad" size="4" value="#{proveedorBean.cantidad}" rendered="#{proveedorBean.txtCantidad}" />
+                                </h:panelGroup>
+                                <h:panelGroup id="caja"  >
+                                    <p:outputLabel value="Paquetes x Caja " for="txtCaja" rendered="#{proveedorBean.txtCaja}" />
+                                    <p:inputText id="txtCaja" size="4" value="#{proveedorBean.uxcaja}" rendered="#{proveedorBean.txtCaja}"  />
+                                </h:panelGroup>
+                                <h:panelGroup id="paquete" >
+                                    <p:outputLabel value="Piezas x Paquete " for="txtPaquete" rendered="#{proveedorBean.txtPaquete}" />
+                                    <p:inputText id="txtPaquete" size="4" value="#{proveedorBean.uxpaquete}" rendered="#{proveedorBean.txtPaquete}"/>
+                                </h:panelGroup>
+                                
+                                <h:panelGroup id="litros" >
+                                    <p:outputLabel value="Litros " for="txtLitros" rendered="#{proveedorBean.txtLitros}" />
+                                    <p:inputText id="txtLitros" size="4" rendered="#{proveedorBean.txtLitros}" />
+                                </h:panelGroup>
+                                <p:column/>
+                                <p:column/>
+                                <p:outputLabel value="Costo Unitario " for="txtCosto" />
+                                <p:inputText id="txtCosto" size="15" value="#{proveedorBean.costoUnitario}" />
+                                <p:outputLabel for="chbResguardo" value="Resguardo" />
+                                <p:selectBooleanCheckbox value="#{proveedorBean.esResguardo}" id="chbResguardo" />
+
+                            </h:panelGrid>
+                            <p/>
+                            <h:panelGrid columns="4">
+                                
+                                <p:outputLabel for="chbDistribuir" value="Distribuir Articulos" />
+                                <p:selectBooleanCheckbox value="#{proveedorBean.distribuir}" id="chbDistribuir" >
+                                    <p:ajax event="change"  listener="#{proveedorBean.habilitarCmbAsignacion()}" update="distribucion" />
+                                </p:selectBooleanCheckbox>
+                                
+                                <h:panelGroup id="distribucion" >
+                                    <p:outputLabel value="Departamento a Distribuir     " for="cmbDistribuir" rendered="#{proveedorBean.activaCmbDis}"/> 
+                                    <p:selectOneMenu id="cmbDistribuir" value="#{proveedorBean.idAsignacion}" rendered="#{proveedorBean.activaCmbDis}" >
+                                        <f:selectItem itemValue="0" itemLabel="Seleccione Departamento" />
+                                        <f:selectItems value="#{proveedorBean.listaDeptoAsignacion}" />
+                                    </p:selectOneMenu>
+                                </h:panelGroup>
+                                
+                            </h:panelGrid>
+                            <p/>
+                            <p:commandButton value="Agregar Articulo" actionListener="#{proveedorBean.guardarArticuloEdita()}" update="cmbUDM,caja :factura:growl :actArt :tablaArt:articulos :actArt:cmbUDM :actArt:themePojo" />
+                            <p/>
+                            <p/>
+                        </p:fieldset>   
+                        <p/>
+                        <p/>
+                    </h:panelGroup>
+                </h:form>
+                
+                <h:form id="tablaArt">
+                        
+                    <p:dataTable id="articulos" var="art" value="#{proveedorBean.listaArtEnt}" rendered="#{proveedorBean.verFac}" >  
+                            <f:facet name="header">
+                                ARTICULOS DE LA FACTURA
+                            </f:facet>
+                            <p:column headerText="Codigo" style="width:150px;text-align: center">
+                                <h:outputText value="#{art.articulo.cb}" />
+                            </p:column>
+                            <p:column headerText="Cantidad" style="width:100px;text-align: center">
+                                <h:outputText value="#{art.cantidad} #{art.unidadDeMedida.unidadDeMedida} " />
+                            </p:column>
+                            <p:column headerText="Descripción">
+                                <h:outputText value="#{art.articulo.articulo}" />
+                            </p:column>
+                            <p:column headerText="Depto. Asignado">
+                                <h:outputText value="#{art.departamento.departamento}" />
+                            </p:column>
+                            <p:column headerText="Precio Unitario" style="width:75px;text-align: center">
+                                <h:outputText value="#{art.costoUnitario}" />
+                            </p:column>
+                            <p:column headerText="Acciones" style="width:75px;text-align: center">
+                                <p:commandButton icon="eliminar" title="Eliminar Articulo" oncomplete="PF('dlgEliminarArt').show();" update=":formEliminarArticulo" >
+                                    <f:setPropertyActionListener target="#{proveedorBean.eliminaArt}" value="#{art}" />
+                                </p:commandButton>
+                            </p:column>  
+
+                        </p:dataTable>    
+                </h:form>
+                
+                <p:dialog id="dlgElimaArt" header="Eliminar Articulo" widgetVar="dlgEliminarArt" showEffect="explode" hideEffect="explode" modal="true" >   
+                    <h:form id="formEliminarArticulo">
+                        <h:outputText value="Desea eliminar este articulo de la factura?" />
+                        <p/>
+                        <h:outputText value="#{proveedorBean.eliminaArt.articulo.articulo}" />
+                        <p/>
+                        <p:commandButton value="Si" actionListener="#{proveedorBean.eliminaArticulo()}"
+                                         update=":tablaArt:articulos :factura:growl" oncomplete="PF('dlgEliminarArt').hide();" />
+                        <p:commandButton value="No" onclick="PF('dlgEliminarArt').hide();
+                                "/>
+                    </h:form>
+                </p:dialog>
+                    
                 
             </ui:define>
 
