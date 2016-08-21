@@ -55,6 +55,25 @@ public class salidaDaoImp implements salidaDAO{
     }
     
     @Override
+    public boolean eliminaSalida(Salida salida) {
+        boolean esCorrecto =  true;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction  transaction = session.beginTransaction();
+        try{
+               
+            session.delete(salida);
+            transaction.commit();
+            session.close();
+            
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            transaction.rollback();
+            esCorrecto = false;
+        }
+        return esCorrecto; 
+    }
+    
+    @Override
     public Salida ultimaSalidaAgregada(){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction  transaction = session.beginTransaction();

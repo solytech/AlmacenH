@@ -13,7 +13,7 @@
             <ui:define name="content">
                 
                 <h:form id="factura"  >
-                    <p:growl id="growl" showDetail="true" sticky="true" life="3000"  />
+                    <p:growl id="growl" autoUpdate="true" showDetail="true" life="3000"  />
                        
                     <p:fieldset legend="Datos Factura" style="margin-bottom:20px" id="fielFactura"  >
                         <h:panelGrid columns="6" id="datosFactura" >
@@ -209,7 +209,7 @@
                     
                 <p:dialog id="nuevoArticulo" widgetVar="wdialogoArt" header="Nuevo Articulo" modal="true" resizable="false" closeOnEscape="true" draggable="false" >
                     <h:form id="formArticulo">
-                        <p:growl id="growl2" showDetail="true" sticky="true" life="3000" />
+                        <p:growl id="growl2" autoUpdate="true" showDetail="true" life="3000" />
                             <h:panelGrid columns="5" id="articulos" >
                             <p:outputLabel for="cboSubCat" value="SubCatalogo Bienes" />
                             <p:selectOneMenu id="cboSubCat" value="#{articuloBean.idSubCat}" filter="true" filterMatchMode="contains" >
@@ -272,7 +272,7 @@
                 
                 <p:dialog id="nuevoProveedor" widgetVar="wdialogoProv" header="Nuevo Proveedor" modal="true" resizable="false" closeOnEscape="true" draggable="false">
                     <h:form id="altaProveedor">
-                        <p:growl id="growl3" showDetail="true" sticky="true" life="3000" />
+                        <p:growl id="growl3" autoUpdate="true" showDetail="true" life="3000" />
                         <h:panelGrid columns="3" id="proveedor" >
                             <p:outputLabel for="txtNombreProv" value="Nombre Proveedor" />
                             <p:inputText id="txtNombreProv" value="#{proveedorBean.proveedor.proveedor}" required="true" />
@@ -309,7 +309,7 @@
                 
                 <p:dialog id="nuevaMarca" widgetVar="wdialogoMarca" header="Nueva Marca" modal="true" resizable="false" closeOnEscape="true" draggable="false">
                     <h:form id="frmMarca">
-                            <p:growl id="growl4" showDetail="true" sticky="true" life="3000" />
+                            <p:growl id="growl4" autoUpdate="true" showDetail="true" life="3000" />
                             <h:panelGrid columns="2" id="marca">
                                 <p:outputLabel for="txtMarca" value="Nombre Marca" />
                                 <p:inputText id="txtMarca" value="#{marcaBean.marca.marca}" required="true" />

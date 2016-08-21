@@ -470,13 +470,11 @@ public class ProveedorBean {
         idDepto = factura.getDepartamento().getIdDepartamento();
         IdFdp = factura.getFormaDePago().getIdFormaDePago();
         IdTe = factura.getTipoEntrada().getIdTipoEntrada();
-        //facturaBean.listaDeEntradas(factura);
-        //activaFrmArt = true;  
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("factura", factura);
+    
         listaArtEnt = artEntDao.listaArtEnt(factura.getIdFactura());
         //System.out.println("*** tamaño de la lista-->>"+listaArtEnt.size());
-        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("esEditar", true);
-        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idEdita", factura);
-        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("factura", factura);
+        
     }
     
     public void editaFactura(){
@@ -508,8 +506,6 @@ public class ProveedorBean {
             System.out.println("*********************************");
             
             facturaDAO.actualizaFactura(factura);
-            
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("factura", factura);
             
             //activaFrmArt = true;
             

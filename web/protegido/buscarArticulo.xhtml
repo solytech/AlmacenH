@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/templates/plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:form id="frmBusquedaArt">
+                    <p:outputLabel value="Selecciones Articulo: " for="themePojo" />
+                    <p:autoComplete id="themePojo"  value="#{completarArticulo.idArticulo}" completeMethod="#{completarArticulo.completarTipo}" 
+                                    var="theme" itemLabel="#{theme.articulo}" itemValue="#{theme}" converter="themeConverter" forceSelection="true" size="60" minQueryLength="2" >
+
+                        <p:column>
+                            <h:outputText value="#{theme.cb}"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{theme.articulo}"/>
+                        </p:column>
+
+                    </p:autoComplete>
+                    <p:commandButton value="Buscar" id="cmdBuscar" actionListener="#{articuloBean.buscarArticulo()}" update=":frmArticulo :frmArticulo:cboSubCat :frmImagen" />
+                </h:form>
+                <p/>
+                <p:separator/>
+                <p/>
+                <h:form id="frmArticulo">
+                        <p:growl id="growl2" autoUpdate="true" showDetail="true" life="3000"  />
+                        <h:panelGrid columns="6">
+                            <p:column/>
+                            <h:panelGroup>
+                                <h:panelGrid columns="5" id="articulos" >
+                                    <p:outputLabel for="cboSubCat" value="SubCatalogo Bienes" />
+                                    <p:selectOneMenu id="cboSubCat" value="#{articuloBean.idSubCat}" filter="true" filterMatchMode="contains" >
+                                        <f:selectItem itemValue="0" itemLabel="Seleccione SubCategoria"  />
+                                        <f:selectItems value="#{articuloBean.listaSubCatB}"  />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel for="cboMarca" value="Marca" />
+                                    <p:selectOneMenu id="cboMarca" value="#{articuloBean.idMarca}" filter="true" filterMatchMode="contains" >
+                                        <f:selectItem itemValue="0" itemLabel="Seleccione Marca" />
+                                        <f:selectItems value="#{articuloBean.listaMarca}"  />
+                                    </p:selectOneMenu>
+                                    <p:commandButton icon="ui-icon-plusthick" value="Marca" onclick="PF('wdialogoMarca').show();" />
+                                    <p:column/>
+                                    <p:outputLabel for="txtArticulo" value="Nombre Articulo" />
+                                    <p:inputText id="txtArticulo" value="#{articuloBean.articulo.articulo}" required="true" />
+
+                                    <p:outputLabel for="txtCB" value="Codigo de Barras" />
+                                    <p:inputText id="txtCB" value="#{articuloBean.articulo.cb}" required="true" />
+                                    <p:column/>
+                                    <p:outputLabel for="txtModelo" value="Modelo" />
+                                    <p:inputText id="txtModelo" value="#{articuloBean.articulo.modelo}" required="true" />
+
+                                    <p:outputLabel for="txtUbicacion" value="Ubicación" />
+                                    <p:inputText id="txtUbicacion" value="#{articuloBean.articulo.ubicacionFisica}" required="true" />
+                                    <p:column/>
+                                    <p:outputLabel for="txtMin" value="Minimo" />
+                                    <p:inputText id="txtMin" value="#{articuloBean.articulo.minimo}" required="false" />
+
+                                    <p:outputLabel for="txtMax" value="Maximo" />
+                                    <p:inputText id="txtMax" value="#{articuloBean.articulo.maximo}" required="false" />
+                                    <p:column/>
+                                    <p:outputLabel for="chbConsumible" value="Es Consumible" />
+                                    <p:selectBooleanCheckbox value="#{articuloBean.esConsumible}" id="chbConsumible" />
+
+                                    <p:outputLabel for="txtCaracteristicas" value="Caracteristicas"/>
+                                    <p:inputTextarea id="txtCaracteristicas" value="#{articuloBean.articulo.caracteristicas}" />
+                                    <p:column/>
+                                    <p:outputLabel for="txtObservaciones" value="Observaciones"/>
+                                    <p:inputTextarea id="txtObservaciones" value="#{articuloBean.articulo.observaciones}" />
+
+                                    <p:outputLabel for="dtaFechaCaduca" value="Fecha de Caducidad" />  
+                                    <p:calendar id="dtaFechaCaduca" value="#{articuloBean.articulo.fechaCaducidad}" />
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="3" >
+                                    <p:commandButton value="Registrar" icon="ui-icon-check"  actionListener="#{articuloBean.guardarArticulo()}" update="growl2"  />
+                                    <p:commandButton value="Nuevo" icon="ui-icon-plusthick" actionListener="#{articuloBean.limpiaTextos()}" immediate="true"  process="@this" update=":frmImagen :frmArticulo" />
+
+                                </h:panelGrid>
+
+                                <p:fileUpload id="btnUpload" fileUploadListener="#{FileUploadManagedBean.upload}" mode="advanced" dragDropSupport="false" fileLimit="2"
+                                              auto="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="10000000" update=":frmImagen"  />
+
+                            </h:panelGroup>
+                            <p:column/>
+                            <p:column/>
+                            
+                            
+                            <p:column/>
+                        </h:panelGrid>
+                            
+                    </h:form>
+                <p/>
+                <p:separator/> 
+                <p/>
+                <h:form id="frmImagen" >
+                    <p:commandButton value="Eliminar Foto" icon="ui-icon-plusthick" actionListener="#{articuloBean.eliminaFoto()}"   update=":frmImagen" />
+                    <p/>
+                    <p:graphicImage cache="false" height="200" id="imagen" title="foto prueba" value="#{buscarArticulos.graphicImage}" width="200" /> 
+                </h:form>
+                
+                <p:dialog id="nuevaMarca" widgetVar="wdialogoMarca" header="Nueva Marca" modal="true" resizable="false" closeOnEscape="true" draggable="false">
+                    <h:form id="frmMarca">
+                            <p:growl id="growl4" showDetail="true" sticky="true" life="3000" />
+                            <h:panelGrid columns="2" id="marca">
+                                <p:outputLabel for="txtMarca" value="Nombre Marca" />
+                                <p:inputText id="txtMarca" value="#{marcaBean.marca.marca}" required="true" />
+                                <p:commandButton value="Registrar" icon="ui-icon-check" actionListener="#{marcaBean.guardaMarca()}" update="growl4 :frmArticulo:cboMarca" oncomplete="PF('wdialogoMarca').hide();"  />
+                            </h:panelGrid>                            
+                        </h:form>
+                </p:dialog>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

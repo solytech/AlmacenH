@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RELb" language="groovy" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="583" leftMargin="14" rightMargin="15" topMargin="22" bottomMargin="20" uuid="bccec70c-8ce6-431f-9675-50de45233a52">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="131"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -29,8 +29,8 @@
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
-     concat(empleado.`nombre`,' ',empleado.`app`,' ',empleado.`apm`) AS nombreEmpleado,
-     articuloSalida.`numSerie` AS articuloSalida_numSerie,
+     concat(empleado.`nombre`,' ',empleado.`app`,' ',empleado.`apm`) AS nombreempleado,
+     articuloSalida.`numserie` AS articuloSalida_numserie,
      articuloEntrada.`id_articuloEntrada` AS articuloEntrada_id_articuloEntrada,
      articulo.`id_articulo` AS articulo_id_articulo,
      articulo.`articulo` AS articulo_articulo,
@@ -43,8 +43,8 @@
      empleado.`direccion` AS empleado_direccion,
      empleado.`puesto` AS empleado_puesto,
      empleado.`clave` AS empleado_clave,
-     articuloSalida.`cantidadPieza` AS articuloSalida_cantidadPieza,
-     articuloSalida.`esResguardo` AS articuloSalida_esResguardo,
+     articuloSalida.`cantidadpieza` AS articuloSalida_cantidadpieza,
+     articuloSalida.`esresguardo` AS articuloSalida_esresguardo,
      articuloSalida.`observaciones` AS articuloSalida_observaciones,
      articuloSalida.`id_salida` AS articuloSalida_id_salida,
      articuloSalida.`id_articuloSalida` AS articuloSalida_id_articuloSalida,
@@ -63,12 +63,13 @@ FROM
      INNER JOIN `empleado` empleado ON salida.`id_empleado` = empleado.`id_empleado`
      INNER JOIN `departamento` departamento ON salida.`id_departamento` = departamento.`id_departamento`
      INNER JOIN `departamento` departamento2 ON departamento2.`id_departamento` = empleado.`id_departamento`
+
 WHERE
      salida.`id_salida` = $P{idSalida}
-     and articuloSalida.`esResguardo` = 'Y']]>
+     and articuloSalida.`esresguardo` = 'Y']]>
 	</queryString>
-	<field name="nombreEmpleado" class="java.lang.String"/>
-	<field name="articuloSalida_numSerie" class="java.lang.String"/>
+	<field name="nombreempleado" class="java.lang.String"/>
+	<field name="articuloSalida_numserie" class="java.lang.String"/>
 	<field name="articuloEntrada_id_articuloEntrada" class="java.lang.Long"/>
 	<field name="articulo_id_articulo" class="java.lang.Long"/>
 	<field name="articulo_articulo" class="java.lang.String"/>
@@ -81,8 +82,8 @@ WHERE
 	<field name="empleado_direccion" class="java.lang.String"/>
 	<field name="empleado_puesto" class="java.lang.String"/>
 	<field name="empleado_clave" class="java.lang.String"/>
-	<field name="articuloSalida_cantidadPieza" class="java.math.BigDecimal"/>
-	<field name="articuloSalida_esResguardo" class="java.lang.String"/>
+	<field name="articuloSalida_cantidadpieza" class="java.math.BigDecimal"/>
+	<field name="articuloSalida_esresguardo" class="java.lang.String"/>
 	<field name="articuloSalida_observaciones" class="java.lang.String"/>
 	<field name="articuloSalida_id_salida" class="java.lang.Long"/>
 	<field name="articuloSalida_id_articuloSalida" class="java.lang.Long"/>
@@ -128,12 +129,12 @@ WHERE
 				<text><![CDATA[SUBJEFATURA DE ALMACEN]]></text>
 			</staticText>
 			<image>
-				<reportElement x="22" y="2" width="104" height="59" uuid="883071bf-6b53-4f28-80ad-6aee53f8ee93"/>
-				<imageExpression><![CDATA["USET.jpg"]]></imageExpression>
+				<reportElement x="460" y="0" width="102" height="61" uuid="817047cd-51e2-4a30-8852-13093b5d40c6"/>
+				<imageExpression><![CDATA["SEP.jpg"]]></imageExpression>
 			</image>
 			<image>
-				<reportElement x="461" y="2" width="101" height="59" uuid="7c669809-8ad6-45c9-bf71-de698fc61d91"/>
-				<imageExpression><![CDATA["SEP.jpg"]]></imageExpression>
+				<reportElement x="13" y="3" width="93" height="49" uuid="bbd29286-fa5f-4e99-96e6-05452439b066"/>
+				<imageExpression><![CDATA["USET.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</title>
@@ -251,7 +252,7 @@ WHERE
 				<text><![CDATA[DIRECCIÓN:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="70" y="27" width="207" height="13" uuid="0a1292af-aa0e-4fdc-a76c-255c041b7437"/>
+				<reportElement x="70" y="27" width="38" height="13" uuid="0a1292af-aa0e-4fdc-a76c-255c041b7437"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9"/>
 				</textElement>
@@ -280,6 +281,9 @@ WHERE
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="97" y="94" width="456" height="13" uuid="e952d32f-9549-4fa0-b466-1bfbce7a73d8"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{departamento_municipio}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -301,11 +305,13 @@ WHERE
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{nombreEmpleado}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nombreempleado}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="108" y="160" width="445" height="14" uuid="e5519455-c96e-4f4e-8857-76b9ced75faa"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{departamento_departamento}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -438,7 +444,7 @@ WHERE
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{articuloSalida_cantidadPieza}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{articuloSalida_cantidadpieza}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="70" y="0" width="284" height="13" uuid="510eae51-02f5-47d6-9789-a6e64d16d959"/>
@@ -454,12 +460,12 @@ WHERE
 				</textElement>
 				<textFieldExpression><![CDATA[$F{articuloSalida_observaciones}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="484" y="0" width="79" height="12" uuid="7a2127b8-b110-4859-a4e5-d93be650cb31"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{articuloSalida_numSerie}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{articuloSalida_numserie}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -540,11 +546,11 @@ WHERE
 				<text><![CDATA[NOTA: Las entregas de mobiliario y equipo será en el horario de 9:00 a.m. a 15:00 hrs. Deberá presentar los dos originales a los almacenistas, así mismo tiene que pasar al área de inventarios para darlos de alta y así proporcionarle el número de inventario.]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="396" y="78" width="180" height="14" uuid="d4610867-eff7-4797-bbec-1eaa914cb20f"/>
+				<reportElement x="407" y="78" width="156" height="27" uuid="d4610867-eff7-4797-bbec-1eaa914cb20f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="9"/>
+					<font fontName="Arial" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{nombreEmpleado}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nombreempleado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

@@ -15,6 +15,8 @@ import com.almacen.dao.formadepagoDAO;
 import com.almacen.dao.formadepagoDaoImp;
 import com.almacen.dao.proveedorDAO;
 import com.almacen.dao.proveedorDaoImp;
+import com.almacen.dao.salidaarticuloDAO;
+import com.almacen.dao.salidaarticuloDaoImp;
 import com.almacen.dao.tipoentradaDAO;
 import com.almacen.dao.tipoentradaDaoImp;
 import com.almacen.dao.unidadmedidaDAO;
@@ -53,6 +55,7 @@ public class FacturaBean {
     articuloDAO articuloDao = new articuloDaoImp();
     unidadmedidaDAO udmDao = new unidadmedidaDaoImp();
     articuloentradaDaoImp artEntDao = new articuloentradaDaoImp();
+    salidaarticuloDAO salArtDao = new salidaarticuloDaoImp();
     
     List<SelectItem> listaProv;
     List<SelectItem> listaDepto;
@@ -64,6 +67,7 @@ public class FacturaBean {
     Factura factura;
     ArticuloEntrada artEnt;
     private ArticuloEntrada eliminaArt;
+    private Factura eliminaFac;
     
     private List<ArticuloEntrada> listaArtEnt;
     private List<Factura> listaFacturas;
@@ -105,6 +109,14 @@ public class FacturaBean {
     }
     
     // geters y seters*************************+
+
+    public Factura getEliminaFac() {
+        return eliminaFac;
+    }
+
+    public void setEliminaFac(Factura eliminaFac) {
+        this.eliminaFac = eliminaFac;
+    }
 
     public ArticuloEntrada getEliminaArt() {
         return eliminaArt;
@@ -506,7 +518,7 @@ public class FacturaBean {
                 System.out.println("**** lo que tiene cajas----------->>"+uxc);
                 System.out.println("**** lo que tiene paquetes-------->>"+uxp);
                 System.out.println("**** lo que tiene piezas---------->>"+pzs);
-                System.out.println("**** total de piezas a ingresar--->>"+totalPzs);
+                System.out.println("**** total de piezas a ingresar--->>"+totalPzs);  
                 
                 
             }
@@ -636,6 +648,48 @@ public class FacturaBean {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Articulo No Elimindo" ) );
         }
         
+    }
+    
+    public void eliminaFactura(){
+        
+        if(eliminaAllArticulos() == false){
+            try{
+                facturaDAO.eliminaFactura(eliminaFac);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Factura Eliminada" ) );
+            }catch(Exception e){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error NO se elimino la Factura" ) );
+            }
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Hay Salidas Asignadas " ) );
+        }
+        
+    }
+    
+    public boolean eliminaAllArticulos(){
+        List<ArticuloEntrada> lista = artEntDao.listaArtEnt(eliminaFac.getIdFactura());
+        boolean hayArticulos = false;
+        for(ArticuloEntrada ae: lista){
+            if(salArtDao.encuentraArticulosSal(ae.getIdArticuloEntrada())){
+                hayArticulos = true;
+            }
+        }
+        
+        if(hayArticulos){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Hay por lo Menos un Articulo Asignado a una Salida " ) );
+        }else{
+            try{
+                for (ArticuloEntrada ae2 : lista) {
+                    boolean eliminados = artEntDao.eliminaArticuloEntrada(ae2);
+                }
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Articulos Eliminados" ) );
+            }catch(Exception e){
+                hayArticulos = true;
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al Eliminar los Articulos de la Factura" ) );
+            }
+            
+        }
+        
+        return hayArticulos;
     }
    
     

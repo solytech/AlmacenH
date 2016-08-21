@@ -18,6 +18,8 @@ public interface salidaDAO {
     
     public boolean actualizaSalida(Salida salida);
     
+    public boolean eliminaSalida(Salida salida);
+    
     public List<Salida> listadoSalidas();
     
     public List<ArticuloSalida> articulosPorSalida(Integer idSalida);

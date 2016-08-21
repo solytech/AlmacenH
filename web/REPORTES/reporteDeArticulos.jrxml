@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BarrasCodigo" language="groovy" pageWidth="612" pageHeight="792" columnWidth="604" leftMargin="4" rightMargin="4" topMargin="4" bottomMargin="4" uuid="19bcfd4f-348e-4727-b08e-d55ea7cb83b1">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select a.articulo, m.marca, a.modelo, c.catalogo, s.subCatalogo, a.caracteristicas, a.observaciones,
+	IF (trim(a.cb) = '', 'no existe codigo', a.cb) as cb,
+	a.foto
+from articulo a join marca m using (id_marca)
+	join subCatalogoBienes s  using (id_subCatalogoBienes)
+	join catalogoBienes c using (id_catalogoBienes)
+
+order by a.id_articulo]]>
+	</queryString>
+	<field name="articulo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="marca" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="modelo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="catalogo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="subCatalogo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="caracteristicas" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="observaciones" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cb" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="foto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="191" splitType="Stretch">
+			<staticText>
+				<reportElement x="249" y="11" width="52" height="13" uuid="ffadb971-a2bd-41b4-a9b5-c0d3fb58953c"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="28" width="52" height="11" uuid="fe29284a-0fdf-45a4-b17e-c49af0b3fc3b"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Marca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="45" width="52" height="11" uuid="c6164e60-d9c7-487b-b91e-8142fb37defb"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Modelo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="61" width="52" height="12" uuid="5227ddb5-7000-4704-abdc-34106842e1f7"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Catalogo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="87" width="66" height="13" uuid="655a9a2d-624b-455c-ab72-5c3c47845189"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[SubCatalogo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="108" width="66" height="13" uuid="ccce878b-8a01-47b4-a198-9c0f7a7e4492"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Caracteristicas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="138" width="66" height="13" uuid="034abc73-2a33-4400-89c0-feb6a7da9064"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Observaciones]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="314" y="10" width="221" height="14" uuid="aa766ccd-98e8-4c35-bc4c-3ecfb31b66d3"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{articulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="315" y="28" width="221" height="11" uuid="5a255805-8695-4d23-95e1-6eac635f29ed"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{marca}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="315" y="45" width="221" height="11" uuid="3f6a230b-d859-42bc-8f8c-5868359d5481"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{modelo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="315" y="61" width="221" height="23" uuid="461dc9e9-57f7-49b5-b8cd-5cbb7c8d9be7"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{catalogo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="315" y="85" width="221" height="21" uuid="901adb2a-d48f-4af4-b850-f5ed0025c50e"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subCatalogo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="315" y="109" width="221" height="26" uuid="ffe7e457-9d9e-4815-9cae-b0882caa9401"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{caracteristicas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="315" y="137" width="221" height="23" uuid="351c1ad4-0874-438a-8cae-7a46b8696015"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="16" y="186" width="543" height="1" uuid="b08f2ce9-dd49-4b43-9495-5a073a19aa24"/>
+			</line>
+			<textField>
+				<reportElement x="46" y="160" width="177" height="14" uuid="4e5134c0-5bdc-4293-a826-af1bca1dc521"/>
+				<textFieldExpression><![CDATA[$F{cb}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="16" y="114" width="215" height="46" uuid="c98ea266-a541-4ae5-a9d9-185ab1426568"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39 (Extended)" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{cb}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<image>
+				<reportElement x="16" y="6" width="215" height="102" uuid="f336de35-1a1d-4d83-8d21-d94b709348cb"/>
+				<imageExpression><![CDATA[$F{foto}]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="15">
+			<textField>
+				<reportElement x="474" y="-1" width="85" height="16" uuid="b2fe7467-c9a9-4165-acec-125320b5d8ac"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>

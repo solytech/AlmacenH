@@ -32,6 +32,25 @@ public class empleadoDaoImp implements empleadoDAO{
     }
     
     @Override
+    public Empleado actualizaEmpleado(Empleado empleado) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction  transaction = session.beginTransaction();
+        try{
+             
+            
+            session.update(empleado);
+            transaction.commit();
+            session.close();
+                
+            
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            transaction.rollback();
+        }
+        return empleado; 
+    }
+    
+    @Override
     public List<Empleado> listaEmpleados() {
         List<Empleado> listarEmpleado = null;
         Session session = HibernateUtil.getSessionFactory().openSession();

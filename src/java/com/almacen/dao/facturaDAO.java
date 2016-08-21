@@ -22,4 +22,6 @@ public interface facturaDAO {
     
     public boolean facturaSalio(Integer idFactura);
     
+    public Factura eliminaFactura(Factura factura);
+    
 }

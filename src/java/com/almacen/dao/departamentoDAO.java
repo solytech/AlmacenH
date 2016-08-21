@@ -14,4 +14,8 @@ public interface departamentoDAO {
     
     public Departamento encuentraUnDepto(Integer idDepto);
     
+    public Departamento actualizaDepto(Departamento depto);
+    
+    public Departamento guardaDepto(Departamento depto);
+    
 }

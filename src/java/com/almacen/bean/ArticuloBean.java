@@ -15,6 +15,7 @@ import com.almacen.model.Acceso;
 import com.almacen.model.Articulo;
 import com.almacen.model.Marca;
 import com.almacen.model.SubCatalogoBienes;
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,7 +46,7 @@ public class ArticuloBean {
     public ArticuloBean(){
         
         articulo = new Articulo();
-        
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("rutaImagen",null);
     }
 
     public Integer getIdSubCat() {
@@ -111,18 +112,17 @@ public class ArticuloBean {
         Date fechaRelleno = new Date(1970-01-01); 
         try{
             FileUploadManagedBean idArt = null;
-            
             Date fecha = new Date();
             Acceso acc = (Acceso) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("acceso");
             SubCatalogoBienes ctb = sucatDao.encuentraSubCat(idSubCat);
             Marca m = marcaDao.encuentraUnProv(idMarca);
-
             articulo.setSubCatalogoBienes(ctb);
             articulo.setMarca(m);
             articulo.setAcceso(acc);
             articulo.setFechaReg(fecha);
-            articulo.setFoto("/imagenes");
-            
+            if(articulo.getFoto() == null){
+                articulo.setFoto("/imagenes");
+            }
             if(esConsumible == true){
                 articulo.setEsConsumible("Y");
             }else{
@@ -137,13 +137,12 @@ public class ArticuloBean {
             if(articulo.getFechaCaducidad() == null){
                 articulo.setFechaCaducidad(fechaRelleno);
             }
-            
             articuloDao.guardaArticulo(articulo);
             //listaArticulos = articuloEJB.listaArticulos();
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idArticuloFoto", articulo.getIdArticulo());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Articulo Guardado Correctamente" ) );
             
-            
+            limpiaTextos();
             //System.out.println("******** lo que tiene idArt--->"+idArt.getIdArticulo());
         }catch(Exception e){
            
@@ -151,6 +150,30 @@ public class ArticuloBean {
         }
         
     }
+    
+    public void buscarArticulo(){
+        String so = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("so"); 
+        String win = "windows";
+        Integer idArticulo = (Integer)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idArticulo");
+        Articulo art = articuloDao.encuentraArticulo(idArticulo);
+        
+        articulo = art;
+        idSubCat = art.getSubCatalogoBienes().getIdSubCatalogoBienes();
+        idMarca  = art.getMarca().getIdMarca();
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idArticuloFoto", art.getIdArticulo());
+        if (so.contains(win)) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("rutaImagen","C:/"+art.getFoto());
+        } else {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("rutaImagen","/"+art.getFoto());
+        }
+        
+    }
+    
+    public void eliminaFoto(){
+        
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("rutaImagen", null);
+        
+    } 
     
     public void limpiaTextos(){
         
@@ -160,7 +183,7 @@ public class ArticuloBean {
         idSubCat = null;
         idMarca = null;
         esConsumible = false;
-
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("rutaImagen",null);
         articulo = new Articulo() ;
     }
     

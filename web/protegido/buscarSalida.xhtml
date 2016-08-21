@@ -12,6 +12,7 @@
 
             <ui:define name="content">
                 <h:form id="listaResultados" >
+                    <p:growl id="growl" autoUpdate="true" showDetail="true" life="3000"  />
                     <p:dataTable id="listadoArticulos" value="#{salidaBean.listadoSalidas}" var="salida" >
                         <f:facet name="header">
                                 LISTADO DE SALIDAS DE ALMACEN
@@ -23,14 +24,20 @@
                         <p:column headerText="Departamento" filterBy="#{salida.departamento.departamento}" filterMatchMode="contains" style="width:250px;text-align: center" >
                             <h:outputText value="#{salida.departamento.departamento}" />
                         </p:column>
-                        <p:column headerText="Empleado Que Recicbio" style="width:150px;text-align: center" >
+                        <p:column headerText="Empleado Que Recibio" style="width:150px;text-align: center" >
                             <h:outputText value="#{salida.empleado.nombre} #{salida.empleado.app} #{salida.empleado.apm}" />
                         </p:column>
                         <p:column headerText="Fecha Salida" filterBy="#{salida.fechaSalida}" filterMatchMode="contains" style="width:100px;text-align: center" >
                             <h:outputText value="#{salida.fechaSalida}" />
                         </p:column>
-                        <p:column headerText="Detalles Salida" style="width:100px;text-align: center" >
+                        <p:column headerText="Acciones Salida" style="width:100px;text-align: center" >
                             <p:commandButton icon="lupa" title="Detalle Salida" oncomplete="PF('wdlDetalleFactura').show();" update=":frmDetalleFactura">
+                                <f:setPropertyActionListener target="#{salidaBean.detalleSalida}" value="#{salida}" />
+                            </p:commandButton>
+                            <p:commandButton icon="eliminar" title="Elimina Salida" oncomplete="PF('wdlEliminaSalida').show();" update=":frmEliminaSalida">
+                                <f:setPropertyActionListener target="#{salidaBean.detalleSalida}" value="#{salida}" />
+                            </p:commandButton>
+                            <p:commandButton icon="actualiza" title="Cambia Empleado registrado en la salida" oncomplete="PF('wdialogoEmpleado').show();" update=":frmEmpleado">
                                 <f:setPropertyActionListener target="#{salidaBean.detalleSalida}" value="#{salida}" />
                             </p:commandButton>
                         </p:column>
@@ -48,6 +55,13 @@
                             <p:outputLabel value="Numero de Articulos: #{salidaBean.listadoSalidasDetalle.size()}" id="txtNumSalidas" />
                         </h:panelGrid>                        
                         <p/>
+                        <h:panelGrid columns="4" >
+                            <h:commandButton id="btnValeSalida" value="Vale Salida" actionListener="#{articulosExportBean.generarValeSalida}" image="/resources/imagenes/valeEntrada.png" />
+                            <p:tooltip id="tTValeSalida" for="btnValeSalida" value="Imprime Vale de Salida" showEffect="clip" hideEffect="explode" />
+                            <h:commandButton id="btnValeRes" value="Vale Resguardo" actionListener="#{articulosExportBean.generarValeResguardo}" image="/resources/imagenes/valeRes.png" />
+                            <p:tooltip id="tTValeRes" for="btnValeRes" value="Imprime Vale de Resguardo" showEffect="clip" hideEffect="explode" />    
+                            
+                        </h:panelGrid>
                         <p/>
                         <p:dataTable id="dialogoListado" value="#{salidaBean.listadoSalidasDetalle}"  var="art" scrollable="true" scrollWidth="90%" scrollHeight="250" >
                             <f:facet name="header">
@@ -63,6 +77,9 @@
                             <p:column headerText="Articulo" style="width:150px;text-align: center">
                                 <h:outputText value="#{art.articuloEntrada.articulo.articulo}"  />
                             </p:column>
+                            <p:column headerText="Resguardo" style="width:30px;text-align: center">
+                                <h:outputText value="#{art.esResguardo}"  />
+                            </p:column>
                             <p:column headerText="Factura" style="width:40px;text-align: center">
                                 <h:outputText value="#{art.articuloEntrada.factura.folioFactura}"  />
                             </p:column>
@@ -70,9 +87,43 @@
                                 <h:outputText value="#{art.articuloEntrada.factura.proveedor.proveedor}"  />
                             </p:column>
                             
-                        </p:dataTable>
+                        </p:dataTable>  
                     </h:form>
                 </p:dialog>
+                
+                <p:dialog id="eliminaSalida" widgetVar="wdlEliminaSalida" header="Eliminar Salida de Articulos" modal="true" resizable="false" closeOnEscape="true" draggable="false" hideEffect="explode" >
+                    <h:form id="frmEliminaSalida" >
+                        <h:panelGrid columns="1" >
+                            <p:outputLabel value="Seguro de Eliminar la Salida Número: #{salidaBean.detalleSalida.folio}" id="txtFolio" />
+
+                        </h:panelGrid>                        
+                        <h:panelGrid columns="3">
+                            <p:commandButton value="Si" actionListener="#{salidaBean.eliminaSalida()}" oncomplete="PF('wdlEliminaSalida').hide();" update=":listaResultados:growl :listaResultados:listadoArticulos" />
+                            <p:commandButton value="No" onclick="PF('wdlEliminaSalida').hide();"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+                
+                <p:dialog id="empleado" widgetVar="wdialogoEmpleado" header="Nuevo Empleado" modal="true" resizable="false" closeOnEscape="true" draggable="false" hideEffect="explode" >
+                    <h:form id="frmEmpleado">
+                        
+                        <h:panelGrid columns="6" >
+                            <p:outputLabel value="Seleccione al Nuevo Empleado: "  />
+                            <p:column/>
+                            <p:selectOneMenu id="cboEmpleado" value="#{salidaBean.idCambiaEmpleado}"  filter="true" filterMatchMode="contains" disabled="#{salidaBean.desactiva}"  >
+                                <f:selectItem itemValue="0" itemLabel=" -- Empleado -- " />
+                                <f:selectItems value="#{salidaBean.listaEmpleado}"   />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid columns="3">
+                            <p:commandButton value="Aceptar" actionListener="#{salidaBean.cambiaEmpleado()}" oncomplete="PF('wdialogoEmpleado').hide();" update=":listaResultados:listadoArticulos :listaResultados:growl" />
+                            <p:commandButton value="Cancelar" onclick="PF('wdialogoEmpleado').hide();"/>
+                        </h:panelGrid>
+                            
+                    </h:form> 
+                </p:dialog>
+                
                 
             </ui:define>
 

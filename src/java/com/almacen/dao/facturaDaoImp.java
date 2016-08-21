@@ -53,6 +53,25 @@ public class facturaDaoImp implements facturaDAO{
         return factura;  
     }
     
+    @Override
+    public Factura eliminaFactura(Factura factura) {
+       
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction  transaction = session.beginTransaction();
+        
+        try{
+            
+                session.delete(factura);
+                transaction.commit();
+                session.close();
+            
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            transaction.rollback();
+        }
+        return factura;  
+    }
+    
     
     @Override
     public Factura encuentraUnaFac(Integer idFac){

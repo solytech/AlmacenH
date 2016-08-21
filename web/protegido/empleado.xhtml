@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/templates/plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:form id="frmEmpleado" >
+                    <p:growl id="avisoGral" autoUpdate="true" showDetail="true" life="3000"  />
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="Seleccione Empleado:" for="cboEmpleado" />
+                        <p:column/>
+                        <p:selectOneMenu id="cboEmpleado" value="#{empleadoBean.idEmpleado}"  filter="true" filterMatchMode="contains"   >
+                            <f:selectItem itemValue="0" itemLabel=" -- Empleado -- " />
+                            <f:selectItems value="#{empleadoBean.listaEmpleado}"   />
+                            <p:ajax event="change"  listener="#{empleadoBean.editaEmpleado()}" update="txtNombre txtApp txtApm txtCurp txtRfc dteFechaNac txtDireccion txtCorreo txtCelular txtTelefono txtPuesto txtClave cboDepto" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    
+                    <p/>
+                    <p:separator/>
+                    <p/>
+                    
+                    <h:panelGrid columns="6" >
+                            <p:outputLabel value="Nombre" for="txtNombre" />
+                            <p:inputText id="txtNombre"  value="#{empleadoBean.empleado.nombre}"  />
+                            <p:outputLabel value="Apellido Paterno " for="txtApp" />
+                            <p:inputText id="txtApp"  value="#{empleadoBean.empleado.app}"  />
+                            <p:outputLabel value="Apellido Materno" for="txtApm" />
+                            <p:inputText id="txtApm"  value="#{empleadoBean.empleado.apm}"  />
+                            
+                            <p:outputLabel value="Curp" for="txtCurp" />
+                            <p:inputText id="txtCurp"  value="#{empleadoBean.empleado.curp}"  />
+                            <p:outputLabel value="RFC" for="txtRfc" />
+                            <p:inputText id="txtRfc"  value="#{empleadoBean.empleado.rfc}"  />
+                            <p:outputLabel value="Fecha de Nacimiento" for="dteFechaNac" />
+                            <p:calendar id="dteFechaNac" value="#{empleadoBean.empleado.fechaNacimiento}" locale="de" navigator="true" />
+                        </h:panelGrid>
+                        <p:outputLabel value="Dirección" for="txtDireccion" />
+                        <p:inputText id="txtDireccion"  value="#{empleadoBean.empleado.direccion}" size="60" />
+                        <h:panelGrid columns="6" >
+                            <p:outputLabel value="Correo" for="txtCorreo" /> 
+                            <p:inputText id="txtCorreo"  value="#{empleadoBean.empleado.email}"  />
+                            <p:outputLabel value="Celular" for="txtCelular" />
+                            <p:inputText id="txtCelular"  value="#{empleadoBean.empleado.celular}"  />
+                            <p:outputLabel value="Telefono" for="txtTelefono" />
+                            <p:inputText id="txtTelefono"  value="#{empleadoBean.empleado.telefono}"  />
+                            
+                            <p:outputLabel value="Puesto" for="txtPuesto" />
+                            <p:inputText id="txtPuesto"  value="#{empleadoBean.empleado.puesto}"  />
+                            <p:outputLabel value="Clave Presupuestal" for="txtClave" />
+                            <p:inputText id="txtClave"  value="#{empleadoBean.empleado.clave}"   />
+                            <p:outputLabel for="cboDepto" value="Departamento al que pertenece" />
+                            <p:selectOneMenu id="cboDepto" value="#{empleadoBean.idDepto}" filter="true" filterMatchMode="contains"  >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione Departamento" />
+                                <f:selectItems value="#{empleadoBean.listaDpto}"  />
+                            </p:selectOneMenu>
+                            
+                        </h:panelGrid>
+                        
+                        <p:commandButton value="Registrar" icon="ui-icon-check" actionListener="#{empleadoBean.guardaEmpleado()}"  update="frmEmpleado avisoGral" />
+                        <p:commandButton value="Nuevo" icon="ui-icon-plusthick" actionListener="#{empleadoBean.limpiarTxt()}" immediate="true"  process="@this" update="frmEmpleado" />
+                       
+                    
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -16,4 +16,6 @@ public interface empleadoDAO {
     
     public Empleado encuentraEmpleado(Integer idEmpleado);
     
+    public Empleado actualizaEmpleado(Empleado empleado);
+    
 }

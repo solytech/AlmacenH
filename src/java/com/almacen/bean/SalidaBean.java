@@ -63,6 +63,7 @@ public class SalidaBean {
     private Integer idFac;
     private Integer idEmpleado;
     private Integer idArtEnt;
+    private Integer idCambiaEmpleado;
     
     private Boolean mostrarPorArticulos = false;
     private Boolean mostrarPorFactura = false;
@@ -84,9 +85,21 @@ public class SalidaBean {
 
     //************************** get y set *************************************
 
-    public List<ArticuloSalida> getListadoSalidasDetalle() {
+    public Integer getIdCambiaEmpleado() {
+        if(detalleSalida != null){
+            this.idCambiaEmpleado = detalleSalida.getEmpleado().getIdEmpleado();
+        }
+        return idCambiaEmpleado;
+    }
+
+    public void setIdCambiaEmpleado(Integer idCambiaEmpleado) {
+        this.idCambiaEmpleado = idCambiaEmpleado;
+    }
+
+    public List<ArticuloSalida> getListadoSalidasDetalle() {  
         if(detalleSalida != null){
             this.listadoSalidasDetalle = salidaDao.articulosPorSalida(detalleSalida.getIdSalida());
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idSalida", detalleSalida);
         }
         return listadoSalidasDetalle;
     }
@@ -279,8 +292,8 @@ public class SalidaBean {
         List<ArticuloEntrada> lista = artEntDao.allArtEnt();
         listaArtEntrada.clear();
         for(ArticuloEntrada ae: lista){
-            SelectItem provItem = new SelectItem(ae.getIdArticuloEntrada(), ae.getCbInterno()+" | "+ae.getArticulo().getArticulo());
-            this.listaArtEntrada.add(provItem);
+            SelectItem provItem = new SelectItem(ae.getIdArticuloEntrada(), ae.getCbInterno()+" | "+ae.getArticulo().getArticulo()+" | "+ae.getDepartamento().getDepartamento());
+            this.listaArtEntrada.add(provItem);  
         }
         
         return listaArtEntrada;
@@ -373,28 +386,84 @@ public class SalidaBean {
     }
     
     public void agragarArticulo(){
+        //Double nuevaExistencia = 0.0;
+        //Double existenciaAnterior = 0.0;
         ArticuloEntrada agregar = aePorArt;
+        //existenciaAnterior = aePorArt.getPiezas().doubleValue();
         System.out.println("***** lo que tiene pzasSalida -->>"+pzsSalida);
         agregar.setCantidad(pzsSalida);
         agregar.setPiezas(pzsSalida);
         System.out.println("***** lo que tiene agregar  -->>"+agregar.getPiezas());
         listaArtPorArt.add(agregar);
         
+        //nuevaExistencia = existenciaAnterior - pzsSalida.byteValue();
+        //aePorArt.setPiezas(new BigDecimal(nuevaExistencia));
+        
+        
     }
+    
     
     public ArticuloEntrada existenciasReales(Integer idAE){
         Double totalSalida = 0.0; Double existencias = 0.0;
         ArticuloEntrada ae = artEntDao.encuentraArtEnt(idAE);
         List<ArticuloSalida> listaAS = salArtDao.listaArtSalida(idAE);
         if(!listaAS.isEmpty()){
+            System.out.println("***** lo que tiene ae -->>"+ae.getPiezas());
             for(ArticuloSalida as : listaAS){    
                 totalSalida = totalSalida + as.getCantidadPieza().doubleValue();
             }
-            existencias = totalSalida - ae.getPiezas().doubleValue();
+            System.out.println("***** lo que tiene totalSalida -->>"+totalSalida);
+            existencias = ae.getPiezas().doubleValue() - totalSalida;
             ae.setPiezas(new BigDecimal(existencias));
+            System.out.println("***** lo que tiene existencias -->>"+existencias);
         }
         
         return ae;
+    }
+    
+    public void eliminaSalida(){
+        
+        try{
+            
+            if(eliminaArtSalida()){
+                boolean correcto = salidaDao.eliminaSalida(detalleSalida);
+                listadoSalidas = salidaDao.listadoSalidas();
+                
+            }
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Salida Completamente Eliminada" ) );
+        }catch(Exception e){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "NO se Elimino la Salida" ) );
+        }
+    }
+    
+    public boolean eliminaArtSalida(){
+        boolean seElimina =  true;
+        List<ArticuloSalida> listaArt = salidaDao.articulosPorSalida(detalleSalida.getIdSalida());
+        try{
+            boolean correcto = salArtDao.eliminaSalAllArticulo(listaArt);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Articulos de Salida Reingresados a Almacen" ) );
+        }catch(Exception e){
+            seElimina = false;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "NO se Reingresaron los Articulos al Almacen" ) );
+        }
+        return seElimina;
+    } 
+    
+    public void cambiaEmpleado(){
+        try{
+            Salida s = detalleSalida;
+            Empleado e = empleadoDao.encuentraEmpleado(idCambiaEmpleado);
+            s.setEmpleado(e);
+            
+            salidaDao.actualizaSalida(s);
+            
+            listadoSalidas = salidaDao.listadoSalidas();
+            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Empleado Cambiado Correctamente" ) );
+        }catch(Exception e){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "NO se cambio empleado" ) );
+        }
+        
     }
    
     public void mostrarOpcion(){

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BarrasCodigo" language="groovy" pageWidth="612" pageHeight="792" columnWidth="604" leftMargin="4" rightMargin="4" topMargin="4" bottomMargin="4" uuid="c52c3757-f094-4455-a132-597e638c4603">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="341"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="id_Entrada22" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -24,9 +24,7 @@
 FROM
      `formaDePago` formaDePago INNER JOIN `factura` factura ON formaDePago.`id_formaDePago` = factura.`id_formaDePago`
      INNER JOIN `departamento` departamento ON factura.`id_departamento` = departamento.`id_departamento`
-     INNER JOIN `proveedor` proveedor ON factura.`id_proveedor` = proveedor.`id_proveedor`
-WHERE
-     factura.`id_factura` = $P{id_Entrada22}]]>
+     INNER JOIN `proveedor` proveedor ON factura.`id_proveedor` = proveedor.`id_proveedor`]]>
 	</queryString>
 	<field name="factura_id_proveedor" class="java.lang.Long"/>
 	<field name="factura_fechaRecepcion" class="java.sql.Date"/>
@@ -162,7 +160,7 @@ WHERE
 			</staticText>
 			<image>
 				<reportElement x="481" y="412" width="123" height="58" uuid="426942e9-7311-46f7-b51c-95990c52416d"/>
-				<imageExpression><![CDATA["SEP.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["C:\\Users\\Itachi1314\\Downloads\\logos almacen\\SEP.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="23" y="518" width="56" height="13" uuid="3bfbb5a7-1c62-4903-9561-59a086450611"/>
@@ -219,14 +217,14 @@ WHERE
 			<textField>
 				<reportElement x="146" y="683" width="189" height="27" uuid="c1ea5a1d-ff75-442b-ade4-ddf559e1d369"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{departamento_departamento}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="146" y="713" width="44" height="13" uuid="fa3c086e-7bc6-4ecb-a396-d1844e829ad1"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{factura_fechaRecepcion}]]></textFieldExpression>
 			</textField>
@@ -240,14 +238,14 @@ WHERE
 			<textField>
 				<reportElement x="416" y="603" width="152" height="34" uuid="475c2c0b-413e-4e40-90a5-b1ba4d594d60"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{proveedor_direccion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="421" y="548" width="100" height="13" uuid="dc881673-720b-4196-9db5-bdf8669512a8"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{proveedor_rfc}]]></textFieldExpression>
 			</textField>
@@ -312,7 +310,7 @@ WHERE
 			<textField>
 				<reportElement x="146" y="326" width="44" height="13" uuid="8b3b34e3-7f7d-4bf5-a91a-f2a81c5cc058"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{factura_fechaRecepcion}]]></textFieldExpression>
 			</textField>
@@ -384,7 +382,7 @@ WHERE
 			</rectangle>
 			<image>
 				<reportElement x="481" y="25" width="123" height="58" uuid="358a59d0-2680-41ad-a6c2-00cc06971956"/>
-				<imageExpression><![CDATA["SEP.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["C:\\Users\\Itachi1314\\Downloads\\logos almacen\\SEP.jpg"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="441" y="181" width="127" height="35" uuid="be568385-ca8f-463f-91e1-0153485aa000"/>
@@ -417,7 +415,7 @@ WHERE
 			<textField>
 				<reportElement x="421" y="161" width="100" height="13" uuid="ff2e60a3-088a-4b9a-b0c3-b58711375f0d"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{proveedor_rfc}]]></textFieldExpression>
 			</textField>
@@ -438,7 +436,7 @@ WHERE
 			<textField>
 				<reportElement x="416" y="216" width="152" height="34" uuid="b88ebb59-7a91-498f-933d-1b43ffa612f8"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{proveedor_direccion}]]></textFieldExpression>
 			</textField>
@@ -451,7 +449,7 @@ WHERE
 			</staticText>
 			<image>
 				<reportElement x="29" y="25" width="117" height="64" uuid="fe13b1de-3ba0-405c-b5ef-c60b3b6af103"/>
-				<imageExpression><![CDATA["USET.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["C:\\Users\\Itachi1314\\Downloads\\logos almacen\\USET.jpg"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="146" y="271" width="166" height="22" uuid="efc99123-b18f-44f4-a243-ed1221e98212"/>
@@ -462,14 +460,14 @@ WHERE
 			</textField>
 			<image>
 				<reportElement x="29" y="412" width="117" height="64" uuid="42b8a556-b226-4fb6-979b-b51dc16a89bd"/>
-				<imageExpression><![CDATA["USET.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["C:\\Users\\Itachi1314\\Downloads\\logos almacen\\USET.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="503" y="302" width="8" height="20" uuid="6a417d98-e35d-4333-8e76-346d5f76ddd4"/>
+				<reportElement x="496" y="302" width="10" height="20" uuid="b22d2171-adc3-4171-9d50-880a54ccb7ce"/>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="503" y="689" width="8" height="20" uuid="aa6fc5e3-bab4-443a-a2ad-238311455cf3"/>
+				<reportElement x="497" y="689" width="10" height="20" uuid="7ad13fe1-16de-4621-87c4-cf239a33ead4"/>
 				<text><![CDATA[$]]></text>
 			</staticText>
 		</band>

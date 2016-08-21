@@ -63,6 +63,7 @@ public class MenuBean implements Serializable{
         DefaultSubMenu thirdSubmenu = new DefaultSubMenu("Salidas");
         //DefaultSubMenu fourSubmenu = new DefaultSubMenu("Herramientas");
         DefaultSubMenu quintoSubmenu = new DefaultSubMenu("Catálogos");
+        DefaultSubMenu sextoSubmenu = new DefaultSubMenu("Reportes");
         
         DefaultMenuItem item4 = new DefaultMenuItem("Inicio"); 
         DefaultMenuItem item1 = new DefaultMenuItem("Captura Factura");
@@ -71,13 +72,20 @@ public class MenuBean implements Serializable{
         DefaultMenuItem item7 = new DefaultMenuItem("Buscar Salida");
         DefaultMenuItem item5 = new DefaultMenuItem("Proveedores");
         DefaultMenuItem item6 = new DefaultMenuItem("Articulos");
+        DefaultMenuItem item8 = new DefaultMenuItem("Reporte por Proveedor");
+        DefaultMenuItem item9 = new DefaultMenuItem("Departamentos");
+        DefaultMenuItem item10 = new DefaultMenuItem("Empleados");
+        
         item4.setUrl("../protegido/principal.xhtml");
         item1.setUrl("../protegido/capturaFactura.xhtml");
         item2.setUrl("../protegido/buscarFactura.xhtml");
         item3.setUrl("../protegido/salidaArticulos.xhtml");
         item5.setUrl("../protegido/proveedores.xhtml");
-        item6.setUrl("/protegido/altaArticulo.almacen");
+        item6.setUrl("../protegido/buscarArticulo.xhtml");
         item7.setUrl("../protegido/buscarSalida.xhtml");
+        item8.setUrl("../protegido/reportes.xhtml");
+        item9.setUrl("../protegido/departamento.xhtml");
+        item10.setUrl("../protegido/empleado.xhtml");
         
         secondSubmenu.addElement(item1);
         secondSubmenu.addElement(item2);
@@ -89,13 +97,16 @@ public class MenuBean implements Serializable{
         //fourSubmenu.addElement(item6);
         
         quintoSubmenu.addElement(item5);
+        quintoSubmenu.addElement(item6);
+        quintoSubmenu.addElement(item9);
+        quintoSubmenu.addElement(item10);
+        sextoSubmenu.addElement(item8);
         
         model.addElement(item4); 
         model.addElement(firstSubmenu);
         model.addElement(quintoSubmenu);
-        
-        
-        
+        model.addElement(sextoSubmenu);
+          
         
     }
     

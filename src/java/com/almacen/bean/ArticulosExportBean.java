@@ -5,7 +5,10 @@
  */
 package com.almacen.bean;
 
+import com.almacen.dao.proveedorDAO;
+import com.almacen.dao.proveedorDaoImp;
 import com.almacen.model.Factura;
+import com.almacen.model.Proveedor;
 import com.almacen.model.Salida;
 import com.almacen.utilerias.Utilerias;
 import java.io.File;
@@ -37,8 +40,8 @@ public class ArticulosExportBean {
         System.out.println("******* entra a la funcion del reporte ******");
         
         Factura facAct = (Factura) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("factura");
+       
         String nombre = "Etiquetas_Factura_"+facAct.getFolioFactura();
-        
         Connection conexion;
         Class.forName("com.mysql.jdbc.Driver").newInstance();
         
@@ -169,4 +172,51 @@ public class ArticulosExportBean {
         System.out.println("******* sale de la funcion del reporte ******");  
     }
     
+    public void facturaPorProv(ActionEvent actionEvent) throws JRException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException{
+        
+        System.out.println("******* entra a la funcion del reporte ******");  
+        
+        Integer idProv = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idProvRep");
+        String nombre = "";
+        String pathReporte = "";
+        proveedorDAO provDAO = new proveedorDaoImp();
+        //System.out.println("***** lo que tiene idProv ---->>"+idProv);
+        if(idProv == 0 || idProv == null){
+            nombre = "facturas_proveedores";
+            pathReporte = "/REPORTES/reporteProveedorTodos.jasper";
+        }else{
+            Proveedor prov = provDAO.encuentraUnProv(idProv);
+            nombre = "facturas_proveedor_" + prov.getRfc();
+            pathReporte = "/REPORTES/reportePorProveedor.jasper";
+            
+        }
+        
+        
+        Connection conexion;  
+        Class.forName("com.mysql.jdbc.Driver").newInstance();  
+        
+        utiles.obtenerDatosDeAcceso();
+        //System.out.println(" **** host: "+ utiles.getUrl() +"     usuario: "+ utiles.getUser() +"   pass: "+ utiles.getPass());
+        
+        conexion = DriverManager.getConnection(utiles.getUrl(), utiles.getUser(), utiles.getPass());
+        
+        Map<String, Object> parametros = new HashMap<String, Object>(); 
+        parametros.put("id_Entrada22", idProv); 
+        
+        
+        File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReporte));
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametros, conexion);
+        
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        response.addHeader("Content-disposition", "attachment; filename="+nombre+".pdf");
+        ServletOutputStream stream = response.getOutputStream();
+        
+        JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+        
+        stream.flush();
+        stream.close();
+        FacesContext.getCurrentInstance().responseComplete();
+        
+        System.out.println("******* sale de la funcion del reporte ******");  
+    }
 }

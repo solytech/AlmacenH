@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/templates/plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:form id="frmDepto" >
+                        <p:growl id="avisoGral" autoUpdate="true" showDetail="true" life="3000"  />
+                        <h:panelGrid columns="3">
+                            <p:outputLabel value="Seleccione Departamento:" />
+                            <p:column/>
+                            <p:selectOneMenu id="cboDepto" value="#{departamentoBean.idDepto}" filter="true" filterMatchMode="contains"  >
+                                <f:selectItem itemValue="0" itemLabel="Seleccione Departamento" />
+                                <f:selectItems value="#{departamentoBean.listaDpto}"  />
+                                <p:ajax event="change"  listener="#{departamentoBean.editaDepartamento()}" update="txtDepto txtCct txtlocalidad txtMunicipio txtClave txtDescripción" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        
+                        <p/>
+                        <p:separator/>
+                        <p/>
+                        
+                        <h:panelGrid columns="3">
+                            <p:outputLabel value="Departamento:" for="txtDepto" />
+                            <p:column/>
+                            <p:inputText id="txtDepto"  value="#{departamentoBean.depto.departamento}"  size="60" />
+                            <p:outputLabel value="CCT:" for="txtCct" />
+                            <p:column/>
+                            <p:inputText id="txtCct"  value="#{departamentoBean.depto.cct}"  />
+                            <p:outputLabel value="Localidad:" for="txtlocalidad" />
+                            <p:column/>
+                            <p:inputText id="txtlocalidad"  value="#{departamentoBean.depto.direccion}" size="50" />
+                            <p:outputLabel value="Municipio:" for="txtMunicipio" />
+                            <p:column/>
+                            <p:inputText id="txtMunicipio"  value="#{departamentoBean.depto.municipio}" size="50" />
+                            <p:outputLabel value="Clave:" for="txtClave" />
+                            <p:column/>
+                            <p:inputText id="txtClave"  value="#{departamentoBean.depto.clave}"  />
+                            <p:outputLabel value="Descripción:" for="txtDescripción" />
+                            <p:column/>
+                            <p:inputText id="txtDescripción"  value="#{departamentoBean.depto.descripcion}" size="60" />
+                        </h:panelGrid>
+                        <p/>
+                        <p:commandButton value="Registrar" icon="ui-icon-check" actionListener="#{departamentoBean.guardarDepto()}"  update="avisoGral frmDepto cboDepto" />
+                        <p:commandButton value="Cancelar" icon="ui-icon-cancel" actionListener="#{departamentoBean.limpiarTxt()}"  update="frmDepto"   />
+                        
+                    </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

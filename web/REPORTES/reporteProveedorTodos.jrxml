@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BarrasCodigo" language="groovy" pageWidth="612" pageHeight="792" columnWidth="604" leftMargin="4" rightMargin="4" topMargin="4" bottomMargin="4" uuid="c52c3757-f094-4455-a132-597e638c4603">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id_Entrada22" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     factura.`id_factura` AS factura_id_factura,
+     factura.`folioRequisicion` AS factura_folioRequisicion,
+     factura.`id_tipoEntrada` AS factura_id_tipoEntrada,
+     factura.`id_proveedor` AS factura_id_proveedor,
+     factura.`id_departamento` AS factura_id_departamento,
+     factura.`id_formaDePago` AS factura_id_formaDePago,
+     factura.`folioInterno` AS factura_folioInterno,
+     factura.`folioFactura` AS factura_folioFactura,
+     factura.`fechaFactura` AS factura_fechaFactura,
+     factura.`fechaRecepcion` AS factura_fechaRecepcion,
+     factura.`importeFactura` AS factura_importeFactura,
+     factura.`descripcion` AS factura_descripcion,
+     factura.`instruccion` AS factura_instruccion,
+     factura.`foto` AS factura_foto,
+     factura.`vigente` AS factura_vigente,
+     factura.`fechaReg` AS factura_fechaReg,
+     factura.`id_acceso` AS factura_id_acceso,
+     proveedor.`id_proveedor` AS proveedor_id_proveedor,
+     proveedor.`proveedor` AS proveedor_proveedor,
+     proveedor.`rfc` AS proveedor_rfc,
+     proveedor.`direccion` AS proveedor_direccion,
+     proveedor.`telefono` AS proveedor_telefono,
+     proveedor.`correo` AS proveedor_correo,
+     proveedor.`paginaWeb` AS proveedor_paginaWeb,
+     proveedor.`contacto` AS proveedor_contacto,
+     proveedor.`observaciones` AS proveedor_observaciones,
+     proveedor.`vigente` AS proveedor_vigente,
+     proveedor.`id_acceso` AS proveedor_id_acceso,
+     proveedor.`fechareg` AS proveedor_fechareg
+FROM
+     `proveedor` proveedor INNER JOIN `factura` factura ON proveedor.`id_proveedor` = factura.`id_proveedor`]]>
+	</queryString>
+	<field name="factura_id_factura" class="java.lang.Long"/>
+	<field name="factura_folioRequisicion" class="java.lang.String"/>
+	<field name="factura_id_tipoEntrada" class="java.lang.Long"/>
+	<field name="factura_id_proveedor" class="java.lang.Long"/>
+	<field name="factura_id_departamento" class="java.lang.Long"/>
+	<field name="factura_id_formaDePago" class="java.lang.Long"/>
+	<field name="factura_folioInterno" class="java.lang.Long"/>
+	<field name="factura_folioFactura" class="java.lang.String"/>
+	<field name="factura_fechaFactura" class="java.sql.Date"/>
+	<field name="factura_fechaRecepcion" class="java.sql.Date"/>
+	<field name="factura_importeFactura" class="java.math.BigDecimal"/>
+	<field name="factura_descripcion" class="java.lang.String"/>
+	<field name="factura_instruccion" class="java.lang.String"/>
+	<field name="factura_foto" class="java.lang.String"/>
+	<field name="factura_vigente" class="java.lang.String"/>
+	<field name="factura_fechaReg" class="java.sql.Timestamp"/>
+	<field name="factura_id_acceso" class="java.lang.Long"/>
+	<field name="proveedor_id_proveedor" class="java.lang.Long"/>
+	<field name="proveedor_proveedor" class="java.lang.String"/>
+	<field name="proveedor_rfc" class="java.lang.String"/>
+	<field name="proveedor_direccion" class="java.lang.String"/>
+	<field name="proveedor_telefono" class="java.lang.String"/>
+	<field name="proveedor_correo" class="java.lang.String"/>
+	<field name="proveedor_paginaWeb" class="java.lang.String"/>
+	<field name="proveedor_contacto" class="java.lang.String"/>
+	<field name="proveedor_observaciones" class="java.lang.String"/>
+	<field name="proveedor_vigente" class="java.lang.String"/>
+	<field name="proveedor_id_acceso" class="java.lang.Long"/>
+	<field name="proveedor_fechareg" class="java.sql.Timestamp"/>
+	<detail>
+		<band height="191" splitType="Stretch">
+			<textField>
+				<reportElement x="489" y="119" width="82" height="13" uuid="3f3ec909-8d8a-47aa-81ac-884d763002fe"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{factura_importeFactura}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="29" y="100" width="49" height="13" uuid="3927a423-971d-4219-91e9-849f8fb2c5d0"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Dirección:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="442" y="119" width="39" height="21" uuid="52696de1-8776-44e5-9bca-634d2a6fd67f"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Monto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="100" width="86" height="13" uuid="9b8616dd-5079-4187-a6e3-a8f921ee7b75"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[No de Factura:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="122" y="45" width="100" height="13" uuid="36ab9775-eb5c-4cc0-8b92-3a908b9d2ac7"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{proveedor_rfc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="445" y="52" width="44" height="13" uuid="760030c5-6c1d-4365-b560-1f8ad2c893e6"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{factura_fechaRecepcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="122" y="100" width="159" height="34" uuid="b411c0da-d537-49d4-91bc-8110c4e8a1dc"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{proveedor_direccion}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="481" y="110" width="90" height="30" uuid="86b0f592-2941-48b5-acd9-507132c77b8a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="29" y="45" width="30" height="13" uuid="004bc04e-b781-4adb-919a-a70371728165"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[RFC:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="374" y="100" width="107" height="13" uuid="7a690aab-ef0d-447d-8896-59cd7573aec4"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{factura_folioFactura}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="293" y="78" width="86" height="13" uuid="41f28062-3508-44c0-bf10-59090b00c69d"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Folio Requisición:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="18" y="36" width="570" height="129" uuid="a96fd5cb-edf2-45bd-b234-c2e30d438bcc"/>
+			</rectangle>
+			<line>
+				<reportElement x="18" y="180" width="570" height="1" uuid="67b5a683-9d88-4c30-8748-4fdce810b601"/>
+			</line>
+			<textField>
+				<reportElement x="122" y="65" width="159" height="35" uuid="85550e6d-2626-4154-a985-3c6b56ccac44"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{proveedor_proveedor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="293" y="52" width="139" height="13" uuid="faa80308-15bf-457d-8e78-a812fd970265"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Fecha de Entrada Almacen:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="29" y="65" width="105" height="13" uuid="7e467597-3327-4053-bc97-5159af61171a"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Nombre Proveedor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="387" y="78" width="142" height="13" uuid="43d09fb3-e743-4279-a563-86e71ff9d5a3"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{factura_folioRequisicion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="246" y="15" width="124" height="12" uuid="137d9f2a-ddcf-4d17-8089-1e522135d389"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Datos de la Facturación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="29" y="140" width="105" height="13" uuid="b539e53b-ede5-4fe5-aa09-aabdea6b2ec7"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Fecha de la Factura:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="134" y="140" width="44" height="13" uuid="622a3ea0-77f5-4a63-b607-2b0312fe1833"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{factura_fechaFactura}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="493" y="119" width="8" height="20" uuid="56e2d31c-d4f7-4334-80ba-bdd5b898aefa"/>
+				<text><![CDATA[$]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

@@ -170,7 +170,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{departamento_departamento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="34" width="197" height="16" uuid="01d560a6-2eb0-4ecc-b0a9-0b06c539f0f0"/>
+				<reportElement x="80" y="34" width="36" height="16" uuid="01d560a6-2eb0-4ecc-b0a9-0b06c539f0f0"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9"/>
 				</textElement>

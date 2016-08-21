@@ -35,3 +35,11 @@ a:link:hover, a:visited:hover  {
 .eliminar {
     background-image: url("#{facesContext.externalContext.request.contextPath}/resources/imagenes/eliminar.png") !important;
 }
+
+.lupa {
+    background-image: url("#{facesContext.externalContext.request.contextPath}/resources/imagenes/lupa.png") !important;
+}
+
+.actualiza {
+    background-image: url("#{facesContext.externalContext.request.contextPath}/resources/imagenes/actualizar.png") !important;
+}

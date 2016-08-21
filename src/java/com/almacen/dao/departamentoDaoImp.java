@@ -6,6 +6,7 @@
 package com.almacen.dao;
 
 import com.almacen.model.Departamento;
+import com.almacen.model.Marca;
 import com.almacen.model.Proveedor;
 import com.almacen.util.HibernateUtil;
 import java.util.List;
@@ -58,4 +59,41 @@ public class departamentoDaoImp implements departamentoDAO{
         
     } 
     
+    @Override
+    public Departamento guardaDepto(Departamento depto) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction  transaction = session.beginTransaction();
+        try{
+             
+            
+            session.save(depto);
+            transaction.commit();
+            session.close();
+                
+            
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            transaction.rollback();
+        }
+        return depto; 
+    }
+    
+    @Override
+    public Departamento actualizaDepto(Departamento depto) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction  transaction = session.beginTransaction();
+        try{
+             
+            
+            session.update(depto);
+            transaction.commit();
+            session.close();
+                
+            
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            transaction.rollback();
+        }
+        return depto; 
+    }
 }

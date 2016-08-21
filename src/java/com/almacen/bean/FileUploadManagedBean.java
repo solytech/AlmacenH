@@ -61,17 +61,17 @@ public class FileUploadManagedBean {
         try {
             if(idIdentifica == 1){
                 String ruta = fac.getFoto();
-                System.out.println("******  ifFactura --->>"+fac.getIdFactura());
-                System.out.println("******  ruta que tiene --->>"+fac.getFoto());
+                //System.out.println("******  ifFactura --->>"+fac.getIdFactura());
+                //System.out.println("******  ruta que tiene --->>"+fac.getFoto());
                 if(ruta.contains(fac.getIdFactura().toString())){
-                    System.out.println("******  entra al if de no crear directorio *****");
+                    //System.out.println("******  entra al if de no crear directorio *****");
                     //no se crea directorio
                     if (so.contains(win)) {
                         destination = "C:\\images\\facturas\\" + fac.getIdFactura().toString() + "\\";
                     } else {
                         destination = "\\images\\facturas\\" + fac.getIdFactura().toString() + "\\";
                     }
-                    System.out.println("******  lo que tiene destination-->>"+destination);
+                    //System.out.println("******  lo que tiene destination-->>"+destination);
                     OutputStream out = new FileOutputStream(new File(destination + fileName));
                     int read = 0;
                     byte[] bytes = new byte[1024];
@@ -114,10 +114,10 @@ public class FileUploadManagedBean {
                     in.close();
                     out.flush();
                     out.close();
-                    System.out.println("El archivo se ha creado con Exito!");
+                    //System.out.println("El archivo se ha creado con Exito!");
                     String ruta1 = destination + fileName;
                     String ruta2 = destination + "imagen-1.jpg";
-                    System.out.println("Archivo: " + ruta1 + " Renombrado a: " + ruta2);
+                    //System.out.println("Archivo: " + ruta1 + " Renombrado a: " + ruta2);
                     File archivo = new File(ruta1);
                     archivo.renameTo(new File(ruta2));  
                     //agregamos la ruta en el objeto factura
@@ -129,35 +129,90 @@ public class FileUploadManagedBean {
                 
             }
             if(idIdentifica == 2){
-                if (so.contains(win)) {
-                    destination = "C:\\images\\articulos\\" + idArticulo.toString() + "\\";
-                    directorio = new File("C:\\images\\articulos\\" + idArticulo.toString());
-                } else {
-                    destination = "\\images\\articulos\\" + idArticulo.toString() + "\\";
-                    directorio = new File("\\images\\articulos\\" + idArticulo.toString());
+                Articulo articulo = art.encuentraArticulo(idArticulo);
+                System.out.println("******* lo que tiene foto -->>"+articulo.getFoto());
+                String rutaArt = articulo.getFoto();
+                System.out.println("******* lo que tiene rutaArt -->>"+rutaArt);
+                if(rutaArt.contains(articulo.getIdArticulo().toString())){
+                    //no se crea directorio
+                    if (so.contains(win)) {
+                        destination = "C:\\images\\articulos\\" + idArticulo.toString() + "\\";
+                        directorio = new File("C:\\images\\articulos\\" + idArticulo.toString());
+                    } else {
+                        destination = "\\images\\articulos\\" + idArticulo.toString() + "\\";
+                        directorio = new File("\\images\\articulos\\" + idArticulo.toString());
+                    }
+                    //eliminamos archivo anterior
+                    File elimina = new File("C:/images/articulos/"+idArticulo.toString()+"/imagen-1.jpg");
+                    if(elimina.delete()){
+                        System.out.println("***** archivo se elimino ****");
+                    }else{
+                        System.out.println("***** archivo NO se elimino ****");
+                    }
+                        
+                    //
+                    directorio.mkdir();
+                    OutputStream out = new FileOutputStream(new File(destination + fileName));
+                    int read = 0;
+                    byte[] bytes = new byte[1024];
+                    while ((read = in.read(bytes)) != -1) {
+                        out.write(bytes, 0, read);
+                    }
+                    in.close();
+                    out.flush();
+                    out.close();
+                    //System.out.println("El archivo se ha creado con Exito!");
+                    
+                    String ruta1 = destination + fileName;
+                    String ruta2 = destination + "imagen-1.jpg";
+                    //System.out.println("Archivo: " + ruta1 + " Renombrado a: " + ruta2);
+                    File archivo = new File(ruta1);
+                    archivo.renameTo(new File(ruta2));
+                    
+                    if (so.contains(win)) {
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("rutaImagen", "C:/" + articulo.getFoto());
+                    } else {
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("rutaImagen", "/" + articulo.getFoto());
+                    }
+                }else{
+                    // se crea directorio
+                    if (so.contains(win)) {
+                        destination = "C:\\images\\articulos\\" + idArticulo.toString() + "\\";
+                        directorio = new File("C:\\images\\articulos\\" + idArticulo.toString());
+                    } else {
+                        destination = "\\images\\articulos\\" + idArticulo.toString() + "\\";
+                        directorio = new File("\\images\\articulos\\" + idArticulo.toString());
+                    }
+
+                    directorio.mkdir();
+                    OutputStream out = new FileOutputStream(new File(destination + fileName));
+                    int read = 0;
+                    byte[] bytes = new byte[1024];
+                    while ((read = in.read(bytes)) != -1) {
+                        out.write(bytes, 0, read);
+                    }
+                    in.close();
+                    out.flush();
+                    out.close();
+                    //System.out.println("El archivo se ha creado con Exito!");
+
+                    String ruta1 = destination + fileName;
+                    String ruta2 = destination + "imagen-1.jpg";
+                    //System.out.println("Archivo: " + ruta1 + " Renombrado a: " + ruta2);
+                    File archivo = new File(ruta1);
+                    archivo.renameTo(new File(ruta2));
+                    //agregamos la ruta en el objeto articulo
+                    Articulo a = art.encuentraArticulo(idArticulo);
+                    a.setFoto("images/articulos/" + idArticulo.toString() + "/imagen-1.jpg");
+                    art.guardaArticulo(a);
+                    
+                    if (so.contains(win)) {
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("rutaImagen", "C:/" + a.getFoto());
+                    } else {
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("rutaImagen", "/" + a.getFoto());
+                    }
                 }
-                
-                directorio.mkdir();
-                OutputStream out = new FileOutputStream(new File(destination + fileName));
-                int read = 0;
-                byte[] bytes = new byte[1024];
-                while ((read = in.read(bytes)) != -1) {
-                    out.write(bytes, 0, read);
-                }
-                in.close();
-                out.flush();
-                out.close();
-                System.out.println("El archivo se ha creado con Exito!");
-                
-                String ruta1 = destination + fileName;
-                String ruta2 = destination + "imagen-1.jpg";
-                System.out.println("Archivo: " + ruta1 + " Renombrado a: " + ruta2);
-                File archivo = new File(ruta1);
-                archivo.renameTo(new File(ruta2));
-                //agregamos la ruta en el objeto articulo
-                Articulo a = art.encuentraArticulo(idArticulo);
-                a.setFoto("images/articulos/" + idArticulo.toString() + "/imagen-1.jpg");
-                art.guardaArticulo(a);
+               
             }
             
             

@@ -18,5 +18,10 @@ public interface salidaarticuloDAO {
     
     public List<ArticuloSalida> listaArtSalida (Integer idArtSal);
     
+    public boolean eliminaSalAllArticulo(List<ArticuloSalida> lista);
+    
+    public ArticuloSalida encuentraArtSal(Integer idArt);
+    
+    public boolean encuentraArticulosSal(Integer idArt);
    
 }

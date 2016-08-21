@@ -28,11 +28,12 @@ public class EmpleadoBean {
     departamentoDAO dptoDao = new departamentoDaoImp();
     
     List<SelectItem> listaDpto;
-    
+    private List<SelectItem> listaEmpleado;
     
     Empleado empleado;
     
     Integer idDepto;
+    private Integer idEmpleado;
     
     
     public EmpleadoBean(){
@@ -40,6 +41,14 @@ public class EmpleadoBean {
     }
     
     //***********************get y set *********************************
+
+    public Integer getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(Integer idEmpleado) {
+        this.idEmpleado = idEmpleado;
+    }
 
     public Empleado getEmpleado() {
         return empleado;
@@ -70,6 +79,18 @@ public class EmpleadoBean {
         return listaDpto;
     }
     
+    public List<SelectItem> getListaEmpleado() {
+        this.listaEmpleado = new ArrayList<>();
+        List<Empleado> emp = empleadoDao.listaEmpleados();
+        listaEmpleado.clear();
+        for(Empleado p: emp){
+            SelectItem provItem = new SelectItem(p.getIdEmpleado(), p.getNombre()+" "+p.getApp()+" "+p.getApm());
+            this.listaEmpleado.add(provItem);
+        }
+        
+        return listaEmpleado;
+    }
+    
     
     
     //*******************************************************************
@@ -80,14 +101,28 @@ public class EmpleadoBean {
            Date fecha = new Date();
            Acceso acc = (Acceso) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("acceso");
            
-           empleado.setFoto("/image");
-           empleado.setVigente("S");
-           empleado.setFechaReg(fecha);
-           Departamento depto = dptoDao.encuentraUnDepto(idDepto);
-           empleado.setDepartamento(depto);
-           empleado.setAcceso(acc);
+           try{
+               if (empleado == null || idEmpleado == 0) {
+                   empleado.setFoto("/image");
+                   empleado.setVigente("S");
+                   empleado.setFechaReg(fecha);
+                   Departamento depto = dptoDao.encuentraUnDepto(idDepto);
+                   empleado.setDepartamento(depto);
+                   empleado.setAcceso(acc);
+
+                   empleadoDao.guardaEmpleado(empleado);
+               }else{
+                   empleadoDao.actualizaEmpleado(empleado);
+               }
+               
+           }catch(Exception e){
+               
+           }
            
-           empleadoDao.guardaEmpleado(empleado);
+           
+           
+           limpiarTxt();
+           
          
            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Empleado Guardado Correctamente" ) );
 
@@ -96,6 +131,21 @@ public class EmpleadoBean {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Error al Guardar Empleado" ) );
         }
         
+    }
+    
+    public void editaEmpleado(){
+        if( idEmpleado != 0 ){
+            Empleado em = empleadoDao.encuentraEmpleado(idEmpleado);
+            empleado = em;
+            idDepto = em.getDepartamento().getIdDepartamento();
+        }
+        
+    }
+    
+    public void limpiarTxt(){
+        empleado = new Empleado();
+        idEmpleado = null;
+        idDepto = null;
     }
     
 }
